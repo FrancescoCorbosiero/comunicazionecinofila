@@ -1,0 +1,41 @@
+---
+// Island condivisa "Prenota una call". Aperta da qualsiasi trigger [data-open-call].
+// Oggi: placeholder con selezione slot → conferma via WhatsApp.
+// In produzione: sostituire il corpo .booking-cal con l'embed cal.com
+// (@calcom/embed-react <Cal calLink={CAL_LINK} />), usando la costante CAL_LINK in src/config.ts.
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import { waLink } from '../config';
+
+const slots = ['Mar · 18:00', 'Mer · 21:00', 'Gio · 18:30', 'Ven · 19:00', 'Sab · 10:30'];
+const defaultWa = waLink('Ciao Andrea! Vorrei fissare una call conoscitiva.');
+---
+<div class="call-modal" hidden data-call-modal>
+  <div class="call-backdrop" data-close-call></div>
+  <div class="call-dialog" role="dialog" aria-modal="true" aria-label="Prenota una call">
+    <button class="call-x" data-close-call aria-label="Chiudi" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        ></path>
+      </svg>
+    </button>
+    <span class="eyebrow" style="color:var(--peach-deep);">Calendario · cal.com</span>
+    <h3 class="display-md" style="margin-top:10px;">Prenota una call</h3>
+    <p style="margin:8px 0 0;">
+      Per le opportunità di lavoro o un confronto veloce. Scegli uno slot indicativo: confermiamo
+      insieme e ti mando il link del calendario.
+    </p>
+    <div class="booking-cal" data-booking style="margin-top:18px;">
+      <div class="cal-head">Slot disponibili · questa settimana</div>
+      <div class="cal-slots">
+        {slots.map((s) => <button class="cal-slot" type="button">{s}</button>)}
+      </div>
+      <div data-cal-confirm class="cal-confirm">
+        <p style="margin:0;">Slot scelto: <b data-cal-label>—</b></p>
+        <a class="btn" data-cal-wa href={defaultWa} target="_blank" rel="noopener">
+          Conferma su WhatsApp <WhatsAppIcon size={15} />
+        </a>
+      </div>
+      <p class="cal-note">Calendario smart in collegamento. Intanto fissiamo via WhatsApp.</p>
+    </div>
+  </div>
+</div>

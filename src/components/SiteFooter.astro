@@ -1,0 +1,52 @@
+---
+import LeafIcon from './LeafIcon.astro';
+import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer paper-bg-deep">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="/">
+          <span class="pp">
+            <img src="/assets/logo-original.jpg" alt="Andrea Bellettati" width="48" height="48" />
+          </span>
+          <span class="n">Andrea Bellettati</span>
+        </a>
+        <p>
+          Consulenza in comportamento e alimentazione naturale per cani e gatti. Partner Reico
+          Italia.
+        </p>
+        <span class="section-mark" style="justify-content:flex-start;" aria-hidden="true">
+          <LeafIcon size={30} stroke="var(--sage-soft)" />
+        </span>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Sito</h5>
+          <a href="/approccio">Approccio</a>
+          <a href="/servizi">Servizi</a>
+          <a href="/eventi">Eventi</a>
+          <a href="/articoli">Articoli</a>
+        </div>
+        <div class="footer-col">
+          <h5>Inizia</h5>
+          <a href="/contatti">Consulenza gratuita</a>
+          <a href="/contatti?p=pro">Opportunità di lavoro</a>
+          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contatti</h5>
+          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a>
+          <a href={IG_URL} target="_blank" rel="noopener">{IG_HANDLE}</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} Andrea Bellettati · Comunicazione Cinofila</span>
+      <span>Comportamento &amp; Nutrizione · Cane e Gatto</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,219 @@
+/* Andrea Bellettati — Mini Brand System v2
+   Riscritto sulla base del feed reale.
+   Riferimento: post "Antistaminico Naturale" + locandina Etichette + sito Reico.
+*/
+
+:root {
+  /* ── PALETTE ───────────────────────────────────────────
+     Verdi salvia desaturati (campionati dal feed reale),
+     crema avorio per testo, accento pesca/corallo da Reico.
+  */
+  --bg-cream:        #ece4d2;   /* sfondo principale carta riciclata */
+  --bg-paper:        #f5efe1;   /* superficie chiara */
+  --bg-deep:         #2a3120;   /* verde notte (footer / hero invertito) */
+
+  --sage:            #7c9474;   /* VERDE PRIMARIO — il verde delle cover */
+  --sage-soft:       #a4b59c;   /* salvia chiara */
+  --sage-mist:       #d5dcc4;   /* salvia pallida pannelli secondari */
+  --olive-deep:      #3f4a2e;   /* oliva profondo headline / badge */
+  --olive-darkest:   #1f2515;   /* quasi nero, footer */
+
+  /* Accento caldo — il pesca/corallo Reico */
+  --peach:           #f4a98a;   /* CTA, hover, badge attivi */
+  --peach-soft:      #f8c9b1;
+  --peach-deep:      #d97a55;   /* hover/active scuro */
+  --ochre:           #c9a96a;   /* uso parco — dettagli */
+
+  /* Inchiostri */
+  --ink:             #1a1c14;
+  --ink-soft:        #3d4533;
+  --ink-mute:        #6a7163;
+  --cream-ink:       #efe8d8;   /* testo crema su verde */
+
+  --rule:            rgba(26,28,20,0.14);
+  --rule-soft:       rgba(26,28,20,0.07);
+  --rule-cream:      rgba(239,232,216,0.22);
+
+  /* ── TIPOGRAFIA ────────────────────────────────────────
+     Display: Anton — sans condensed pesante, all-caps, da poster.
+     Body: Inter — pulito, neutro.
+     Script accent: Caveat — solo per parole singole decorative.
+  */
+  --display: 'Anton', 'Bebas Neue', 'Oswald', sans-serif;
+  --sans:    'Inter', -apple-system, system-ui, sans-serif;
+  --serif:   'Cormorant Garamond', Georgia, serif;  /* fallback per qualche dettaglio */
+  --script:  'Caveat', 'Brush Script MT', cursive;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radii — angoli quasi vivi, leggermente smussati come la grafica reale */
+  --r-1: 2px;
+  --r-2: 6px;
+  --r-3: 12px;
+  --r-pill: 999px;
+}
+
+.brand {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg-cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* DISPLAY — sempre uppercase, condensed, letter-spacing leggero */
+.brand h1, .brand h2, .brand h3, .brand .display {
+  font-family: var(--display);
+  font-weight: 400;            /* Anton ha solo 400; il peso viene dal carattere stesso */
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.95;
+}
+
+.brand .eyebrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--olive-deep);
+}
+
+.brand .lead {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.brand .script {
+  font-family: var(--script);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Texture carta — sfondo discreto */
+.paper-bg {
+  background-color: var(--bg-cream);
+  background-image:
+    radial-gradient(rgba(63,74,46,0.04) 1px, transparent 1px),
+    radial-gradient(rgba(63,74,46,0.025) 1px, transparent 1px);
+  background-size: 32px 32px, 17px 17px;
+  background-position: 0 0, 8px 8px;
+}
+
+.paper-bg-deep {
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(rgba(239,232,216,0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Placeholder per immagini */
+.placeholder {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(124,148,116,0.18) 0 8px,
+      rgba(124,148,116,0.06) 8px 16px
+    ),
+    var(--sage-mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--olive-deep);
+  letter-spacing: 0.1em;
+}
+
+/* Buttons — pesca pieno + ghost verde */
+.brand .btn {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 14px 24px;
+  border: none;
+  background: var(--peach);
+  color: var(--olive-darkest);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--r-pill);
+}
+.brand .btn:hover {
+  background: var(--peach-deep);
+  color: var(--cream-ink);
+}
+.brand .btn-dark {
+  background: var(--olive-deep);
+  color: var(--cream-ink);
+}
+.brand .btn-dark:hover {
+  background: var(--olive-darkest);
+}
+.brand .btn-ghost {
+  background: transparent;
+  color: var(--olive-deep);
+  border: 1.5px solid var(--olive-deep);
+}
+.brand .btn-ghost:hover {
+  background: var(--olive-deep);
+  color: var(--cream-ink);
+}
+
+/* Pill / tag — stile Reico */
+.brand .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: var(--sage-mist);
+  color: var(--olive-deep);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.brand .pill-peach {
+  background: var(--peach);
+  color: var(--olive-darkest);
+}
+.brand .pill-dark {
+  background: var(--olive-deep);
+  color: var(--cream-ink);
+}
+
+/* Form — bordo morbido invece di underline */
+.brand .field {
+  display: block;
+  margin-bottom: 16px;
+}
+.brand .field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+.brand input, .brand textarea, .brand select {
+  font-family: var(--sans);
+  font-size: 15px;
+  background: var(--bg-paper);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--r-2);
+  padding: 12px 14px;
+  width: 100%;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+.brand input:focus, .brand textarea:focus, .brand select:focus {
+  border-color: var(--olive-deep);
+}
