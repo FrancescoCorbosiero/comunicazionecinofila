@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 /**
@@ -61,4 +61,21 @@ const eventi = defineCollection({
   }),
 });
 
-export const collections = { articoli, eventi };
+const catalogo = defineCollection({
+  loader: file('src/data/catalogo.json'),
+  schema: z.object({
+    name: z.string(),
+    animal: z.enum(['cane', 'gatto']),
+    type: z.enum(['umido', 'secco', 'snack', 'integratore']),
+    lifeStage: z.enum(['cucciolo', 'adulto', 'senior', 'tutti']).default('tutti'),
+    line: z.string().optional(),
+    description: z.string(),
+    features: z.array(z.string()).default([]),
+    /** Foto prodotto opzionale; senza, mostra un placeholder coerente col brand. */
+    image: z.string().optional(),
+    /** Etichetta in evidenza (es. "Novità", "Best seller"). */
+    badge: z.string().optional(),
+  }),
+});
+
+export const collections = { articoli, eventi, catalogo };

@@ -1,10 +1,23 @@
 ---
 import '../styles/brand.css';
 import '../styles/site.css';
+import '../styles/effects.css';
+import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import CallModal from '../components/CallModal.astro';
-import { SITE, SITE_NAME, EMAIL, PHONE, IG_URL } from '../config';
+import { SITE, SITE_NAME } from '../config';
+import {
+  siteGraph,
+  breadcrumbLd,
+  absoluteUrl,
+  DEFAULT_OG_IMAGE,
+  LOCALE,
+  DEFAULT_ROBOTS,
+  THEME_COLOR,
+  TWITTER_HANDLE,
+  GOOGLE_SITE_VERIFICATION,
+} from '../lib/seo';
 
 interface Props {
   title: string;
@@ -12,9 +25,13 @@ interface Props {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: string;
   active?: string;
-  /** Structured data aggiuntivi (Article, Event…) da unire al grafo base. */
+  robots?: string;
+  /** Breadcrumb per le pagine di dettaglio: [{ name, url }]. */
+  breadcrumbs?: { name: string; url: string }[];
+  /** Structured data aggiuntivi (Article, Event, ItemList…). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
@@ -23,56 +40,35 @@ const {
   description,
   ogTitle = title,
   ogDescription = description,
-  ogImage = '/assets/logo-original.jpg',
+  ogImage = DEFAULT_OG_IMAGE,
+  ogImageAlt = 'Andrea Bellettati — Comunicazione Cinofila',
   ogType = 'website',
   active,
+  robots = DEFAULT_ROBOTS,
+  breadcrumbs,
   jsonLd,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE).href;
-const ogImageAbs = new URL(ogImage, SITE).href;
-
-const baseGraph: Record<string, unknown>[] = [
-  {
-    '@type': 'Person',
-    '@id': `${SITE}/#andrea`,
-    name: 'Andrea Bellettati',
-    jobTitle: 'Consulente in comportamento e nutrizione per cani e gatti',
-    url: SITE,
-    image: `${SITE}/assets/logo-original.jpg`,
-    sameAs: [IG_URL],
-  },
-  {
-    '@type': 'LocalBusiness',
-    '@id': `${SITE}/#business`,
-    name: SITE_NAME,
-    description:
-      'Consulenza in comportamento e alimentazione naturale per cani e gatti. Partner Reico Italia.',
-    image: `${SITE}/assets/logo-original.jpg`,
-    url: SITE,
-    email: EMAIL,
-    telephone: PHONE,
-    areaServed: 'IT',
-    priceRange: 'Consulenza gratuita',
-    founder: { '@id': `${SITE}/#andrea` },
-    sameAs: [IG_URL],
-    knowsAbout: [
-      'Alimentazione naturale per cani e gatti',
-      'Comportamento animale',
-      'Lettura delle etichette del pet food',
-      'Benessere di cani e gatti',
-    ],
-  },
-];
+const ogImageAbs = absoluteUrl(ogImage);
 
 const extra = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const structuredData = {
   '@context': 'https://schema.org',
-  '@graph': [...baseGraph, ...extra],
+  '@graph': [
+    ...siteGraph(),
+    ...(breadcrumbs?.length ? [breadcrumbLd(breadcrumbs)] : []),
+    ...extra,
+  ],
 };
 
 const fontHref =
   'https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=JetBrains+Mono:wght@400&display=swap';
+
+// Speculation Rules API: prefetch dei documenti interni (warm-up del navigatore).
+const speculationRules = JSON.stringify({
+  prefetch: [{ source: 'document', where: { href_matches: '/*' }, eagerness: 'moderate' }],
+});
 ---
 <!doctype html>
 <html lang="it" data-titlestyle="poster" data-paper="on">
@@ -81,18 +77,23 @@ const fontHref =
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/jpeg" href="/assets/logo-original.jpg" />
     <link rel="apple-touch-icon" href="/assets/logo-original.jpg" />
-    <meta name="theme-color" content="#7c9474" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <meta name="theme-color" content={THEME_COLOR} />
+    <meta name="generator" content={Astro.generator} />
+    {GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
     <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="it_IT" />
+    <meta property="og:locale" content={LOCALE} />
     <meta property="og:site_name" content={SITE_NAME} />
 
     <!-- Twitter -->
@@ -100,6 +101,8 @@ const fontHref =
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImageAbs} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
 
     <!-- Google Fonts: Anton, Inter, Caveat, Playfair Display, Cormorant Garamond, JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -107,6 +110,9 @@ const fontHref =
     <link href={fontHref} rel="stylesheet" />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+    <script type="speculationrules" is:inline set:html={speculationRules} />
+
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body class="brand paper-bg">

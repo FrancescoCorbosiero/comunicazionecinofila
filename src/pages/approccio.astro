@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import andrea1 from '../assets/andrea-1.jpg';
+import andrea2 from '../assets/andrea-2.jpg';
 ---
 <Base
   active="approccio"
@@ -32,12 +35,10 @@ import ArrowIcon from '../components/ArrowIcon.astro';
             Prenota la consulenza gratuita <ArrowIcon size={16} />
           </a>
         </div>
-        <div class="split-media" data-reveal data-delay="1" style="aspect-ratio:4/5;">
-          <img
-            src="/assets/andrea-1.jpg"
+        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
+          <CoverImage
+            src={andrea1}
             alt="Andrea Bellettati seduto su una roccia con il suo bassotto, lungo un fiume di montagna"
-            loading="lazy"
-            decoding="async"
           />
         </div>
       </div>
@@ -84,12 +85,10 @@ import ArrowIcon from '../components/ArrowIcon.astro';
   <section class="section">
     <div class="container">
       <div class="split flip">
-        <div class="split-media" data-reveal style="aspect-ratio:4/5;">
-          <img
-            src="/assets/andrea-2.jpg"
+        <div class="split-media parallax-cover" data-reveal style="aspect-ratio:4/5;">
+          <CoverImage
+            src={andrea2}
             alt="Andrea Bellettati guancia a guancia con il suo bassotto, in inverno"
-            loading="lazy"
-            decoding="async"
           />
         </div>
         <div class="split-body" data-reveal data-delay="1">

@@ -28,6 +28,12 @@ const articleLd = {
   author: { '@id': `${SITE}/#andrea` },
   mainEntityOfPage: new URL(`/articoli/${entry.id}`, SITE).href,
 };
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Articoli', url: '/articoli' },
+  { name: d.title, url: `/articoli/${entry.id}` },
+];
 ---
 <Base
   active="articoli"
@@ -37,6 +43,8 @@ const articleLd = {
   ogTitle={d.title}
   ogDescription={d.excerpt}
   ogImage={d.cover ?? '/assets/feed-antistaminico.jpg'}
+  ogImageAlt={d.coverAlt ?? d.title}
+  breadcrumbs={crumbs}
   jsonLd={articleLd}
 >
   <article class="section-tight">
@@ -50,11 +58,11 @@ const articleLd = {
       {
         d.cover && (
           <div
-            class="card-media"
-            style="aspect-ratio:16/10; border-radius:var(--r-3); overflow:hidden; margin-bottom:36px;"
+            class="card-media parallax-cover"
+            style="aspect-ratio:16/10; border-radius:var(--r-3); margin-bottom:36px;"
             data-reveal
           >
-            <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" />
+            <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
           </div>
         )
       }

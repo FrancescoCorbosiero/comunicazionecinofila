@@ -55,8 +55,8 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
             style="text-decoration:none;"
           >
             {f.cover ? (
-              <div class="svc-block-media">
-                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" />
+              <div class="svc-block-media parallax-cover">
+                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               </div>
             ) : (
               <div

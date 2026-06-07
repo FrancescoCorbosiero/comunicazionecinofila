@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import andrea3 from '../assets/andrea-3.jpg';
 import { waLink, WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
 
 const proWa = waLink("Ciao Andrea! Sono interessato/a all'opportunità lavorativa.");
@@ -281,12 +283,10 @@ const proCallWa = waLink(
             </a>
           </div>
         </div>
-        <div class="split-media" data-reveal data-delay="1" style="aspect-ratio:4/5;">
-          <img
-            src="/assets/andrea-3.jpg"
+        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
+          <CoverImage
+            src={andrea3}
             alt="I bassotti di Andrea con i maglioni a quadri, sul letto"
-            loading="lazy"
-            decoding="async"
           />
         </div>
       </div>

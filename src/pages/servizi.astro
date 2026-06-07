@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import feedEtichette from '../assets/feed-etichette.jpg';
+import andrea2 from '../assets/andrea-2.jpg';
 ---
 <Base
   active="servizi"
@@ -30,12 +33,10 @@ import CalendarIcon from '../components/CalendarIcon.astro';
   <section class="section-tight" id="alimentazione">
     <div class="container">
       <div class="svc-block" data-reveal>
-        <div class="svc-block-media">
-          <img
-            src="/assets/feed-etichette.jpg"
+        <div class="svc-block-media parallax-cover">
+          <CoverImage
+            src={feedEtichette}
             alt="Locandina del webinar Etichette a 4 Zampe sulla lettura delle etichette del cibo per cani"
-            loading="lazy"
-            decoding="async"
           />
         </div>
         <div class="svc-block-body">
@@ -71,12 +72,10 @@ import CalendarIcon from '../components/CalendarIcon.astro';
   <section class="section-tight" id="consulenza">
     <div class="container">
       <div class="svc-block flip" data-reveal>
-        <div class="svc-block-media">
-          <img
-            src="/assets/andrea-2.jpg"
+        <div class="svc-block-media parallax-cover">
+          <CoverImage
+            src={andrea2}
             alt="Andrea Bellettati con il suo bassotto, in un momento di vicinanza"
-            loading="lazy"
-            decoding="async"
           />
         </div>
         <div class="svc-block-body">

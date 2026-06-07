@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import LeafIcon from '../components/LeafIcon.astro';
+---
+<Base
+  title="Pagina non trovata — Andrea Bellettati"
+  description="La pagina che cerchi non esiste o è stata spostata."
+  robots="noindex, follow"
+>
+  <section class="section bg-deep paper-bg-deep" style="min-height:calc(100svh - 70px); display:flex; align-items:center;">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <span class="section-mark" aria-hidden="true">
+          <LeafIcon size={44} stroke="var(--peach)" />
+        </span>
+        <span class="eyebrow">Errore 404</span>
+        <h1 class="display-xl">Ops, qui non<br />c'è nulla.</h1>
+        <p class="lead">
+          La pagina che cerchi non esiste o è stata spostata. Torniamo sulla strada giusta?
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/">Vai alla home <ArrowIcon size={16} /></a>
+          <a class="btn btn-ghost-cream btn-lg" href="/contatti">Contattami</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

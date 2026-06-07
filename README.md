@@ -23,15 +23,20 @@ npm run check      # type-check (astro check)
 ```
 src/
   config.ts              # ⭐ contatti reali + CAL_LINK (sorgente unica)
-  layouts/Base.astro     # <head>: meta, OG/Twitter, JSON-LD, font, canonical
-  components/            # Header, Footer, CallModal, card/row, icone
-  scripts/site.ts        # nav mobile, reveal, step-form→WhatsApp, modale call…
-  pages/                 # index, approccio, servizi, eventi, articoli, contatti
+  lib/seo.ts             # default SEO + JSON-LD (Person/LocalBusiness/breadcrumb)
+  lib/dates.ts           # formattazione date (fuso Europe/Rome)
+  layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
+  components/            # Header, Footer, CallModal, CoverImage, card/row, icone
+  scripts/site.ts        # nav, reveal, step-form→WhatsApp, modale call, parallax
+  scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo
+  pages/                 # index, approccio, servizi, catalogo, eventi, articoli, contatti, 404
     articoli/[slug].astro  eventi/[slug].astro   # dettagli da Content Collection
   content/articoli/*.md  content/eventi/*.md      # contenuti (Markdown)
+  data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
   content.config.ts      # schema delle Content Collections
-  styles/                # brand.css (invariato), site.css (base), content.css
-public/assets/           # immagini + favicon (ritratto)
+  styles/                # brand.css (invariato), site.css (base), content/catalog/effects.css
+  assets/                # foto ottimizzate da astro:assets (webp responsive)
+public/assets/           # favicon + immagini per OG e cover delle collection
 ```
 
 ## Aggiungere un articolo
@@ -81,6 +86,38 @@ reserveWaText: 'Ciao Andrea! Vorrei riservare il mio posto a "Nome evento".'
 Programma dell'evento in Markdown.
 ```
 
+## Aggiungere un prodotto al catalogo
+
+Modifica `src/data/catalogo.json` (un array): ogni prodotto ha un `id` univoco.
+
+```json
+{
+  "id": "umido-cane-manzo-verdure",
+  "name": "Umido Cane · Manzo & Verdure",
+  "animal": "cane",                 // cane | gatto
+  "type": "umido",                  // umido | secco | snack | integratore
+  "lifeStage": "adulto",            // cucciolo | adulto | senior | tutti
+  "line": "Carne fresca",
+  "description": "Pasto completo…",
+  "features": ["Carne fresca", "Grain free"],
+  "image": "/assets/foto.jpg",      // opzionale (senza → placeholder)
+  "badge": "Best seller"             // opzionale
+}
+```
+
+I filtri (animale, tipo, età, caratteristiche) si generano da soli dai dati.
+Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
+
+## Performance & SEO (già attive)
+
+- **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
+  interni e **Speculation Rules** per navigazione più rapida.
+- **Immagini ottimizzate** con `astro:assets` (webp responsive) per le foto pesanti.
+- **Parallax** accessibile su hero e cover (off con `prefers-reduced-motion`).
+- **JSON-LD** Person/LocalBusiness ovunque, Article/Event/ItemList/Breadcrumb dove
+  pertinente; `sitemap.xml`, `robots.txt`, header di cache (`netlify.toml`, `_headers`).
+- Verifica Search Console e handle social: compila i campi in `src/lib/seo.ts`.
+
 ## Integrazione cal.com ("Prenota una call")
 
 Oggi i pulsanti **Prenota una call** aprono un modale-placeholder con selezione
@@ -110,6 +147,7 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
 ## Da completare
 
 - **Dominio** definitivo (placeholder attuale: `www.comunicazionecinofila.it`).
-- **Foto reali** al posto dei `.placeholder` (team/formazione, ciotola, gatto).
+- **Foto reali** al posto dei `.placeholder` (team/formazione, ciotola, gatto) e foto prodotto del catalogo.
 - **Testi articoli** on-site (le bozze sono marcate nel Markdown).
-- Eventuale ottimizzazione immagini (es. `andrea-1.jpg` è pesante).
+- **Prodotti catalogo**: i dati in `src/data/catalogo.json` sono esempi indicativi, da allineare alla gamma Reico reale.
+- **Link cal.com** (`CAL_LINK` in `src/config.ts`) + immagine OG dedicata 1200×630.

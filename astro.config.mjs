@@ -7,4 +7,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.comunicazionecinofila.it',
   integrations: [sitemap()],
+  // Prefetch dei link interni (lavora insieme alle View Transitions del ClientRouter).
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
 });

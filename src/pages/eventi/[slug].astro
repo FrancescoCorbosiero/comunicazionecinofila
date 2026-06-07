@@ -35,6 +35,12 @@ const eventLd = {
   isAccessibleForFree: d.free,
   organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
 };
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Eventi', url: '/eventi' },
+  { name: d.title, url: `/eventi/${entry.id}` },
+];
 ---
 <Base
   active="eventi"
@@ -43,19 +49,21 @@ const eventLd = {
   ogTitle={d.title}
   ogDescription={d.excerpt}
   ogImage={d.cover ?? '/assets/feed-etichette.jpg'}
+  ogImageAlt={d.coverAlt ?? d.title}
+  breadcrumbs={crumbs}
   jsonLd={eventLd}
 >
   <article class="section-tight">
     <div class="container">
       <a class="text-link" href="/eventi">Tutti gli eventi</a>
       <div class="event-feature" data-reveal style="margin-top:18px;">
-        <div class="event-feature-media">
+        <div class="event-feature-media parallax-cover">
           {d.statusLabel && (
             <span class="event-status"><span class="pill pill-peach">{d.statusLabel}</span></span>
           )}
           {
             d.cover ? (
-              <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" />
+              <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
             ) : (
               <div class="placeholder" style="position:absolute; inset:0;">
                 {d.placeholderLabel ?? 'EVENTO'}

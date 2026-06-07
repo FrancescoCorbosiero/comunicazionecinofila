@@ -1,0 +1,37 @@
+---
+// Immagine cover ottimizzata (astro:assets) con effetto parallax opzionale.
+// Va inserita dentro un contenitore con la classe `parallax-cover`
+// (oltre alla classe layout, es. split-media / svc-block-media).
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  eager?: boolean;
+  parallax?: boolean;
+  sizes?: string;
+  widths?: number[];
+  class?: string;
+}
+const {
+  src,
+  alt,
+  eager = false,
+  parallax = true,
+  sizes = '(min-width: 940px) 50vw, 100vw',
+  widths = [400, 800, 1200],
+  class: className,
+} = Astro.props;
+
+const parallaxAttrs = parallax ? { 'data-parallax': '', 'data-parallax-cover': '' } : {};
+---
+<Image
+  src={src}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  class={className}
+  {...parallaxAttrs}
+/>

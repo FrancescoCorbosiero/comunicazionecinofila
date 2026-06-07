@@ -72,14 +72,14 @@ const eventLd = f
       <section class="section-tight">
         <div class="container">
           <div class="event-feature" data-reveal>
-            <div class="event-feature-media">
+            <div class="event-feature-media parallax-cover">
               {f.statusLabel && (
                 <span class="event-status">
                   <span class="pill pill-peach">{f.statusLabel}</span>
                 </span>
               )}
               {f.cover ? (
-                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" />
+                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               ) : (
                 <div class="placeholder" style="position:absolute; inset:0;">
                   {f.placeholderLabel ?? 'EVENTO'}
