@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import LeafIcon from '../components/LeafIcon.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import CalendarIcon from '../components/CalendarIcon.astro';
+
+const services = [
+  {
+    num: '01',
+    href: '/servizi#alimentazione',
+    title: 'Alimentazione Naturale',
+    body: "Capire l'etichetta, scegliere bene e costruire una ciotola adatta davvero al tuo animale. In collaborazione con Reico.",
+  },
+  {
+    num: '02',
+    href: '/servizi#consulenza',
+    title: 'Consulenza 1:1',
+    body: '45 minuti per analizzare alimentazione e comportamento. Al termine, un piano di lavoro firmato, su misura.',
+  },
+  {
+    num: '03',
+    href: '/servizi#opportunita',
+    title: 'Opportunità Lavorative',
+    body: 'Ami gli animali e vuoi farne una professione? Entra in un team multidisciplinare con formazione continua.',
+  },
+];
+---
+<Base
+  title="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+  description="Consulenza in comportamento e alimentazione naturale per cani e gatti. Consulenza gratuita di 45 minuti, piano di lavoro su misura. Partner Reico Italia."
+  ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+  ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e piano di lavoro su misura per il tuo animale."
+>
+  <!-- HERO -->
+  <section class="hero-center bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container">
+      <div class="hero-center-inner">
+        <span class="hero-portrait-xl">
+          <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
+        </span>
+        <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
+        <h1 class="hero-title-center">Il benessere parte<br />dalla <span class="hl">ciotola.</span></h1>
+        <p class="hero-lead-c">
+          Studio la relazione tra <strong style="color:var(--cream-ink); font-weight:700;"
+            >comportamento e alimentazione</strong
+          >: non esiste benessere animale senza tenerli insieme. Da qui parte ogni mia consulenza.
+        </p>
+        <div class="hero-cta-row center">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita <ArrowIcon size={16} /></a>
+          <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
+            Prenota una call <CalendarIcon size={16} />
+          </button>
+        </div>
+        <span class="hero-note">Primo confronto gratuito · cane e gatto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES STRIP -->
+  <section class="section">
+    <div class="container">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">Come posso aiutarti</span>
+        <h2 class="display-lg">Tre strade,<br />un'unica cura.</h2>
+        <p class="lead">
+          Per le famiglie che vogliono nutrire meglio, per chi cerca un confronto vero, e per chi
+          vuole farne un mestiere.
+        </p>
+      </div>
+      <div class="svc-strip" data-reveal data-delay="1">
+        {
+          services.map((s) => (
+            <a class="svc-item" href={s.href}>
+              <span class="svc-num">{s.num}</span>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+              <span class="text-link">
+                Scopri di più <ArrowIcon size={14} />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH TEASER -->
+  <section class="section bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container">
+      <div class="split">
+        <div class="split-media" data-reveal>
+          <img
+            src="/assets/andrea-1.jpg"
+            alt="Andrea con il suo bassotto lungo un fiume di montagna"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="split-body" data-reveal data-delay="1">
+          <span class="eyebrow kicker-rule">L'approccio</span>
+          <h2 class="display-md">Non vendo crocchette.<br />Costruisco equilibrio.</h2>
+          <p>
+            Lavoro sull'equilibrio interno dell'animale mettendo insieme tre cose: ciò che la
+            letteratura scientifica dice, ciò che osservo nel singolo soggetto, e il contesto reale
+            della famiglia. Una dieta perfetta sulla carta non serve a nulla se non entra nella vita
+            di tutti i giorni.
+          </p>
+          <p>
+            Dal 2021 collaboro con un team di professionisti uniti per portare consapevolezza su un
+            tema troppo spesso sottovalutato.
+          </p>
+          <a class="text-link" href="/approccio">
+            Conosci la mia storia <ArrowIcon size={14} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="proof paper-bg-deep" data-reveal>
+        <div class="proof-item"><div class="pn">2021</div><div class="pl">Nel team dal</div></div>
+        <div class="proof-item"><div class="pn">45'</div><div class="pl">Consulenza gratuita</div></div>
+        <div class="proof-item">
+          <div class="pn">
+            <svg
+              viewBox="0 0 50 44"
+              width="48"
+              height="42"
+              fill="var(--peach)"
+              aria-hidden="true"
+              style="display:inline-block;vertical-align:middle;"
+            >
+              <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
+              <ellipse cx="21" cy="10" rx="4.3" ry="6"></ellipse>
+              <ellipse cx="30" cy="11" rx="4.3" ry="6"></ellipse>
+              <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"></ellipse>
+              <ellipse cx="25" cy="29" rx="9.5" ry="8"></ellipse>
+            </svg>
+          </div>
+          <div class="pl">Cane &amp; Gatto</div>
+        </div>
+        <div class="proof-item"><div class="pn">Reico</div><div class="pl">Partner ufficiale</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="section bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <span class="section-mark" aria-hidden="true">
+          <LeafIcon size={40} stroke="var(--peach)" />
+        </span>
+        <span class="eyebrow">Il primo passo è gratuito</span>
+        <h2 class="display-lg">Parliamo del tuo<br />animale, davvero.</h2>
+        <p class="lead">
+          45 minuti insieme per analizzare alimentazione e comportamento. Al termine ricevi un piano
+          di lavoro firmato. Senza impegno.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+          <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
+            Prenota una call <CalendarIcon size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,51 @@
+---
+import { SITE_TAGLINE } from '../config';
+
+interface Props {
+  active?: string;
+}
+const { active } = Astro.props;
+
+const nav = [
+  { href: '/approccio', label: 'Approccio', key: 'approccio' },
+  { href: '/servizi', label: 'Servizi', key: 'servizi' },
+  { href: '/eventi', label: 'Eventi', key: 'eventi' },
+  { href: '/articoli', label: 'Articoli', key: 'articoli' },
+  { href: '/contatti', label: 'Contatti', key: 'contatti' },
+];
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand-lockup" href="/" aria-label="Andrea Bellettati — home">
+      <span class="lockup-mark">
+        <img
+          src="/assets/logo-original.jpg"
+          alt="Ritratto di Andrea Bellettati con il suo bassotto"
+          width="42"
+          height="42"
+        />
+      </span>
+      <span class="lockup-text">
+        <span class="lockup-name">Andrea Bellettati</span>
+        <span class="lockup-tag">{SITE_TAGLINE}</span>
+      </span>
+    </a>
+    <nav class="site-nav" data-nav aria-label="Navigazione principale">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class={active === item.key ? 'active' : undefined}
+            aria-current={active === item.key ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a class="btn btn-sm" href="/contatti">Consulenza gratuita</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
