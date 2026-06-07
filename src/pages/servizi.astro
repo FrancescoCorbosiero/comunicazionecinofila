@@ -1,0 +1,200 @@
+---
+import Base from '../layouts/Base.astro';
+import LeafIcon from '../components/LeafIcon.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import CalendarIcon from '../components/CalendarIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import feedEtichette from '../assets/feed-etichette.jpg';
+import andrea2 from '../assets/andrea-2.jpg';
+---
+<Base
+  active="servizi"
+  title="Servizi — Andrea Bellettati · Alimentazione, Consulenza, Lavoro"
+  description="Alimentazione naturale, consulenza 1:1 e opportunità lavorative nel settore pet. Consulenza gratuita di 45 minuti e piano di lavoro su misura. Partner Reico."
+  ogTitle="Servizi — Andrea Bellettati"
+  ogDescription="Tre strade, un'unica cura: alimentazione naturale, consulenza 1:1, opportunità lavorative."
+>
+  <!-- INTRO -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:760px;">
+        <span class="eyebrow kicker-rule">I servizi</span>
+        <h1 class="display-xl">Tre strade,<br />un'unica cura.</h1>
+        <p class="lead">
+          Per le famiglie che vogliono nutrire meglio il proprio animale e per chi sogna di
+          trasformare questa passione in un mestiere. Nessun prezzo a listino: ogni percorso parte da
+          un confronto gratuito e da un preventivo costruito sulla tua situazione reale.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE 1 — Alimentazione -->
+  <section class="section-tight" id="alimentazione">
+    <div class="container">
+      <div class="svc-block" data-reveal>
+        <div class="svc-block-media parallax-cover">
+          <CoverImage
+            src={feedEtichette}
+            alt="Locandina del webinar Etichette a 4 Zampe sulla lettura delle etichette del cibo per cani"
+          />
+        </div>
+        <div class="svc-block-body">
+          <span class="svc-num">Servizio 01</span>
+          <h3>Alimentazione Naturale</h3>
+          <p>
+            Capire cosa stai davvero comprando per il tuo animale e costruire una ciotola adatta a
+            lui — non alla pubblicità. Lavoro in collaborazione con Reico, alimentazione naturale per
+            cani e gatti.
+          </p>
+          <div class="svc-tag-row">
+            <span class="pill">Carne fresca</span>
+            <span class="pill">Grain free</span>
+            <span class="pill">Lettura etichette</span>
+            <span class="pill pill-peach">Partner Reico</span>
+          </div>
+          <ul class="svc-includes">
+            <li>Analisi dell'alimentazione attuale e degli ingredienti reali</li>
+            <li>Scelta dei prodotti in base a età, razza, attività e sensibilità</li>
+            <li>Indicazioni pratiche su dosi, transizione e routine</li>
+            <li>Supporto nel tempo, non una tabella e via</li>
+          </ul>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <a class="btn" href="/contatti">Richiedi un preventivo <ArrowIcon size={15} /></a>
+            <a class="btn btn-ghost" href="/articoli">Leggi gli articoli</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE 2 — Consulenza 1:1 -->
+  <section class="section-tight" id="consulenza">
+    <div class="container">
+      <div class="svc-block flip" data-reveal>
+        <div class="svc-block-media parallax-cover">
+          <CoverImage
+            src={andrea2}
+            alt="Andrea Bellettati con il suo bassotto, in un momento di vicinanza"
+          />
+        </div>
+        <div class="svc-block-body">
+          <span class="svc-num">Servizio 02</span>
+          <h3>Consulenza 1:1</h3>
+          <p>
+            Un confronto dedicato per analizzare insieme tutti gli aspetti legati ad alimentazione e
+            comportamento del tuo animale. La prima consulenza è gratuita.
+          </p>
+          <div class="svc-tag-row">
+            <span class="pill">45 minuti</span>
+            <span class="pill">Cane &amp; Gatto</span>
+            <span class="pill pill-peach">Primo incontro gratuito</span>
+          </div>
+          <ul class="svc-includes">
+            <li>45 minuti per analizzare alimentazione e comportamento del soggetto</li>
+            <li>Un documento firmato con il piano di lavoro proposto</li>
+            <li>Obiettivi concreti e sostenibili per la tua quotidianità</li>
+            <li>Verrai ricontattato al numero che lasci nel form</li>
+          </ul>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <a class="btn" href="/contatti">
+              Prenota la consulenza gratuita <ArrowIcon size={15} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE 3 — Opportunità Lavorative -->
+  <section class="section-tight" id="opportunita">
+    <div class="container">
+      <div class="svc-block" data-reveal>
+        <div
+          class="svc-block-media placeholder"
+          style="min-height:280px; flex-direction:column; gap:8px; text-align:center; padding:24px;"
+        >
+          <LeafIcon size={40} stroke="var(--olive-deep)" />
+          <span>FOTO TEAM · FORMAZIONE</span>
+        </div>
+        <div class="svc-block-body">
+          <span class="svc-num">Servizio 03</span>
+          <h3>Opportunità Lavorative</h3>
+          <p>
+            Se ami gli animali e vuoi trasformare questa passione in una professione, il settore
+            dell'alimentazione pet è un'opportunità concreta e in crescita costante. Entrando nel
+            team non sei solo: formazione continua, una community di esperti e strumenti reali per
+            costruire il tuo percorso.
+          </p>
+          <div class="svc-tag-row">
+            <span class="pill">Formazione continua</span>
+            <span class="pill">Community</span>
+            <span class="pill">Attività indipendente</span>
+            <span class="pill pill-dark">Settore in crescita</span>
+          </div>
+          <ul class="svc-includes">
+            <li>Competenze pratiche e scientifiche per seguire i clienti</li>
+            <li>Affiancamento di un team multidisciplinare</li>
+            <li>Strumenti per avviare un'attività o ampliare le tue competenze</li>
+            <li>Una call conoscitiva per capire se fa per te</li>
+          </ul>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <button type="button" class="btn btn-dark" data-open-call>
+              Fissa una call conoscitiva <CalendarIcon size={15} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section bg-deep paper-bg-deep">
+    <div class="container">
+      <div class="head-block center" data-reveal>
+        <span class="eyebrow kicker-rule">Come funziona</span>
+        <h2 class="display-lg">Dal primo messaggio<br />al piano firmato.</h2>
+      </div>
+      <div class="principi" data-reveal data-delay="1">
+        <div class="principio">
+          <span class="pno">1</span>
+          <h3>Compili il form</h3>
+          <p>
+            Mi racconti chi è il tuo animale e qual è la situazione. Niente Google Form: scrivi
+            direttamente qui o su WhatsApp.
+          </p>
+        </div>
+        <div class="principio">
+          <span class="pno">2</span>
+          <h3>Ti ricontatto io</h3>
+          <p>
+            Ti chiamo al numero indicato e fissiamo la consulenza gratuita di 45 minuti, su
+            alimentazione e comportamento.
+          </p>
+        </div>
+        <div class="principio">
+          <span class="pno">3</span>
+          <h3>Ricevi il piano</h3>
+          <p>
+            Al termine ti consegno un documento firmato con il piano di lavoro che possiamo mettere
+            in atto, passo dopo passo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-tight">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <span class="eyebrow">Pronto a iniziare?</span>
+        <h2 class="display-md">Il primo confronto<br />è sempre gratuito.</h2>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+          <button type="button" class="btn btn-ghost btn-lg" data-open-call>Prenota una call</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

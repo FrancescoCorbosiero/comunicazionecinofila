@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import ArrowIcon from '../../components/ArrowIcon.astro';
+import { SITE } from '../../config';
+import { longDate } from '../../lib/dates';
+import '../../styles/content.css';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('articoli');
+  // Pagine on-site solo per gli articoli pubblicati senza link esterno.
+  return all
+    .filter((a) => a.data.status === 'published' && !a.data.externalUrl)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const articleLd = {
+  '@type': 'Article',
+  headline: d.title,
+  description: d.excerpt,
+  datePublished: d.date.toISOString(),
+  ...(d.cover ? { image: new URL(d.cover, SITE).href } : {}),
+  author: { '@id': `${SITE}/#andrea` },
+  mainEntityOfPage: new URL(`/articoli/${entry.id}`, SITE).href,
+};
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Articoli', url: '/articoli' },
+  { name: d.title, url: `/articoli/${entry.id}` },
+];
+---
+<Base
+  active="articoli"
+  ogType="article"
+  title={`${d.title} — Andrea Bellettati`}
+  description={d.excerpt}
+  ogTitle={d.title}
+  ogDescription={d.excerpt}
+  ogImage={d.cover ?? '/assets/feed-antistaminico.jpg'}
+  ogImageAlt={d.coverAlt ?? d.title}
+  breadcrumbs={crumbs}
+  jsonLd={articleLd}
+>
+  <article class="section-tight">
+    <div class="container container-narrow">
+      <a class="text-link" href="/articoli">Tutti gli articoli</a>
+      <div class="head-block" data-reveal style="margin-top:18px; margin-bottom:28px;">
+        <div class="card-meta">{d.category} · <span>{longDate(d.date)}</span></div>
+        <h1 class="display-lg">{d.title}</h1>
+        <p class="lead">{d.excerpt}</p>
+      </div>
+      {
+        d.cover && (
+          <div
+            class="card-media parallax-cover"
+            style="aspect-ratio:16/10; border-radius:var(--r-3); margin-bottom:36px;"
+            data-reveal
+          >
+            <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
+          </div>
+        )
+      }
+      <div class="prose" data-reveal>
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="section-tight bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <h2 class="display-md">Hai una domanda<br />sul tuo animale?</h2>
+        <p class="lead">Il primo confronto è gratuito e senza impegno.</p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita <ArrowIcon size={16} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

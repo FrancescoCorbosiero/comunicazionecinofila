@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import { IG_URL } from '../config';
+
+const all = await getCollection('articoli');
+const featured = all.find((a) => a.data.featured) ?? all[0];
+const statusOrder: Record<string, number> = { published: 0, 'coming-soon': 1 };
+const rest = all
+  .filter((a) => a.id !== featured?.id)
+  .sort(
+    (a, b) =>
+      statusOrder[a.data.status] - statusOrder[b.data.status] ||
+      b.data.date.getTime() - a.data.date.getTime()
+  );
+
+const f = featured?.data;
+const fExternal = Boolean(f?.externalUrl);
+const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
+---
+<Base
+  active="articoli"
+  title="Articoli — Andrea Bellettati · Alimentazione e benessere"
+  description="Note e approfondimenti su alimentazione naturale, lettura delle etichette, rimedi naturali e benessere di cani e gatti."
+  ogTitle="Articoli — Andrea Bellettati"
+  ogDescription="Approfondimenti su alimentazione e benessere, senza slogan."
+  ogImage="/assets/feed-antistaminico.jpg"
+>
+  <!-- INTRO -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:760px;">
+        <span class="eyebrow kicker-rule">Note &amp; approfondimenti</span>
+        <h1 class="display-xl">Senza slogan.<br />Con metodo.</h1>
+        <p class="lead">
+          Spunti pratici su alimentazione e benessere, nati dalle domande che mi fanno più spesso
+          famiglie e proprietari. Niente promesse facili: solo informazione che aiuta a scegliere.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED ARTICLE -->
+  {
+    featured && f && (
+      <section class="section-tight">
+        <div class="container">
+          <a
+            class="svc-block"
+            href={fHref}
+            {...fExternal ? { target: '_blank', rel: 'noopener' } : {}}
+            data-reveal
+            style="text-decoration:none;"
+          >
+            {f.cover ? (
+              <div class="svc-block-media parallax-cover">
+                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
+              </div>
+            ) : (
+              <div
+                class="svc-block-media placeholder"
+                style="min-height:280px; flex-direction:column; gap:8px;"
+              >
+                <span>{f.placeholderLabel ?? 'FOTO'}</span>
+              </div>
+            )}
+            <div class="svc-block-body">
+              <div class="card-meta">
+                <span style="color:var(--peach-deep);">In evidenza</span> · <span>{f.category}</span>
+              </div>
+              <h2 class="display-md">{f.title}</h2>
+              <p>{f.excerpt}</p>
+              <span class="text-link">
+                {fExternal ? 'Leggi su Instagram' : "Leggi l'articolo"} <ArrowIcon size={14} />
+              </span>
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- GRID -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="card-grid cols-3" data-reveal data-delay="1">
+        {rest.map((entry) => <ArticleCard entry={entry} />)}
+      </div>
+      <p class="field-hint" style="margin-top:20px;">
+        Pubblico nuovi contenuti prima su Instagram. Seguimi su <a
+          class="text-link"
+          href={IG_URL}
+          target="_blank"
+          rel="noopener">@comunicazionecinofila</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-tight bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <h2 class="display-md">Hai una domanda<br />sul tuo animale?</h2>
+        <p class="lead">
+          Spesso la risposta più utile arriva da un confronto diretto. Il primo è gratuito.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Chiedi a me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

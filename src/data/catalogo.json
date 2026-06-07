@@ -1,0 +1,135 @@
+[
+  {
+    "id": "umido-cane-manzo-verdure",
+    "name": "Umido Cane · Manzo & Verdure",
+    "animal": "cane",
+    "type": "umido",
+    "lifeStage": "adulto",
+    "line": "Carne fresca",
+    "description": "Pasto completo con alta percentuale di manzo fresco e verdure di stagione. Senza coloranti né aromi artificiali.",
+    "features": ["Carne fresca", "Grain free", "Monoproteico"],
+    "badge": "Best seller"
+  },
+  {
+    "id": "umido-cane-pollo-riso",
+    "name": "Umido Cane · Pollo & Riso",
+    "animal": "cane",
+    "type": "umido",
+    "lifeStage": "adulto",
+    "line": "Carne fresca",
+    "description": "Ricetta delicata e digeribile con pollo fresco e riso, ideale per la routine di tutti i giorni.",
+    "features": ["Carne fresca", "Ipoallergenico"]
+  },
+  {
+    "id": "secco-cane-agnello",
+    "name": "Secco Cane · Agnello",
+    "animal": "cane",
+    "type": "secco",
+    "lifeStage": "adulto",
+    "line": "Sensible",
+    "description": "Crocchette monoproteiche all'agnello per cani sensibili, senza cereali.",
+    "features": ["Monoproteico", "Grain free", "Ipoallergenico"]
+  },
+  {
+    "id": "secco-cane-cucciolo-pollo",
+    "name": "Secco Cane Cucciolo · Pollo",
+    "animal": "cane",
+    "type": "secco",
+    "lifeStage": "cucciolo",
+    "line": "Crescita",
+    "description": "Formula per la crescita con pollo fresco, calcio e DHA per uno sviluppo equilibrato.",
+    "features": ["Carne fresca"],
+    "badge": "Novità"
+  },
+  {
+    "id": "secco-cane-senior-pesce",
+    "name": "Secco Cane Senior · Pesce",
+    "animal": "cane",
+    "type": "secco",
+    "lifeStage": "senior",
+    "line": "Senior",
+    "description": "Crocchette leggere al pesce per cani anziani, con supporto per articolazioni.",
+    "features": ["Senior", "Grain free", "Omega 3"]
+  },
+  {
+    "id": "umido-gatto-tonno",
+    "name": "Umido Gatto · Tonno",
+    "animal": "gatto",
+    "type": "umido",
+    "lifeStage": "adulto",
+    "line": "Carne fresca",
+    "description": "Bocconcini di tonno in salsa, ricchi di umidità per il benessere delle vie urinarie.",
+    "features": ["Carne fresca", "Grain free"]
+  },
+  {
+    "id": "umido-gatto-salmone",
+    "name": "Umido Gatto · Salmone",
+    "animal": "gatto",
+    "type": "umido",
+    "lifeStage": "adulto",
+    "line": "Sensible",
+    "description": "Salmone monoproteico per gatti dal palato esigente o con sensibilità alimentari.",
+    "features": ["Monoproteico", "Omega 3"]
+  },
+  {
+    "id": "secco-gatto-pollo",
+    "name": "Secco Gatto · Pollo",
+    "animal": "gatto",
+    "type": "secco",
+    "lifeStage": "adulto",
+    "line": "Carne fresca",
+    "description": "Crocchette al pollo fresco, croccanti e appetibili, senza cereali aggiunti.",
+    "features": ["Carne fresca", "Grain free"]
+  },
+  {
+    "id": "secco-gatto-sterilizzato",
+    "name": "Secco Gatto · Sterilizzato",
+    "animal": "gatto",
+    "type": "secco",
+    "lifeStage": "adulto",
+    "line": "Light",
+    "description": "Ricetta a ridotto contenuto calorico per gatti sterilizzati, per mantenere il peso forma.",
+    "features": ["Sterilizzato", "Ipoallergenico"]
+  },
+  {
+    "id": "snack-cane-filetti-pollo",
+    "name": "Snack Cane · Filetti di Pollo",
+    "animal": "cane",
+    "type": "snack",
+    "lifeStage": "tutti",
+    "line": "Naturale",
+    "description": "Filetti di pollo essiccati al 100%, premio naturale per l'addestramento e la coccola.",
+    "features": ["Monoproteico", "Naturale"]
+  },
+  {
+    "id": "snack-gatto-bocconcini",
+    "name": "Snack Gatto · Bocconcini",
+    "animal": "gatto",
+    "type": "snack",
+    "lifeStage": "tutti",
+    "line": "Naturale",
+    "description": "Bocconcini teneri e naturali, perfetti come premio o per la somministrazione di integratori.",
+    "features": ["Naturale"]
+  },
+  {
+    "id": "integratore-olio-salmone",
+    "name": "Integratore · Olio di Salmone",
+    "animal": "cane",
+    "type": "integratore",
+    "lifeStage": "tutti",
+    "line": "Benessere",
+    "description": "Olio di salmone ricco di Omega 3 per il benessere di pelle e pelo. Adatto a cani e gatti.",
+    "features": ["Omega 3", "Naturale"],
+    "badge": "Novità"
+  },
+  {
+    "id": "integratore-articolazioni",
+    "name": "Integratore · Supporto Articolazioni",
+    "animal": "cane",
+    "type": "integratore",
+    "lifeStage": "senior",
+    "line": "Benessere",
+    "description": "Complemento con condroprotettori per il supporto delle articolazioni nei cani adulti e senior.",
+    "features": ["Senior", "Articolazioni"]
+  }
+]

@@ -1,15 +1,19 @@
 /* =====================================================================
    Andrea Bellettati — comportamenti del sito.
-   Caricato una sola volta dal Base layout. Ogni blocco verifica i propri
-   elementi, così è sicuro su tutte le pagine (progressive enhancement).
+   Compatibile con le View Transitions (Astro ClientRouter):
+   - i listener globali (window/document) si registrano UNA volta sola;
+   - gli inizializzatori legati agli elementi girano a ogni `astro:page-load`
+     (gli elementi vecchi vengono scartati dallo swap, niente doppi bind).
    ===================================================================== */
 import { WA_NUMBER, EMAIL } from '../config';
-// Quando attiverai cal.com, importa anche CAL_LINK da '../config' e usalo
-// per aprire l'embed/popup ufficiale al posto del placeholder.
+import { initCatalog } from './catalog';
+// Quando attiverai cal.com, importa anche CAL_LINK da '../config'.
 
 function waLink(text: string): string {
   return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
 }
+const prefersReduced = () =>
+  window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ── Mobile nav ──────────────────────────────────────────────── */
 function initNav(): void {
@@ -32,10 +36,8 @@ function initNav(): void {
 function initReveal(): void {
   const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
   if (!els.length) return;
-  const reduce =
-    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) return; // il CSS base li lascia visibili
-  document.documentElement.classList.add('js'); // opt-in: nascondi-poi-rivela
+  if (prefersReduced() || !('IntersectionObserver' in window)) return; // il CSS base li lascia visibili
+  document.documentElement.classList.add('js');
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -49,7 +51,6 @@ function initReveal(): void {
   );
   const vh = window.innerHeight || document.documentElement.clientHeight;
   els.forEach((el) => {
-    // Above the fold: rivela subito senza transizione, non resta mai nascosto.
     if (el.getBoundingClientRect().top < vh * 0.95) {
       el.style.transition = 'none';
       el.classList.add('in');
@@ -57,17 +58,6 @@ function initReveal(): void {
       io.observe(el);
     }
   });
-}
-
-/* ── Header: leggera elevazione allo scroll ──────────────────── */
-function initHeader(): void {
-  const h = document.querySelector<HTMLElement>('.site-header');
-  if (!h) return;
-  const onScroll = () => {
-    h.style.boxShadow = window.scrollY > 8 ? '0 8px 28px -20px rgba(31,37,21,0.5)' : 'none';
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 }
 
 /* ── Validazione campo ───────────────────────────────────────── */
@@ -123,8 +113,6 @@ function initStepForm(): void {
       if (current > 0) show(current - 1);
     });
   });
-
-  // Pulisci l'errore mentre si scrive
   form.querySelectorAll('input, textarea, select').forEach((inp) => {
     inp.addEventListener('input', () => {
       const field = inp.closest('.field');
@@ -174,7 +162,6 @@ function initStepForm(): void {
     const head = form.querySelector<HTMLElement>('.steps-head');
     if (head) head.style.display = 'none';
     if (success) success.classList.add('show');
-    // apri WhatsApp direttamente
     window.open(waLink(text), '_blank', 'noopener');
   });
 
@@ -195,14 +182,15 @@ function initPathSelector(): void {
   cards.forEach((c) =>
     c.addEventListener('click', () => select(c.getAttribute('data-path') || 'famiglia'))
   );
-  // rispetta il deep-link ?p=
   const p = new URLSearchParams(location.search).get('p');
   select(p === 'pro' ? 'pro' : 'famiglia');
 }
 
 /* ── Booking: slot → conferma WhatsApp (modale + card pro) ───── */
 function callText(slot: string): string {
-  return 'Ciao Andrea! Vorrei fissare una call conoscitiva' + (slot ? ' — slot preferito: ' + slot : '') + '.';
+  return (
+    'Ciao Andrea! Vorrei fissare una call conoscitiva' + (slot ? ' — slot preferito: ' + slot : '') + '.'
+  );
 }
 function initBookings(): void {
   document.querySelectorAll<HTMLElement>('[data-booking]').forEach((group) => {
@@ -225,46 +213,99 @@ function initBookings(): void {
   });
 }
 
-/* ── Modale call condiviso, aperto da [data-open-call] ───────── */
-function initCallModal(): void {
+/* ── Modale call (apertura/chiusura via delega globale) ──────── */
+function openCall(): void {
   const ov = document.querySelector<HTMLElement>('[data-call-modal]');
   if (!ov) return;
-  const open = () => {
-    ov.hidden = false;
-    document.documentElement.style.overflow = 'hidden';
-    const f = ov.querySelector<HTMLElement>('.cal-slot');
-    if (f) setTimeout(() => f.focus(), 60);
+  ov.hidden = false;
+  document.documentElement.style.overflow = 'hidden';
+  const f = ov.querySelector<HTMLElement>('.cal-slot');
+  if (f) setTimeout(() => f.focus(), 60);
+}
+function closeCall(): void {
+  const ov = document.querySelector<HTMLElement>('[data-call-modal]');
+  if (!ov || ov.hidden) return;
+  ov.hidden = true;
+  document.documentElement.style.overflow = '';
+}
+
+/* ── Parallax ────────────────────────────────────────────────── */
+let parallaxItems: HTMLElement[] = [];
+function collectParallax(): void {
+  parallaxItems = prefersReduced() ? [] : Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+}
+function updateParallax(): void {
+  if (!parallaxItems.length) return;
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  for (const el of parallaxItems) {
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom < -120 || rect.top > vh + 120) continue;
+    const center = rect.top + rect.height / 2;
+    const progress = (center - vh / 2) / (vh / 2 + rect.height / 2);
+    const clamped = Math.max(-1, Math.min(1, progress));
+    if (el.hasAttribute('data-parallax-cover')) {
+      const shift = rect.height * 0.06 * -clamped;
+      el.style.transform = `translate3d(0, ${shift.toFixed(2)}px, 0) scale(1.12)`;
+    } else {
+      const speed = parseFloat(el.getAttribute('data-parallax') || '') || 40;
+      el.style.transform = `translate3d(0, ${(-clamped * (speed / 2)).toFixed(2)}px, 0)`;
+    }
+  }
+}
+
+/* ── Elevazione header allo scroll ───────────────────────────── */
+function updateHeader(): void {
+  const h = document.querySelector<HTMLElement>('.site-header');
+  if (h) h.style.boxShadow = window.scrollY > 8 ? '0 8px 28px -20px rgba(31,37,21,0.5)' : 'none';
+}
+
+/* ── Listener globali (una sola volta) ───────────────────────── */
+let globalsReady = false;
+function initGlobals(): void {
+  if (globalsReady) return;
+  globalsReady = true;
+
+  let ticking = false;
+  const onScroll = () => {
+    updateHeader();
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateParallax();
+        ticking = false;
+      });
+    }
   };
-  const close = () => {
-    ov.hidden = true;
-    document.documentElement.style.overflow = '';
-  };
-  ov.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).closest('[data-close-call]')) close();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+
+  // Modale "Prenota una call": delega → robusta tra le navigazioni.
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-open-call]')) {
+      e.preventDefault();
+      openCall();
+    } else if (t.closest('[data-close-call]')) {
+      closeCall();
+    }
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !ov.hidden) close();
-  });
-  document.querySelectorAll('[data-open-call]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      open();
-    });
+    if (e.key === 'Escape') closeCall();
   });
 }
 
-/* ── Bootstrap ───────────────────────────────────────────────── */
-function ready(fn: () => void): void {
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
-  else fn();
-}
-
-ready(() => {
+/* ── Per pagina (anche dopo ogni view transition) ───────────── */
+function onPageLoad(): void {
   initNav();
   initReveal();
-  initHeader();
-  initCallModal();
-  initBookings();
   initStepForm();
   initPathSelector();
-});
+  initBookings();
+  initCatalog();
+  collectParallax();
+  updateParallax();
+  updateHeader();
+}
+
+initGlobals();
+document.addEventListener('astro:page-load', onPageLoad);

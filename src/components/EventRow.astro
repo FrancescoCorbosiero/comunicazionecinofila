@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArrowIcon from './ArrowIcon.astro';
+import { eventShort } from '../lib/dates';
+
+interface Props {
+  entry: CollectionEntry<'eventi'>;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const comingSoon = d.status === 'coming-soon';
+const external = Boolean(d.externalUrl);
+const dateText = d.whenLabel ?? (d.date ? eventShort(d.date) : '');
+const href = d.externalUrl ?? d.internalUrl ?? (comingSoon ? null : `/eventi/${entry.id}`);
+const linkLabel = external ? 'Resta aggiornato' : d.internalUrl ? "Leggi l'articolo" : 'Dettagli';
+---
+<div class="event-row">
+  <span class="er-date">{dateText}</span>
+  <span class="er-title">
+    {d.title}
+    <small>{d.excerpt}</small>
+  </span>
+  {
+    href && (
+      <a class="text-link" href={href} {...external ? { target: '_blank', rel: 'noopener' } : {}}>
+        {linkLabel} <ArrowIcon size={14} />
+      </a>
+    )
+  }
+</div>

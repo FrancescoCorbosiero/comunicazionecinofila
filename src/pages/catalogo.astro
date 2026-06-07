@@ -1,0 +1,230 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import { waLink } from '../config';
+import '../styles/catalog.css';
+
+const products = (await getCollection('catalogo')).map((p, i) => ({ ...p, order: i }));
+
+const animalLabel: Record<string, string> = { cane: 'Cane', gatto: 'Gatto' };
+const typeLabel: Record<string, string> = {
+  umido: 'Umido',
+  secco: 'Secco',
+  snack: 'Snack',
+  integratore: 'Integratore',
+};
+const stageLabel: Record<string, string> = {
+  cucciolo: 'Cucciolo',
+  adulto: 'Adulto',
+  senior: 'Senior',
+  tutti: 'Tutte le età',
+};
+
+const animals = [...new Set(products.map((p) => p.data.animal))];
+const types = [...new Set(products.map((p) => p.data.type))];
+const stages = [...new Set(products.map((p) => p.data.lifeStage))].filter((s) => s !== 'tutti');
+const features = [...new Set(products.flatMap((p) => p.data.features))].sort((a, b) => a.localeCompare(b, 'it'));
+
+const filterGroups = [
+  { facet: 'animal', label: 'Animale', values: animals.map((v) => ({ v, l: animalLabel[v] ?? v })) },
+  { facet: 'type', label: 'Tipo di alimento', values: types.map((v) => ({ v, l: typeLabel[v] ?? v })) },
+  { facet: 'stage', label: "Fascia d'età", values: stages.map((v) => ({ v, l: stageLabel[v] ?? v })) },
+  { facet: 'feature', label: 'Caratteristiche', values: features.map((v) => ({ v, l: v })) },
+];
+
+// SEO prep: ItemList dei prodotti di esempio.
+const itemListLd = {
+  '@type': 'ItemList',
+  name: 'Catalogo prodotti Reico — selezione',
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.data.name,
+  })),
+};
+---
+<Base
+  active="catalogo"
+  title="Catalogo prodotti — Andrea Bellettati · Alimentazione Reico"
+  description="Una selezione di prodotti Reico per cani e gatti: umido, secco, snack e integratori. Filtra per animale, tipo, età e caratteristiche. Preventivo su richiesta, senza impegno."
+  ogTitle="Catalogo prodotti — Andrea Bellettati"
+  ogDescription="Alimentazione naturale Reico per cani e gatti. Filtra e richiedi un preventivo su misura."
+  jsonLd={itemListLd}
+>
+  <!-- INTRO -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:780px;">
+        <span class="eyebrow kicker-rule">Catalogo · Partner Reico</span>
+        <h1 class="display-xl">Una ciotola<br />su misura.</h1>
+        <p class="lead">
+          Una selezione dei prodotti Reico che propongo più spesso: alimentazione naturale per cani e
+          gatti. Filtra per animale, tipo, età e caratteristiche — poi chiedimi un preventivo: nessun
+          prezzo a listino, ogni consiglio parte dal tuo animale.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG -->
+  <section class="section-tight" data-catalog data-screen-label="Catalogo">
+    <div class="container">
+      <div class="catalog-toolbar">
+        <button
+          class="catalog-filter-toggle"
+          data-catalog-filter-toggle
+          aria-controls="catalog-filters"
+          aria-expanded="false"
+          type="button"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 5h18M6 12h12M10 19h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          Filtri <span class="filter-count-badge" data-filter-count>0</span>
+        </button>
+        <span class="catalog-count" data-catalog-count></span>
+        <span class="spacer"></span>
+        <div class="catalog-search field" style="margin:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          <input type="search" data-catalog-search placeholder="Cerca un prodotto…" aria-label="Cerca nel catalogo" />
+        </div>
+        <label class="catalog-sort">
+          <span>Ordina</span>
+          <select data-catalog-sort aria-label="Ordina i prodotti">
+            <option value="relevance">Rilevanza</option>
+            <option value="name-asc">Nome A–Z</option>
+            <option value="name-desc">Nome Z–A</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="catalog-layout">
+        <aside class="catalog-sidebar" data-catalog-sidebar id="catalog-filters" aria-label="Filtri prodotti">
+          <div class="catalog-sidebar-head">
+            <b>Filtri</b>
+            <span style="display:flex; gap:10px; align-items:center;">
+              <button class="catalog-reset" data-catalog-reset type="button">Azzera</button>
+              <button class="catalog-sidebar-close" data-catalog-sidebar-close type="button" aria-label="Chiudi filtri">✕</button>
+            </span>
+          </div>
+          {
+            filterGroups.map((g) => (
+              <div class="filter-group">
+                <h4>{g.label}</h4>
+                <div class="filter-chips">
+                  {g.values.map((opt) => (
+                    <label class="choice">
+                      <input type="checkbox" data-filter={g.facet} value={opt.v} />
+                      <span>{opt.l}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </aside>
+
+        <div>
+          <div class="product-grid" data-catalog-grid>
+            {
+              products.map((p) => {
+                const d = p.data;
+                const wa = waLink(
+                  `Ciao Andrea! Vorrei informazioni / un preventivo per "${d.name}" (${typeLabel[d.type]} · ${animalLabel[d.animal]}).`
+                );
+                const searchHay = [d.name, d.description, d.line, ...d.features].join(' ');
+                return (
+                  <article
+                    class="product-card"
+                    data-product
+                    data-animal={d.animal}
+                    data-type={d.type}
+                    data-stage={d.lifeStage}
+                    data-name={d.name}
+                    data-order={p.order}
+                    data-features={d.features.join(',')}
+                    data-search={searchHay}
+                  >
+                    <div class="product-media">
+                      {d.badge && <span class="product-badge">{d.badge}</span>}
+                      {d.image ? (
+                        <img src={d.image} alt={d.name} loading="lazy" decoding="async" />
+                      ) : (
+                        <Fragment>
+                          <svg width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                            <path
+                              d="M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6"
+                              stroke="var(--olive-deep)"
+                              stroke-width="1.4"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          <span class="ph-type">
+                            {typeLabel[d.type]} · {animalLabel[d.animal]}
+                          </span>
+                        </Fragment>
+                      )}
+                    </div>
+                    <div class="product-body">
+                      {d.line && <span class="product-line">{d.line}</span>}
+                      <h3>{d.name}</h3>
+                      <p class="product-desc">{d.description}</p>
+                      {d.features.length > 0 && (
+                        <div class="product-tags">
+                          {d.features.slice(0, 3).map((t) => (
+                            <span class="pill">{t}</span>
+                          ))}
+                        </div>
+                      )}
+                      <div class="product-cta">
+                        <a class="btn btn-sm" href={wa} target="_blank" rel="noopener">
+                          Richiedi info <WhatsAppIcon size={14} />
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })
+            }
+          </div>
+          <div class="catalog-empty" data-catalog-empty>
+            <p>Nessun prodotto con questi filtri.</p>
+            <button class="text-link" data-catalog-reset type="button" style="background:none;border:0;font:inherit;cursor:pointer;">
+              Azzera i filtri <ArrowIcon size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="field-hint" style="margin-top:22px;">
+        Selezione indicativa a scopo informativo. La gamma completa Reico è più ampia: scrivimi e
+        costruiamo insieme la ciotola giusta. <a class="text-link" href="/contatti">Richiedi un preventivo</a>.
+      </p>
+    </div>
+  </section>
+
+  <div class="catalog-backdrop" data-catalog-backdrop></div>
+
+  <!-- CTA -->
+  <section class="section-tight bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <span class="eyebrow">Non sai da dove partire?</span>
+        <h2 class="display-md">Ti aiuto a scegliere.</h2>
+        <p class="lead">
+          La prima consulenza è gratuita: analizziamo alimentazione e abitudini, poi ti propongo i
+          prodotti adatti con un preventivo su misura.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+          <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>Prenota una call</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

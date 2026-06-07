@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import andrea1 from '../assets/andrea-1.jpg';
 
 const services = [
   {
@@ -35,7 +37,7 @@ const services = [
   <section class="hero-center bg-sage paper-bg" style="background-color:var(--sage);">
     <div class="container">
       <div class="hero-center-inner">
-        <span class="hero-portrait-xl">
+        <span class="hero-portrait-xl" data-parallax="50">
           <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
@@ -88,13 +90,8 @@ const services = [
   <section class="section bg-sage paper-bg" style="background-color:var(--sage);">
     <div class="container">
       <div class="split">
-        <div class="split-media" data-reveal>
-          <img
-            src="/assets/andrea-1.jpg"
-            alt="Andrea con il suo bassotto lungo un fiume di montagna"
-            loading="lazy"
-            decoding="async"
-          />
+        <div class="split-media parallax-cover" data-reveal>
+          <CoverImage src={andrea1} alt="Andrea con il suo bassotto lungo un fiume di montagna" />
         </div>
         <div class="split-body" data-reveal data-delay="1">
           <span class="eyebrow kicker-rule">L'approccio</span>

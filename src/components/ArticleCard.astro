@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArrowIcon from './ArrowIcon.astro';
+
+interface Props {
+  entry: CollectionEntry<'articoli'>;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const comingSoon = d.status === 'coming-soon';
+const external = Boolean(d.externalUrl);
+const href = d.externalUrl ?? (comingSoon ? null : `/articoli/${entry.id}`);
+const Tag = href ? 'a' : 'div';
+---
+<Tag
+  class="card"
+  {...href ? { href } : {}}
+  {...external ? { target: '_blank', rel: 'noopener' } : {}}
+>
+  {
+    d.cover ? (
+      <div class="card-media">
+        <img src={d.cover} alt={d.coverAlt ?? d.title} loading="lazy" decoding="async" />
+      </div>
+    ) : (
+      <div class="card-media placeholder" style="flex-direction:column; gap:6px;">
+        <span>{d.placeholderLabel ?? 'FOTO'}</span>
+      </div>
+    )
+  }
+  <div class="card-body">
+    <div class="card-meta">
+      {d.category}
+      {comingSoon && (
+        <Fragment>
+          {' · '}
+          <span style="color:var(--peach-deep);">In arrivo</span>
+        </Fragment>
+      )}
+    </div>
+    <h3 style="font-size:21px;">{d.title}</h3>
+    <p style="font-size:14.5px; margin:0;">{d.excerpt}</p>
+    {
+      comingSoon ? (
+        <span class="text-link" style="margin-top:auto; opacity:0.55; cursor:default;">
+          Presto disponibile
+        </span>
+      ) : (
+        <span class="text-link" style="margin-top:auto;">
+          {external ? 'Leggi su Instagram' : 'Approfondisci'} <ArrowIcon size={14} />
+        </span>
+      )
+    }
+  </div>
+</Tag>

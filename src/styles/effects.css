@@ -1,0 +1,33 @@
+/* =====================================================================
+   Effetti: parallax + rifiniture per le View Transitions.
+   Tutto è disattivato quando l'utente preferisce meno movimento.
+   ===================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-parallax] {
+    will-change: transform;
+  }
+  /* I contenitori cover nascondono l'eccedenza; l'immagine è pre-scalata
+     così la traslazione del parallax non scopre mai i bordi. */
+  .parallax-cover {
+    overflow: hidden;
+  }
+  .parallax-cover > img {
+    transform: scale(1.12);
+    transform-origin: center;
+  }
+}
+
+/* View Transitions (Astro ClientRouter): crossfade un filo più morbido. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
