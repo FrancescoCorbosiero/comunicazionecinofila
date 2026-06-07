@@ -1,0 +1,295 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import { waLink, WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+
+const proWa = waLink("Ciao Andrea! Sono interessato/a all'opportunità lavorativa.");
+const proCallWa = waLink(
+  "Ciao Andrea! Sono interessato/a all'opportunità lavorativa. Vorrei fissare una call conoscitiva."
+);
+---
+<Base
+  active="contatti"
+  title="Contatti — Andrea Bellettati · Consulenza gratuita"
+  description="Prenota la consulenza gratuita di 45 minuti o fissa una call per le opportunità lavorative. Scrivimi su WhatsApp, email o Instagram."
+  ogTitle="Contatti — Andrea Bellettati"
+  ogDescription="Parliamo del tuo animale. Il primo passo è gratuito e senza impegno."
+>
+  <!-- INTRO + PATH SELECTOR -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:760px;">
+        <span class="eyebrow kicker-rule">Iniziamo</span>
+        <h1 class="display-xl">Parliamo del<br />tuo animale.</h1>
+        <p class="lead">
+          Dimmi prima di tutto da dove arrivi: posso aiutarti a nutrire e gestire meglio il tuo cane
+          o gatto, oppure accompagnarti se vuoi farne una professione.
+        </p>
+      </div>
+      <div class="path-grid" data-reveal data-delay="1">
+        <button class="path-card" data-path="famiglia" type="button">
+          <span class="pc-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z" stroke="var(--olive-deep)" stroke-width="1.6" stroke-linejoin="round"></path>
+              <circle cx="12" cy="11" r="2.4" stroke="var(--olive-deep)" stroke-width="1.6"></circle>
+            </svg>
+          </span>
+          <h3>Ho un cane o un gatto</h3>
+          <p>
+            Voglio migliorare alimentazione e benessere del mio animale. Compilo il questionario e mi
+            ricontatti tu.
+          </p>
+          <span class="text-link">Consulenza gratuita <ArrowIcon size={14} /></span>
+        </button>
+        <button class="path-card" data-path="pro" type="button">
+          <span class="pc-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16v12H4z" stroke="var(--olive-deep)" stroke-width="1.6"></path>
+              <path d="M9 7V5h6v2" stroke="var(--olive-deep)" stroke-width="1.6"></path>
+            </svg>
+          </span>
+          <h3>Voglio farne un lavoro</h3>
+          <p>
+            Mi interessa l'opportunità professionale nel settore pet. Fisso una call conoscitiva con
+            il calendario.
+          </p>
+          <span class="text-link">Prenota una call <ArrowIcon size={14} /></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAMILY PATH -->
+  <section class="section-tight" data-path-target="famiglia">
+    <div class="container">
+      <div class="form-card" style="display:grid; gap:clamp(28px,4vw,52px); grid-template-columns:1fr;">
+        <div>
+          <span class="eyebrow kicker-rule">Consulenza gratuita</span>
+          <h2 class="display-md" style="margin-top:14px;">45 minuti, su misura.<br />Senza impegno.</h2>
+          <p style="margin-top:14px;">
+            A seguito del questionario verrai ricontattato al numero che indichi. La consulenza dura
+            circa 45 minuti: analizziamo insieme tutti gli aspetti legati ad alimentazione e
+            comportamento del tuo animale.
+          </p>
+          <p>
+            Al termine ricevi un documento firmato in cui spiego il piano di lavoro che possiamo
+            mettere in atto per migliorare la situazione.
+          </p>
+          <ul class="svc-includes" style="margin-top:18px;">
+            <li>Gratuita e senza impegno</li>
+            <li>Cane &amp; gatto, alimentazione e comportamento</li>
+            <li>Piano di lavoro firmato</li>
+          </ul>
+        </div>
+
+        <form data-stepform novalidate>
+          <input type="hidden" name="profilo" value="Una famiglia" />
+          <div class="steps-head">
+            <span class="step-dot"></span>
+            <span class="step-dot"></span>
+            <span class="step-dot"></span>
+          </div>
+
+          <!-- STEP 1 -->
+          <div class="step-panel active">
+            <span class="step-label">Passo 1 di 3</span>
+            <h3 class="step-q">Come ti chiami?</h3>
+            <div class="field">
+              <label for="f-nome">Nome e cognome</label>
+              <input id="f-nome" name="nome" type="text" placeholder="Es. Giulia Bianchi" required />
+              <span class="field-error">Scrivi il tuo nome per continuare.</span>
+            </div>
+            <div class="step-nav">
+              <span></span>
+              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="step-panel">
+            <span class="step-label">Passo 2 di 3</span>
+            <h3 class="step-q">Parlami del tuo animale.</h3>
+            <div class="field">
+              <label for="f-animale">Chi è e qual è la situazione</label>
+              <textarea
+                id="f-animale"
+                name="animale"
+                rows="4"
+                placeholder="Cane o gatto? Razza, età, nome. Cosa vorresti migliorare: alimentazione, prurito, peso, comportamento…"
+                required></textarea>
+              <span class="field-error">Due righe bastano: mi aiutano a prepararmi.</span>
+            </div>
+            <div class="step-nav">
+              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="step-panel">
+            <span class="step-label">Passo 3 di 3</span>
+            <h3 class="step-q">Come ti ricontatto?</h3>
+            <div class="field">
+              <label for="f-tel">Telefono</label>
+              <input id="f-tel" name="telefono" type="tel" placeholder="+39 3xx xxx xxxx" required />
+              <span class="field-error">Serve un recapito per richiamarti.</span>
+            </div>
+            <div class="field">
+              <label for="f-msg">
+                Vuoi aggiungere altro?
+                <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--ink-mute);"
+                  >(facoltativo)</span
+                >
+              </label>
+              <textarea
+                id="f-msg"
+                name="messaggio"
+                rows="2"
+                placeholder="Orari migliori per essere chiamato, dubbi specifici…"></textarea>
+            </div>
+            <div class="step-nav">
+              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+              <button type="submit" class="btn">Invia su WhatsApp <WhatsAppIcon size={16} /></button>
+            </div>
+            <p class="field-hint">
+              Si apre WhatsApp con il messaggio già compilato. Preferisci l'email? Te lo preparo lo
+              stesso.
+            </p>
+            <div class="call-opt">
+              <span>Preferisci fissare direttamente una call?</span>
+              <button type="button" class="btn btn-ghost btn-sm" data-open-call>
+                Prenota una call <ArrowIcon size={14} />
+              </button>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="form-success">
+            <span class="success-check">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <h3 class="display-md">Ci siamo!</h3>
+            <p style="max-width:420px;">
+              Si è aperto WhatsApp con il tuo messaggio. Se non è successo, usa i pulsanti qui sotto —
+              ti ricontatto al più presto.
+            </p>
+            <div class="hero-cta-row" style="justify-content:center;">
+              <a class="btn" data-wa-out href="#" target="_blank" rel="noopener">Apri WhatsApp</a>
+              <a class="btn btn-ghost" data-mail-out href="#">Invia per email</a>
+            </div>
+            <p class="field-hint" style="text-align:center;">
+              Vuoi anche fissare una call? <button
+                type="button"
+                class="text-link"
+                data-open-call
+                style="background:none;border:0;font:inherit;cursor:pointer;">Prenotala qui</button
+              >
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRO PATH -->
+  <section class="section-tight" data-path-target="pro" style="display:none;">
+    <div class="container">
+      <div class="booking-card" data-reveal>
+        <span class="eyebrow kicker-rule" style="color:var(--peach);">Opportunità lavorative</span>
+        <h2 class="display-md">Fissa una call<br />conoscitiva.</h2>
+        <p style="max-width:560px;">
+          Se ami gli animali e vuoi trasformare questa passione in una professione, parliamone.
+          Scegli uno slot indicativo qui sotto: confermiamo insieme data e orario sul calendario.
+        </p>
+        <div class="booking-cal" data-booking>
+          <div style="font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-soft);">
+            Slot disponibili · questa settimana
+          </div>
+          <div class="cal-slots">
+            <button class="cal-slot" type="button">Mar · 18:00</button>
+            <button class="cal-slot" type="button">Mer · 21:00</button>
+            <button class="cal-slot" type="button">Gio · 18:30</button>
+            <button class="cal-slot" type="button">Ven · 19:00</button>
+            <button class="cal-slot" type="button">Sab · 10:30</button>
+          </div>
+          <div data-cal-confirm style="display:none; width:100%; padding-top:6px; flex-direction:column; gap:12px;">
+            <p style="margin:0; color:var(--cream-ink);">
+              Slot scelto: <b data-cal-label>—</b>. Confermalo su WhatsApp e ti mando il link del
+              calendario.
+            </p>
+            <a class="btn" data-cal-wa href={proCallWa} target="_blank" rel="noopener" style="align-self:flex-start;">
+              Conferma su WhatsApp <WhatsAppIcon size={15} />
+            </a>
+          </div>
+          <p style="font-size:11px; color:rgba(239,232,216,0.5); margin:4px 0 0;">
+            Prenotazione gestita via calendario smart (cal.com) — collegamento in arrivo.
+          </p>
+        </div>
+        <div class="hero-cta-row">
+          <a class="btn btn-cream" href={proWa} target="_blank" rel="noopener">Scrivimi direttamente</a>
+          <a class="btn btn-ghost-cream" href="/servizi#opportunita">Cosa significa entrare nel team</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANNELS -->
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split-body" data-reveal>
+          <span class="eyebrow kicker-rule">Tutti i modi per scrivermi</span>
+          <h2 class="display-md">O semplicemente,<br />contattami.</h2>
+          <p>
+            Preferisci saltare il questionario? Scegli il canale che ti è più comodo. Rispondo entro
+            24–48 ore.
+          </p>
+          <div class="channel-list" style="margin-top:8px;">
+            <a class="channel" href={WA_LINK} target="_blank" rel="noopener">
+              <span class="channel-icon"><WhatsAppIcon size={22} /></span>
+              <span class="channel-text"><b>WhatsApp</b><span>{PHONE_DISPLAY}</span></span>
+            </a>
+            <a class="channel" href={`mailto:${EMAIL}`}>
+              <span class="channel-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6"></path>
+                  <path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              <span class="channel-text"><b>Email</b><span>{EMAIL}</span></span>
+            </a>
+            <a class="channel" href={IG_URL} target="_blank" rel="noopener">
+              <span class="channel-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"></rect>
+                  <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"></circle>
+                  <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"></circle>
+                </svg>
+              </span>
+              <span class="channel-text"><b>Instagram</b><span>{IG_HANDLE}</span></span>
+            </a>
+            <a class="channel" href={`tel:${PHONE}`}>
+              <span class="channel-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5V18a2 2 0 01-2 2A14 14 0 014 6a2 2 0 011-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              <span class="channel-text"><b>Telefono</b><span>{PHONE_DISPLAY}</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="split-media" data-reveal data-delay="1" style="aspect-ratio:4/5;">
+          <img
+            src="/assets/andrea-3.jpg"
+            alt="I bassotti di Andrea con i maglioni a quadri, sul letto"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

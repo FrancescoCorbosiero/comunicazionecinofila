@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import { waLink, IG_URL } from '../config';
+
+const riservaWa = waLink('Ciao Andrea! Vorrei riservare il mio posto al webinar "Etichette a 4 Zampe".');
+
+// Structured data dell'evento in evidenza (JSON-LD Event).
+const eventLd = {
+  '@type': 'Event',
+  name: 'Etichette a 4 Zampe',
+  description:
+    'Webinar live gratuito per imparare a leggere le etichette del cibo per cani e fare scelte consapevoli. In collaborazione con Team Branco · Virginia Dallara.',
+  startDate: '2026-02-11T21:00:00+01:00',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'VirtualLocation', url: IG_URL },
+  image: 'https://www.comunicazionecinofila.it/assets/feed-etichette.jpg',
+  isAccessibleForFree: true,
+  organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
+};
+---
+<Base
+  active="eventi"
+  title="Eventi & Webinar — Andrea Bellettati"
+  description="Webinar e incontri live su alimentazione e benessere di cani e gatti. Etichette a 4 Zampe: impara a leggere le etichette e a scegliere con consapevolezza."
+  ogTitle="Eventi & Webinar — Andrea Bellettati"
+  ogDescription="Etichette a 4 Zampe e altri incontri live, gratuiti e a posti limitati."
+  ogImage="/assets/feed-etichette.jpg"
+  jsonLd={eventLd}
+>
+  <!-- INTRO -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:760px;">
+        <span class="eyebrow kicker-rule">Eventi &amp; Webinar</span>
+        <h1 class="display-xl">
+          Impariamo<br />insieme, <span
+            class="script"
+            style="font-family:var(--script); font-size:0.6em; text-transform:none;">live</span
+          >.
+        </h1>
+        <p class="lead">
+          Incontri online gratuiti per fare chiarezza su alimentazione e benessere. Si parla di
+          etichette, ingredienti, scelte quotidiane — con spazio per le tue domande.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED EVENT -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="event-feature" data-reveal>
+        <div class="event-feature-media">
+          <span class="event-status"><span class="pill pill-peach">Prossimo · posti limitati</span></span>
+          <img
+            src="/assets/feed-etichette.jpg"
+            alt="Locandina del webinar Etichette a 4 Zampe con Virginia Dallara, Team Branco"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="event-feature-body">
+          <div class="event-date">
+            <span class="d">11</span><span class="m">Febbraio · ore 21:00</span>
+          </div>
+          <h2 class="display-md">Etichette a 4 Zampe</h2>
+          <p style="font-weight:600; color:var(--olive-deep); font-size:18px; margin:0;">
+            Sai davvero cosa stai acquistando per il tuo cane?
+          </p>
+          <p>
+            Un webinar live per imparare a leggere le etichette del cibo e fare scelte consapevoli
+            per il benessere del tuo animale. Parliamo di carne fresca, grain free e additivi — senza
+            slogan, con metodo.
+          </p>
+          <div class="svc-tag-row">
+            <span class="pill">Carne fresca</span>
+            <span class="pill">Grain free</span>
+            <span class="pill">Additivi</span>
+          </div>
+          <div class="event-meta-row">
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 10l4.5-2.5v9L15 14M3 7h12v10H3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+              </svg>
+              Online · Webinar Live
+            </span>
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"></circle>
+                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+              </svg>
+              Durata ~60 min
+            </span>
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                <circle cx="12" cy="11" r="2.4" stroke="currentColor" stroke-width="1.6"></circle>
+              </svg>
+              Evento gratuito
+            </span>
+          </div>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <a class="btn btn-lg" href={riservaWa} target="_blank" rel="noopener">
+              Riserva il tuo posto <WhatsAppIcon size={16} />
+            </a>
+            <a class="btn btn-ghost btn-lg" href={IG_URL} target="_blank" rel="noopener">
+              Segui su Instagram
+            </a>
+          </div>
+          <p class="field-hint" style="margin-top:2px;">
+            In collaborazione con Team Branco · con Virginia Dallara.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">In programma &amp; in replay</span>
+        <h2 class="display-md">Altri appuntamenti</h2>
+      </div>
+      <div class="event-list" data-reveal data-delay="1">
+        <div class="event-row">
+          <span class="er-date">Su richiesta</span>
+          <span class="er-title">
+            Antistaminico naturale per cani
+            <small>Rimedi naturali e gestione del prurito stagionale — mini-sessione di domande.</small>
+          </span>
+          <a class="text-link" href="/articoli">Leggi l'articolo <ArrowIcon size={14} /></a>
+        </div>
+        <div class="event-row">
+          <span class="er-date">In arrivo</span>
+          <span class="er-title">
+            Ciotola del gatto: miti da sfatare
+            <small>Date in via di definizione — annuncio su Instagram e qui.</small>
+          </span>
+          <a class="text-link" href={IG_URL} target="_blank" rel="noopener">
+            Resta aggiornato <ArrowIcon size={14} />
+          </a>
+        </div>
+      </div>
+      <p class="field-hint" style="margin-top:16px;">
+        I nuovi eventi vengono annunciati prima su Instagram. Vuoi essere avvisato? <a
+          class="text-link"
+          href="/contatti">Scrivimi</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-tight bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <h2 class="display-md">Preferisci un confronto<br />tutto tuo?</h2>
+        <p class="lead">La consulenza 1:1 parte da un primo incontro gratuito di 45 minuti.</p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
