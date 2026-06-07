@@ -5,7 +5,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 # Asset con hash nel nome → cache lunghissima e immutabile.
 [[headers]]

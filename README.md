@@ -10,6 +10,9 @@ nutrizione per cani e gatti (partner Reico Italia). Costruito con **Astro**
 
 ## Comandi
 
+> **Richiede Node ≥ 22.12** (Astro 6). Con `nvm`: `nvm install 22 && nvm use 22`
+> (il repo include `.nvmrc`). Verifica con `node -v`.
+
 ```bash
 npm install        # installa le dipendenze
 npm run dev        # sviluppo su http://localhost:4321
