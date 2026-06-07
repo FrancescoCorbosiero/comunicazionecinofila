@@ -11,6 +11,18 @@ export const SITE = 'https://www.comunicazionecinofila.it';
 export const SITE_NAME = 'Andrea Bellettati · Comunicazione Cinofila';
 export const SITE_TAGLINE = 'Comportamento & Nutrizione · Cane e Gatto';
 
+/**
+ * ───────────────────────────────────────────────────────────────────────────
+ * DEMO TEMPORANEA — landing singola.
+ *   true  → il sito è UNA SOLA landing su "/" (Approccio + CTA), nav/footer
+ *           ridotti, nessun riferimento al form/contatti. Le altre route
+ *           reindirizzano a "/".
+ *   false → RIPRISTINA il sito multipagina completo, identico a prima.
+ * Per tornare al sito completo: metti `false` e ricostruisci (`npm run build`).
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+export const LANDING_MODE = true;
+
 /** Contatti reali (cablati ovunque) */
 export const WA_NUMBER = '393476780938';
 export const WA_LINK = `https://wa.me/${WA_NUMBER}`;

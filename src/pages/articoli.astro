@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import { IG_URL } from '../config';
+import { IG_URL, LANDING_MODE } from '../config';
+
+if (LANDING_MODE) return Astro.redirect('/');
 
 const all = await getCollection('articoli');
 const featured = all.find((a) => a.data.featured) ?? all[0];

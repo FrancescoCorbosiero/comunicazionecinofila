@@ -5,6 +5,9 @@ import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import { waLink } from '../config';
 import '../styles/catalog.css';
+import { LANDING_MODE } from '../config';
+
+if (LANDING_MODE) return Astro.redirect('/');
 
 const products = (await getCollection('catalogo')).map((p, i) => ({ ...p, order: i }));
 

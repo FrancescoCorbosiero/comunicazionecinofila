@@ -4,8 +4,10 @@ import Base from '../layouts/Base.astro';
 import EventRow from '../components/EventRow.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
-import { waLink, IG_URL, SITE } from '../config';
+import { waLink, IG_URL, SITE, LANDING_MODE } from '../config';
 import { eventDay, eventMonthTime } from '../lib/dates';
+
+if (LANDING_MODE) return Astro.redirect('/');
 
 const all = await getCollection('eventi');
 const featured = all.find((e) => e.data.featured) ?? all[0];

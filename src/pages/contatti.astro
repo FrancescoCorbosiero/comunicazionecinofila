@@ -4,7 +4,9 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import andrea3 from '../assets/andrea-3.jpg';
-import { waLink, WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+import { waLink, WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL, LANDING_MODE } from '../config';
+
+if (LANDING_MODE) return Astro.redirect('/');
 
 const proWa = waLink("Ciao Andrea! Sono interessato/a all'opportunità lavorativa.");
 const proCallWa = waLink(

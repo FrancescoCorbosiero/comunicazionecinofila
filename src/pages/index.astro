@@ -5,6 +5,8 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import andrea1 from '../assets/andrea-1.jpg';
+import { LANDING_MODE } from '../config';
+import LandingSections from '../components/LandingSections.astro';
 
 const services = [
   {
@@ -27,12 +29,20 @@ const services = [
   },
 ];
 ---
-<Base
-  title="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
-  description="Consulenza in comportamento e alimentazione naturale per cani e gatti. Consulenza gratuita di 45 minuti, piano di lavoro su misura. Partner Reico Italia."
-  ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
-  ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e piano di lavoro su misura per il tuo animale."
->
+{LANDING_MODE ? (
+  <Base
+    title="Andrea Bellettati — Comportamento, Nutrizione e Benessere · Cane e Gatto"
+    description="Comportamento e alimentazione naturale per cani e gatti. Primo confronto gratuito, piano di lavoro su misura. Partner Reico Italia."
+  >
+    <LandingSections />
+  </Base>
+) : (
+  <Base
+    title="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+    description="Consulenza in comportamento e alimentazione naturale per cani e gatti. Consulenza gratuita di 45 minuti, piano di lavoro su misura. Partner Reico Italia."
+    ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+    ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e piano di lavoro su misura per il tuo animale."
+  >
   <!-- HERO -->
   <section class="hero-center bg-sage paper-bg" style="background-color:var(--sage);">
     <div class="container">
@@ -167,3 +177,4 @@ const services = [
     </div>
   </section>
 </Base>
+)}
