@@ -1,25 +1,42 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import EventRow from '../components/EventRow.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
-import { waLink, IG_URL } from '../config';
+import { waLink, IG_URL, SITE } from '../config';
+import { eventDay, eventMonthTime } from '../lib/dates';
 
-const riservaWa = waLink('Ciao Andrea! Vorrei riservare il mio posto al webinar "Etichette a 4 Zampe".');
+const all = await getCollection('eventi');
+const featured = all.find((e) => e.data.featured) ?? all[0];
+const statusOrder: Record<string, number> = { upcoming: 0, 'on-request': 1, past: 2, 'coming-soon': 3 };
+const rest = all
+  .filter((e) => e.id !== featured?.id)
+  .sort(
+    (a, b) =>
+      statusOrder[a.data.status] - statusOrder[b.data.status] ||
+      (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0)
+  );
 
-// Structured data dell'evento in evidenza (JSON-LD Event).
-const eventLd = {
-  '@type': 'Event',
-  name: 'Etichette a 4 Zampe',
-  description:
-    'Webinar live gratuito per imparare a leggere le etichette del cibo per cani e fare scelte consapevoli. In collaborazione con Team Branco · Virginia Dallara.',
-  startDate: '2026-02-11T21:00:00+01:00',
-  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-  eventStatus: 'https://schema.org/EventScheduled',
-  location: { '@type': 'VirtualLocation', url: IG_URL },
-  image: 'https://www.comunicazionecinofila.it/assets/feed-etichette.jpg',
-  isAccessibleForFree: true,
-  organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
-};
+const f = featured?.data;
+const reserve = f?.reserveWaText
+  ? waLink(f.reserveWaText)
+  : waLink('Ciao Andrea! Vorrei riservare il mio posto al prossimo webinar.');
+
+const eventLd = f
+  ? {
+      '@type': 'Event',
+      name: f.title,
+      description: f.excerpt,
+      ...(f.date ? { startDate: f.date.toISOString() } : {}),
+      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: { '@type': 'VirtualLocation', url: IG_URL },
+      ...(f.cover ? { image: new URL(f.cover, SITE).href } : {}),
+      isAccessibleForFree: f.free,
+      organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
+    }
+  : undefined;
 ---
 <Base
   active="eventi"
@@ -50,109 +67,129 @@ const eventLd = {
   </section>
 
   <!-- FEATURED EVENT -->
-  <section class="section-tight">
-    <div class="container">
-      <div class="event-feature" data-reveal>
-        <div class="event-feature-media">
-          <span class="event-status"><span class="pill pill-peach">Prossimo · posti limitati</span></span>
-          <img
-            src="/assets/feed-etichette.jpg"
-            alt="Locandina del webinar Etichette a 4 Zampe con Virginia Dallara, Team Branco"
-            loading="lazy"
-            decoding="async"
-          />
+  {
+    featured && f && (
+      <section class="section-tight">
+        <div class="container">
+          <div class="event-feature" data-reveal>
+            <div class="event-feature-media">
+              {f.statusLabel && (
+                <span class="event-status">
+                  <span class="pill pill-peach">{f.statusLabel}</span>
+                </span>
+              )}
+              {f.cover ? (
+                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" />
+              ) : (
+                <div class="placeholder" style="position:absolute; inset:0;">
+                  {f.placeholderLabel ?? 'EVENTO'}
+                </div>
+              )}
+            </div>
+            <div class="event-feature-body">
+              {f.date && (
+                <div class="event-date">
+                  <span class="d">{eventDay(f.date)}</span>
+                  <span class="m">{eventMonthTime(f.date)}</span>
+                </div>
+              )}
+              <h2 class="display-md">{f.title}</h2>
+              {f.subtitle && (
+                <p style="font-weight:600; color:var(--olive-deep); font-size:18px; margin:0;">
+                  {f.subtitle}
+                </p>
+              )}
+              <p>{f.excerpt}</p>
+              {f.tags.length > 0 && (
+                <div class="svc-tag-row">
+                  {f.tags.map((t) => (
+                    <span class="pill">{t}</span>
+                  ))}
+                </div>
+              )}
+              <div class="event-meta-row">
+                {f.locationLabel && (
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M15 10l4.5-2.5v9L15 14M3 7h12v10H3z"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    {f.locationLabel}
+                  </span>
+                )}
+                {f.duration && (
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+                      <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    </svg>
+                    Durata {f.duration}
+                  </span>
+                )}
+                {f.free && (
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linejoin="round"
+                      />
+                      <circle cx="12" cy="11" r="2.4" stroke="currentColor" stroke-width="1.6" />
+                    </svg>
+                    Evento gratuito
+                  </span>
+                )}
+              </div>
+              <div class="hero-cta-row" style="margin-top:6px;">
+                <a class="btn btn-lg" href={reserve} target="_blank" rel="noopener">
+                  Riserva il tuo posto <WhatsAppIcon size={16} />
+                </a>
+                <a class="btn btn-ghost btn-lg" href={`/eventi/${featured.id}`}>
+                  Tutti i dettagli <ArrowIcon size={16} />
+                </a>
+              </div>
+              {f.collab && (
+                <p class="field-hint" style="margin-top:2px;">
+                  In collaborazione con {f.collab}.
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-        <div class="event-feature-body">
-          <div class="event-date">
-            <span class="d">11</span><span class="m">Febbraio · ore 21:00</span>
-          </div>
-          <h2 class="display-md">Etichette a 4 Zampe</h2>
-          <p style="font-weight:600; color:var(--olive-deep); font-size:18px; margin:0;">
-            Sai davvero cosa stai acquistando per il tuo cane?
-          </p>
-          <p>
-            Un webinar live per imparare a leggere le etichette del cibo e fare scelte consapevoli
-            per il benessere del tuo animale. Parliamo di carne fresca, grain free e additivi — senza
-            slogan, con metodo.
-          </p>
-          <div class="svc-tag-row">
-            <span class="pill">Carne fresca</span>
-            <span class="pill">Grain free</span>
-            <span class="pill">Additivi</span>
-          </div>
-          <div class="event-meta-row">
-            <span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 10l4.5-2.5v9L15 14M3 7h12v10H3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-              </svg>
-              Online · Webinar Live
-            </span>
-            <span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"></circle>
-                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
-              </svg>
-              Durata ~60 min
-            </span>
-            <span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-                <circle cx="12" cy="11" r="2.4" stroke="currentColor" stroke-width="1.6"></circle>
-              </svg>
-              Evento gratuito
-            </span>
-          </div>
-          <div class="hero-cta-row" style="margin-top:6px;">
-            <a class="btn btn-lg" href={riservaWa} target="_blank" rel="noopener">
-              Riserva il tuo posto <WhatsAppIcon size={16} />
-            </a>
-            <a class="btn btn-ghost btn-lg" href={IG_URL} target="_blank" rel="noopener">
-              Segui su Instagram
-            </a>
-          </div>
-          <p class="field-hint" style="margin-top:2px;">
-            In collaborazione con Team Branco · con Virginia Dallara.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    )
+  }
 
   <!-- AGENDA -->
-  <section class="section-tight">
-    <div class="container">
-      <div class="head-block" data-reveal>
-        <span class="eyebrow kicker-rule">In programma &amp; in replay</span>
-        <h2 class="display-md">Altri appuntamenti</h2>
-      </div>
-      <div class="event-list" data-reveal data-delay="1">
-        <div class="event-row">
-          <span class="er-date">Su richiesta</span>
-          <span class="er-title">
-            Antistaminico naturale per cani
-            <small>Rimedi naturali e gestione del prurito stagionale — mini-sessione di domande.</small>
-          </span>
-          <a class="text-link" href="/articoli">Leggi l'articolo <ArrowIcon size={14} /></a>
+  {
+    rest.length > 0 && (
+      <section class="section-tight">
+        <div class="container">
+          <div class="head-block" data-reveal>
+            <span class="eyebrow kicker-rule">In programma &amp; in replay</span>
+            <h2 class="display-md">Altri appuntamenti</h2>
+          </div>
+          <div class="event-list" data-reveal data-delay="1">
+            {rest.map((entry) => (
+              <EventRow entry={entry} />
+            ))}
+          </div>
+          <p class="field-hint" style="margin-top:16px;">
+            I nuovi eventi vengono annunciati prima su Instagram. Vuoi essere avvisato?{' '}
+            <a class="text-link" href="/contatti">
+              Scrivimi
+            </a>
+            .
+          </p>
         </div>
-        <div class="event-row">
-          <span class="er-date">In arrivo</span>
-          <span class="er-title">
-            Ciotola del gatto: miti da sfatare
-            <small>Date in via di definizione — annuncio su Instagram e qui.</small>
-          </span>
-          <a class="text-link" href={IG_URL} target="_blank" rel="noopener">
-            Resta aggiornato <ArrowIcon size={14} />
-          </a>
-        </div>
-      </div>
-      <p class="field-hint" style="margin-top:16px;">
-        I nuovi eventi vengono annunciati prima su Instagram. Vuoi essere avvisato? <a
-          class="text-link"
-          href="/contatti">Scrivimi</a
-        >.
-      </p>
-    </div>
-  </section>
+      </section>
+    )
+  }
 
   <!-- CTA -->
   <section class="section-tight bg-deep paper-bg-deep">

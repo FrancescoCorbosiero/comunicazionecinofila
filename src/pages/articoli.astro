@@ -1,7 +1,24 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import { IG_URL } from '../config';
+
+const all = await getCollection('articoli');
+const featured = all.find((a) => a.data.featured) ?? all[0];
+const statusOrder: Record<string, number> = { published: 0, 'coming-soon': 1 };
+const rest = all
+  .filter((a) => a.id !== featured?.id)
+  .sort(
+    (a, b) =>
+      statusOrder[a.data.status] - statusOrder[b.data.status] ||
+      b.data.date.getTime() - a.data.date.getTime()
+  );
+
+const f = featured?.data;
+const fExternal = Boolean(f?.externalUrl);
+const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
 ---
 <Base
   active="articoli"
@@ -26,89 +43,50 @@ import { IG_URL } from '../config';
   </section>
 
   <!-- FEATURED ARTICLE -->
-  <section class="section-tight">
-    <div class="container">
-      <a
-        class="svc-block"
-        href={IG_URL}
-        target="_blank"
-        rel="noopener"
-        data-reveal
-        style="text-decoration:none;"
-      >
-        <div class="svc-block-media">
-          <img
-            src="/assets/feed-antistaminico.jpg"
-            alt="Grafica: Antistaminico naturale per cani"
-            loading="lazy"
-            decoding="async"
-          />
+  {
+    featured && f && (
+      <section class="section-tight">
+        <div class="container">
+          <a
+            class="svc-block"
+            href={fHref}
+            {...fExternal ? { target: '_blank', rel: 'noopener' } : {}}
+            data-reveal
+            style="text-decoration:none;"
+          >
+            {f.cover ? (
+              <div class="svc-block-media">
+                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" />
+              </div>
+            ) : (
+              <div
+                class="svc-block-media placeholder"
+                style="min-height:280px; flex-direction:column; gap:8px;"
+              >
+                <span>{f.placeholderLabel ?? 'FOTO'}</span>
+              </div>
+            )}
+            <div class="svc-block-body">
+              <div class="card-meta">
+                <span style="color:var(--peach-deep);">In evidenza</span> · <span>{f.category}</span>
+              </div>
+              <h2 class="display-md">{f.title}</h2>
+              <p>{f.excerpt}</p>
+              <span class="text-link">
+                {fExternal ? 'Leggi su Instagram' : "Leggi l'articolo"} <ArrowIcon size={14} />
+              </span>
+            </div>
+          </a>
         </div>
-        <div class="svc-block-body">
-          <div class="card-meta">
-            <span style="color:var(--peach-deep);">In evidenza</span> · <span>Benessere</span>
-          </div>
-          <h2 class="display-md">Antistaminico naturale per cani</h2>
-          <p>
-            Prurito, arrossamenti, leccamenti insistenti: il cambio di stagione si fa sentire anche a
-            quattro zampe. Quali supporti naturali hanno davvero senso, quando servono e perché
-            l'alimentazione è il primo alleato contro le reazioni allergiche.
-          </p>
-          <span class="text-link">Leggi su Instagram <ArrowIcon size={14} /></span>
-        </div>
-      </a>
-    </div>
-  </section>
+      </section>
+    )
+  }
 
   <!-- GRID -->
   <section class="section-tight">
     <div class="container">
       <div class="card-grid cols-3" data-reveal data-delay="1">
-        <a class="card" href={IG_URL} target="_blank" rel="noopener">
-          <div class="card-media">
-            <img src="/assets/feed-etichette.jpg" alt="Locandina Etichette a 4 Zampe" loading="lazy" decoding="async" />
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Alimentazione</div>
-            <h3 style="font-size:21px;">Leggere le etichette: da dove si parte</h3>
-            <p style="font-size:14.5px; margin:0;">
-              Ingredienti, percentuali, “carne fresca” e additivi: cosa guardare davvero prima di
-              mettere un sacco nel carrello.
-            </p>
-            <span class="text-link" style="margin-top:auto;">Approfondisci <ArrowIcon size={14} /></span>
-          </div>
-        </a>
-        <div class="card">
-          <div class="card-media placeholder" style="flex-direction:column; gap:6px;">
-            <span>FOTO · CIOTOLA</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              Alimentazione · <span style="color:var(--peach-deep);">In arrivo</span>
-            </div>
-            <h3 style="font-size:21px;">Grain free: moda o necessità?</h3>
-            <p style="font-size:14.5px; margin:0;">
-              Quando l'assenza di cereali ha senso e quando è solo marketing. Una guida onesta, caso
-              per caso.
-            </p>
-            <span class="text-link" style="margin-top:auto; opacity:0.55; cursor:default;">Presto disponibile</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-media placeholder" style="flex-direction:column; gap:6px;">
-            <span>FOTO · GATTO</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              Comportamento · <span style="color:var(--peach-deep);">In arrivo</span>
-            </div>
-            <h3 style="font-size:21px;">Cibo e comportamento: il legame</h3>
-            <p style="font-size:14.5px; margin:0;">
-              Come ciò che mangia il tuo animale influenza energia, umore e gestione quotidiana.
-            </p>
-            <span class="text-link" style="margin-top:auto; opacity:0.55; cursor:default;">Presto disponibile</span>
-          </div>
-        </div>
+        {rest.map((entry) => <ArticleCard entry={entry} />)}
       </div>
       <p class="field-hint" style="margin-top:20px;">
         Pubblico nuovi contenuti prima su Instagram. Seguimi su <a

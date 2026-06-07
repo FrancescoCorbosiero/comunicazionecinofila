@@ -1,0 +1,134 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
+import { waLink, IG_URL, SITE } from '../../config';
+import { eventDay, eventMonthTime } from '../../lib/dates';
+import '../../styles/content.css';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('eventi');
+  // Pagina di dettaglio solo per eventi on-site: senza redirect esterno/interno e non "in arrivo".
+  return all
+    .filter((e) => !e.data.externalUrl && !e.data.internalUrl && e.data.status !== 'coming-soon')
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const reserve = d.reserveWaText
+  ? waLink(d.reserveWaText)
+  : waLink(`Ciao Andrea! Vorrei informazioni sull'evento "${d.title}".`);
+
+const eventLd = {
+  '@type': 'Event',
+  name: d.title,
+  description: d.excerpt,
+  ...(d.date ? { startDate: d.date.toISOString() } : {}),
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'VirtualLocation', url: IG_URL },
+  ...(d.cover ? { image: new URL(d.cover, SITE).href } : {}),
+  isAccessibleForFree: d.free,
+  organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
+};
+---
+<Base
+  active="eventi"
+  title={`${d.title} — Eventi · Andrea Bellettati`}
+  description={d.excerpt}
+  ogTitle={d.title}
+  ogDescription={d.excerpt}
+  ogImage={d.cover ?? '/assets/feed-etichette.jpg'}
+  jsonLd={eventLd}
+>
+  <article class="section-tight">
+    <div class="container">
+      <a class="text-link" href="/eventi">Tutti gli eventi</a>
+      <div class="event-feature" data-reveal style="margin-top:18px;">
+        <div class="event-feature-media">
+          {d.statusLabel && (
+            <span class="event-status"><span class="pill pill-peach">{d.statusLabel}</span></span>
+          )}
+          {
+            d.cover ? (
+              <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" />
+            ) : (
+              <div class="placeholder" style="position:absolute; inset:0;">
+                {d.placeholderLabel ?? 'EVENTO'}
+              </div>
+            )
+          }
+        </div>
+        <div class="event-feature-body">
+          {
+            d.date ? (
+              <div class="event-date">
+                <span class="d">{eventDay(d.date)}</span>
+                <span class="m">{eventMonthTime(d.date)}</span>
+              </div>
+            ) : (
+              d.whenLabel && (
+                <div class="event-date">
+                  <span class="m">{d.whenLabel}</span>
+                </div>
+              )
+            )
+          }
+          <h1 class="display-md">{d.title}</h1>
+          {d.subtitle && (
+            <p style="font-weight:600; color:var(--olive-deep); font-size:18px; margin:0;">
+              {d.subtitle}
+            </p>
+          )}
+          <p>{d.excerpt}</p>
+          {
+            d.tags.length > 0 && (
+              <div class="svc-tag-row">
+                {d.tags.map((t) => (
+                  <span class="pill">{t}</span>
+                ))}
+              </div>
+            )
+          }
+          <div class="event-meta-row">
+            {d.locationLabel && <span>{d.locationLabel}</span>}
+            {d.duration && <span>Durata {d.duration}</span>}
+            {d.free && <span>Evento gratuito</span>}
+          </div>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <a class="btn btn-lg" href={reserve} target="_blank" rel="noopener">
+              Riserva il tuo posto <WhatsAppIcon size={16} />
+            </a>
+            <a class="btn btn-ghost btn-lg" href={IG_URL} target="_blank" rel="noopener">
+              Segui su Instagram
+            </a>
+          </div>
+          {d.collab && (
+            <p class="field-hint" style="margin-top:2px;">In collaborazione con {d.collab}.</p>
+          )}
+        </div>
+      </div>
+
+      <div class="prose" style="margin:40px auto 0;" data-reveal>
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <!-- CTA -->
+  <section class="section-tight bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <h2 class="display-md">Preferisci un confronto<br />tutto tuo?</h2>
+        <p class="lead">La consulenza 1:1 parte da un primo incontro gratuito di 45 minuti.</p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
