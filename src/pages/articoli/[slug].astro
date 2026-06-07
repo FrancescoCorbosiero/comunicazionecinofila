@@ -3,11 +3,12 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import ArrowIcon from '../../components/ArrowIcon.astro';
-import { SITE } from '../../config';
+import { SITE, LANDING_MODE } from '../../config';
 import { longDate } from '../../lib/dates';
 import '../../styles/content.css';
 
 export const getStaticPaths = (async () => {
+  if (LANDING_MODE) return [];
   const all = await getCollection('articoli');
   // Pagine on-site solo per gli articoli pubblicati senza link esterno.
   return all

@@ -1,6 +1,6 @@
 ---
 import LeafIcon from './LeafIcon.astro';
-import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL, LANDING_MODE } from '../config';
 
 const year = new Date().getFullYear();
 ---
@@ -22,28 +22,49 @@ const year = new Date().getFullYear();
           <LeafIcon size={30} stroke="var(--sage-soft)" />
         </span>
       </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <h5>Sito</h5>
-          <a href="/approccio">Approccio</a>
-          <a href="/servizi">Servizi</a>
-          <a href="/catalogo">Catalogo</a>
-          <a href="/eventi">Eventi</a>
-          <a href="/articoli">Articoli</a>
-        </div>
-        <div class="footer-col">
-          <h5>Inizia</h5>
-          <a href="/contatti">Consulenza gratuita</a>
-          <a href="/contatti?p=pro">Opportunità di lavoro</a>
-          <a href={WA_LINK} target="_blank" rel="noopener">WhatsApp</a>
-        </div>
-        <div class="footer-col">
-          <h5>Contatti</h5>
-          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-          <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a>
-          <a href={IG_URL} target="_blank" rel="noopener">{IG_HANDLE}</a>
-        </div>
-      </div>
+      {
+        LANDING_MODE ? (
+          <div class="footer-cols">
+            <div class="footer-col">
+              <h5>Contatti</h5>
+              <a href={WA_LINK} target="_blank" rel="noopener">
+                WhatsApp · {PHONE_DISPLAY}
+              </a>
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              <a href={IG_URL} target="_blank" rel="noopener">
+                {IG_HANDLE}
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="footer-cols">
+            <div class="footer-col">
+              <h5>Sito</h5>
+              <a href="/approccio">Approccio</a>
+              <a href="/servizi">Servizi</a>
+              <a href="/catalogo">Catalogo</a>
+              <a href="/eventi">Eventi</a>
+              <a href="/articoli">Articoli</a>
+            </div>
+            <div class="footer-col">
+              <h5>Inizia</h5>
+              <a href="/contatti">Consulenza gratuita</a>
+              <a href="/contatti?p=pro">Opportunità di lavoro</a>
+              <a href={WA_LINK} target="_blank" rel="noopener">
+                WhatsApp
+              </a>
+            </div>
+            <div class="footer-col">
+              <h5>Contatti</h5>
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a>
+              <a href={IG_URL} target="_blank" rel="noopener">
+                {IG_HANDLE}
+              </a>
+            </div>
+          </div>
+        )
+      }
     </div>
     <div class="footer-bottom">
       <span>© {year} Andrea Bellettati · Comunicazione Cinofila</span>

@@ -3,11 +3,12 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
-import { waLink, IG_URL, SITE } from '../../config';
+import { waLink, IG_URL, SITE, LANDING_MODE } from '../../config';
 import { eventDay, eventMonthTime } from '../../lib/dates';
 import '../../styles/content.css';
 
 export const getStaticPaths = (async () => {
+  if (LANDING_MODE) return [];
   const all = await getCollection('eventi');
   // Pagina di dettaglio solo per eventi on-site: senza redirect esterno/interno e non "in arrivo".
   return all

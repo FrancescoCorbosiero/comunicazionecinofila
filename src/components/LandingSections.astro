@@ -1,0 +1,202 @@
+---
+// Corpo della landing temporanea (vedi LANDING_MODE in src/config.ts).
+// Compone: hero (Home) + contenuti di Approccio + proof (Home) + CTA finali.
+// Tutte le CTA puntano a WhatsApp o al modale "Prenota una call": nessun form/contatti.
+import LeafIcon from './LeafIcon.astro';
+import CalendarIcon from './CalendarIcon.astro';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import CoverImage from './CoverImage.astro';
+import andrea1 from '../assets/andrea-1.jpg';
+import andrea2 from '../assets/andrea-2.jpg';
+import { waLink } from '../config';
+
+const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il mio animale.');
+---
+<!-- HERO (da Home) -->
+<section class="hero-center bg-sage paper-bg" style="background-color:var(--sage);">
+  <div class="container">
+    <div class="hero-center-inner">
+      <span class="hero-portrait-xl" data-parallax="50">
+        <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
+      </span>
+      <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
+      <h1 class="hero-title-center">Il benessere parte<br />dalla <span class="hl">ciotola.</span></h1>
+      <p class="hero-lead-c">
+        Studio la relazione tra <strong style="color:var(--cream-ink); font-weight:700;"
+          >comportamento e alimentazione</strong
+        >: non esiste benessere animale senza tenerli insieme. Da qui parte ogni mia consulenza.
+      </p>
+      <div class="hero-cta-row center">
+        <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
+          Consulenza gratuita <WhatsAppIcon size={16} />
+        </a>
+        <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
+          Prenota una call <CalendarIcon size={16} />
+        </button>
+      </div>
+      <span class="hero-note">Primo confronto gratuito · cane e gatto</span>
+    </div>
+  </div>
+</section>
+
+<!-- APPROCCIO — intro -->
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div class="split-body" data-reveal>
+        <span class="eyebrow kicker-rule">Chi sono · L'approccio</span>
+        <h2 class="display-lg">
+          Non vendo<br />crocchette.<br /><span style="color:var(--peach-deep);"
+            >Costruisco<br />equilibrio.</span
+          >
+        </h2>
+        <p class="lead">
+          Mi chiamo Andrea Bellettati e sono un esperto in comportamento e nutrizione per cani e
+          gatti. Studio da anni la relazione che intercorre tra questi due mondi: non si può parlare
+          di benessere animale senza tenerli insieme.
+        </p>
+        <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
+          Scrivimi su WhatsApp <WhatsAppIcon size={16} />
+        </a>
+      </div>
+      <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
+        <CoverImage
+          src={andrea1}
+          alt="Andrea Bellettati seduto su una roccia con il suo bassotto, lungo un fiume di montagna"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO (da Approccio) -->
+<section class="section bg-deep paper-bg-deep">
+  <div class="container">
+    <div class="head-block" data-reveal>
+      <span class="eyebrow kicker-rule">Il manifesto</span>
+      <h2 class="display-lg">Tre principi<br />che non negozio.</h2>
+    </div>
+    <div class="principi" data-reveal data-delay="1">
+      <div class="principio">
+        <span class="pno">01</span>
+        <h3>Cibo e comportamento<br />sono la stessa storia</h3>
+        <p>
+          Un cane irrequieto, un gatto che si gratta, una digestione difficile: spesso la risposta è
+          nella ciotola tanto quanto nelle abitudini. Li guardo insieme, mai separati.
+        </p>
+      </div>
+      <div class="principio">
+        <span class="pno">02</span>
+        <h3>La scienza prima<br />delle mode</h3>
+        <p>
+          Niente slogan, niente “grain free” perché fa tendenza. Parto dalla letteratura, leggo le
+          etichette riga per riga e spiego il perché di ogni scelta.
+        </p>
+      </div>
+      <div class="principio">
+        <span class="pno">03</span>
+        <h3>Il piano deve entrare<br />nella vita vera</h3>
+        <p>
+          La dieta perfetta sulla carta non serve a niente se la famiglia non riesce a seguirla.
+          Costruisco qualcosa di sostenibile, per l'animale e per chi se ne prende cura.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIO (da Approccio) -->
+<section class="section">
+  <div class="container">
+    <div class="split flip">
+      <div class="split-media parallax-cover" data-reveal style="aspect-ratio:4/5;">
+        <CoverImage
+          src={andrea2}
+          alt="Andrea Bellettati guancia a guancia con il suo bassotto, in inverno"
+        />
+      </div>
+      <div class="split-body" data-reveal data-delay="1">
+        <span class="eyebrow kicker-rule">Vivo con un bassotto</span>
+        <h2 class="display-md">La teoria la verifico<br />ogni giorno, a casa.</h2>
+        <p>
+          Convivo con un bassotto: ogni cosa che studio passa prima dalla nostra quotidianità. Le
+          passeggiate, i pasti, le piccole intolleranze, gli inverni in montagna. È lì che la
+          nutrizione smette di essere una tabella e diventa cura concreta.
+        </p>
+        <p>
+          Questo è anche il modo in cui lavoro con te: con la pazienza e l'onestà di chi sa che
+          dall'altra parte c'è un compagno di vita, non un “caso”.
+        </p>
+        <blockquote style="border-left:3px solid var(--peach); padding-left:18px; margin:6px 0 0;">
+          <p style="font-family:var(--serif); font-style:italic; font-size:20px; color:var(--olive-deep);">
+            «Alimentare correttamente il proprio amico a quattro zampe è, insieme alla sua
+            educazione, la più grande forma di amore.»
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE (da Approccio) -->
+<section class="section bg-sage paper-bg" style="background-color:var(--sage);">
+  <div class="container">
+    <div class="pullquote" data-reveal>
+      <span class="section-mark" aria-hidden="true">
+        <LeafIcon size={38} stroke="var(--cream-ink)" />
+      </span>
+      <q>
+        Se l'alimentazione è sbagliata la medicina è inutile; se l'alimentazione è corretta la
+        medicina non è necessaria.
+      </q>
+      <cite>Proverbio ayurvedico · il cuore del mio lavoro</cite>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF (da Home) -->
+<section class="section-tight">
+  <div class="container">
+    <div class="proof paper-bg-deep" data-reveal>
+      <div class="proof-item"><div class="pn">2021</div><div class="pl">Nel team dal</div></div>
+      <div class="proof-item"><div class="pn">45'</div><div class="pl">Consulenza gratuita</div></div>
+      <div class="proof-item">
+        <div class="pn">
+          <svg viewBox="0 0 50 44" width="48" height="42" fill="var(--peach)" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
+            <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
+            <ellipse cx="21" cy="10" rx="4.3" ry="6"></ellipse>
+            <ellipse cx="30" cy="11" rx="4.3" ry="6"></ellipse>
+            <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"></ellipse>
+            <ellipse cx="25" cy="29" rx="9.5" ry="8"></ellipse>
+          </svg>
+        </div>
+        <div class="pl">Cane &amp; Gatto</div>
+      </div>
+      <div class="proof-item"><div class="pn">Reico</div><div class="pl">Partner ufficiale</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINALE -->
+<section class="section bg-deep paper-bg-deep">
+  <div class="container container-narrow">
+    <div class="cta-band">
+      <span class="section-mark" aria-hidden="true">
+        <LeafIcon size={40} stroke="var(--peach)" />
+      </span>
+      <span class="eyebrow">Il primo passo è gratuito</span>
+      <h2 class="display-lg">Parliamo del tuo<br />animale, davvero.</h2>
+      <p class="lead">
+        45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
+          Consulenza gratuita <WhatsAppIcon size={16} />
+        </a>
+        <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
+          Prenota una call <CalendarIcon size={16} />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
