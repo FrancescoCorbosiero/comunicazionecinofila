@@ -21,7 +21,7 @@ export const SITE_TAGLINE = 'Comportamento & Nutrizione · Cane e Gatto';
  * Per tornare al sito completo: metti `false` e ricostruisci (`npm run build`).
  * ───────────────────────────────────────────────────────────────────────────
  */
-export const LANDING_MODE = true;
+export const LANDING_MODE = false;
 
 /** Contatti reali (cablati ovunque) */
 export const WA_NUMBER = '393476780938';
