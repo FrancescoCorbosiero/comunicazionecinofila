@@ -221,6 +221,11 @@ html[data-titlestyle="serif"] .hero-quote { font-family: 'Playfair Display', ser
 .svc-item p { font-size: 14.5px; margin: 0; flex-grow: 1; }
 
 /* ── Cards (servizi, articoli) ─────────────────────────────────── */
+/* Intestazione di sezione con CTA a destra (es. anteprima blog in home) */
+.section-head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px;
+  flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+.section-head-row .head-block { margin-bottom: 0; }
+
 .card-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
 .card { background: var(--bg-paper); border: 1px solid var(--rule); border-radius: var(--r-3); overflow: hidden;
   display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease; }
