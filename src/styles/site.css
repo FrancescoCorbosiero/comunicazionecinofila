@@ -48,6 +48,10 @@ section[id] { scroll-margin-top: 84px; }
   --tex-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
   --tear-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23ece4d2'/%3E%3C/svg%3E");
   --tear-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cg transform='translate(0,18) scale(1,-1)'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23ece4d2'/%3E%3C/g%3E%3C/svg%3E");
+  --wave-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23ece4d2'/%3E%3C/svg%3E");
+  --wave-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cg transform='translate(0,20) scale(1,-1)'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23ece4d2'/%3E%3C/g%3E%3C/svg%3E");
+  --zig-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23ece4d2'/%3E%3C/svg%3E");
+  --zig-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cg transform='translate(0,12) scale(1,-1)'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23ece4d2'/%3E%3C/g%3E%3C/svg%3E");
   --leaf-olive: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(18 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%233f4a2e' stroke-opacity='0.09' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
   --leaf-cream: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(-16 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%23efe8d8' stroke-opacity='0.11' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
   --tex-paws: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Cg fill='%233f4a2e' opacity='0.055'%3E%3Cg transform='translate(46,58) rotate(-14) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3Cg transform='translate(238,242) rotate(13) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -95,55 +99,53 @@ section[id] { scroll-margin-top: 84px; }
   background-repeat: repeat, repeat, no-repeat;
 }
 
-/* ── ::after — decoro: strappi di carta + foglia watermark ── */
-/* Crema: solo foglia oversize in basso a destra */
-.section:not(.bg-sage):not(.bg-deep)::after,
-.section-tight:not(.bg-sage):not(.bg-deep)::after {
+/* ── ::after — decoro OPT-IN, mai lo stesso motivo ovunque ──
+   Ogni classe è un elemento distinto, da usare al massimo 2-3
+   volte in tutto il sito (le classi condividono ::after: non
+   combinarle sulla stessa sezione):
+   · .edge-tear   — bordo "carta strappata" sopra/sotto
+   · .edge-wave   — bordo a onda morbida sopra/sotto
+   · .edge-zigzag — bordo a denti da poster sopra/sotto
+   · .deco-leaf   — foglia line-art oversize in un angolo
+   · .bg-paws     — trama di zampe sul crema
+   I bordi vanno solo su sezioni colorate CIRCONDATE dal crema
+   (mai sulla prima/ultima sezione, che confina con header/footer). */
+.section.edge-tear::after, .section-tight.edge-tear::after {
+  background-image: var(--tear-top), var(--tear-bottom);
+  background-repeat: repeat-x, repeat-x;
+  background-size: 240px 18px, 240px 18px;
+  background-position: 0 -1px, 0 calc(100% + 1px);
+}
+.section.edge-wave::after, .section-tight.edge-wave::after {
+  background-image: var(--wave-top), var(--wave-bottom);
+  background-repeat: repeat-x, repeat-x;
+  background-size: 280px 20px, 280px 20px;
+  background-position: 0 -1px, 0 calc(100% + 1px);
+}
+.section.edge-zigzag::after, .section-tight.edge-zigzag::after {
+  background-image: var(--zig-top), var(--zig-bottom);
+  background-repeat: repeat-x, repeat-x;
+  background-size: 28px 12px, 28px 12px;
+  background-position: 0 -1px, 0 calc(100% + 1px);
+}
+/* Foglia watermark: oliva sul crema, crema sulle sezioni colorate */
+.section.deco-leaf::after, .section-tight.deco-leaf::after {
   background-image: var(--leaf-olive);
   background-repeat: no-repeat;
   background-size: 440px 440px;
   background-position: right -110px bottom -90px;
 }
-/* Trama di zampe (opt-in): si aggiunge alla foglia sulle sezioni crema */
+.section.deco-leaf.bg-sage::after, .section-tight.deco-leaf.bg-sage::after,
+.section.deco-leaf.bg-deep::after, .section-tight.deco-leaf.bg-deep::after {
+  background-image: var(--leaf-cream);
+  background-size: 400px 400px;
+  background-position: right -90px top -80px;
+}
+/* Trama di zampe (solo sezioni crema) */
 .section.bg-paws::after, .section-tight.bg-paws::after {
-  background-image: var(--tex-paws), var(--leaf-olive);
-  background-repeat: repeat, no-repeat;
-  background-size: 380px 380px, 440px 440px;
-  background-position: 0 0, right -110px bottom -90px;
-}
-/* Salvia: strappo crema sopra e sotto + foglia crema in alto a sinistra */
-.section.bg-sage::after, .section-tight.bg-sage::after {
-  background-image: var(--tear-top), var(--tear-bottom), var(--leaf-cream);
-  background-repeat: repeat-x, repeat-x, no-repeat;
-  background-size: 240px 18px, 240px 18px, 420px 420px;
-  background-position: 0 -1px, 0 calc(100% + 1px), left -100px top -70px;
-}
-/* Verde scuro: come salvia, foglia in alto a destra */
-.section.bg-deep::after, .section-tight.bg-deep::after {
-  background-image: var(--tear-top), var(--tear-bottom), var(--leaf-cream);
-  background-repeat: repeat-x, repeat-x, no-repeat;
-  background-size: 240px 18px, 240px 18px, 400px 400px;
-  background-position: 0 -1px, 0 calc(100% + 1px), right -90px top -80px;
-}
-/* Prima sezione della pagina (es. hero scuro sotto l'header): niente
-   strappo in alto — confinerebbe con l'header, non con il crema. */
-main > .section.bg-sage:first-child::after,
-main > .section.bg-deep:first-child::after {
-  background-image: var(--tear-bottom), var(--leaf-cream);
-  background-repeat: repeat-x, no-repeat;
-  background-size: 240px 18px, 400px 400px;
-  background-position: 0 calc(100% + 1px), right -90px top -80px;
-}
-/* Ultima sezione della pagina: niente strappo in basso — sotto c'è
-   il footer scuro, non il crema. */
-main > .section.bg-sage:last-child::after,
-main > .section.bg-deep:last-child::after,
-main > .section-tight.bg-sage:last-child::after,
-main > .section-tight.bg-deep:last-child::after {
-  background-image: var(--tear-top), var(--leaf-cream);
-  background-repeat: repeat-x, no-repeat;
-  background-size: 240px 18px, 400px 400px;
-  background-position: 0 -1px, right -90px top -80px;
+  background-image: var(--tex-paws);
+  background-repeat: repeat;
+  background-size: 380px 380px;
 }
 
 .bg-cream  { background: var(--bg-cream); }
