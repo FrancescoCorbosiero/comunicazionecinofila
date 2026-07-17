@@ -1,10 +1,14 @@
 ---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
+import ArticleCard from '../components/ArticleCard.astro';
 import andrea1 from '../assets/andrea-1.jpg';
+import andrea2 from '../assets/andrea-2.jpg';
 
 // Home-smistatore: due pubblici diversi (famiglie e futuri collaboratori)
 // più il blog, serviti da un'unica identità.
@@ -31,6 +35,18 @@ const paths = [
     cta: 'Leggi il blog',
   },
 ];
+
+// I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
+const articoli = await getCollection('articoli');
+const latestArticoli = articoli
+  .filter((a) => a.data.status === 'published' && !a.data.externalUrl)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// Evento in evidenza per il rimando alla pagina Eventi.
+const eventi = await getCollection('eventi');
+const featuredEvent = eventi.find((e) => e.data.featured) ?? eventi[0];
+const ev = featuredEvent?.data;
 ---
 <Base
   active="home"
@@ -41,12 +57,20 @@ const paths = [
 >
   <!-- HERO -->
   <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);">
-    <!-- TODO: quando ci sarà la foto hero reale, caricarla in public/assets/hero.jpg
-         e ripristinare style="background-image:url('/assets/hero.jpg');" qui sotto. -->
-    <div class="hero-bg" data-parallax="80" aria-hidden="true"></div>
+    <div class="hero-bg" data-parallax="70" aria-hidden="true">
+      <Image
+        src={andrea1}
+        alt=""
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="hero-bg-img"
+      />
+    </div>
     <div class="container">
       <div class="hero-center-inner">
-        <span class="hero-portrait-xl" data-parallax="50">
+        <span class="hero-portrait-xl" data-parallax="40">
           <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
@@ -114,13 +138,73 @@ const paths = [
             Dal 2021 collaboro con un team di professionisti uniti per portare consapevolezza su un
             tema troppo spesso sottovalutato.
           </p>
-          <a class="text-link" href="/chi-sono">
-            Conosci la mia storia <ArrowIcon size={14} />
-          </a>
+          <div class="hero-cta-row" style="margin-top:6px;">
+            <a class="text-link" href="/chi-sono">Conosci la mia storia <ArrowIcon size={14} /></a>
+            <a class="text-link" href="/servizi">Scopri i servizi <ArrowIcon size={14} /></a>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- BLOG PREVIEW -->
+  {
+    latestArticoli.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="section-head-row" data-reveal>
+            <div class="head-block" style="margin-bottom:0;">
+              <span class="eyebrow kicker-rule">Dal blog</span>
+              <h2 class="display-lg">Senza slogan.<br />Con metodo.</h2>
+            </div>
+            <a class="btn btn-ghost" href="/articoli">
+              Tutti gli articoli <ArrowIcon size={15} />
+            </a>
+          </div>
+          <div class="card-grid cols-3" data-reveal data-delay="1">
+            {latestArticoli.map((entry) => (
+              <ArticleCard entry={entry} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- EVENTI TEASER -->
+  {
+    ev && (
+      <section class="section bg-deep paper-bg-deep">
+        <div class="container">
+          <div class="split">
+            <div class="split-body" data-reveal>
+              <span class="eyebrow kicker-rule">Eventi &amp; webinar</span>
+              <h2 class="display-md">Impariamo insieme,<br />dal vivo.</h2>
+              <p>
+                Incontri gratuiti per imparare a leggere le etichette e nutrire meglio cane e gatto,
+                online e in presenza. Come “{ev.title}”: pratici, concreti, senza fronzoli.
+              </p>
+              {ev.statusLabel && (
+                <span class="pill pill-peach" style="align-self:flex-start;">{ev.statusLabel}</span>
+              )}
+              <div class="hero-cta-row" style="margin-top:8px;">
+                <a class="btn btn-cream" href="/eventi">
+                  Vedi il calendario <ArrowIcon size={15} />
+                </a>
+              </div>
+            </div>
+            <div class="split-media parallax-cover" data-reveal data-delay="1" style="order:-1;">
+              {ev.cover ? (
+                <img src={ev.cover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
+              ) : (
+                <CoverImage src={andrea2} alt="Andrea Bellettati con il suo cane" />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- PROOF -->
   <section class="section-tight">
