@@ -33,50 +33,117 @@ section[id] { scroll-margin-top: 84px; }
 .section-tight { padding: clamp(40px, 6vw, 72px) 0; }
 
 /* ─────────────────────────────────────────────────────────────
-   Vita degli sfondi — texture "carta" (micro-punti) + soft-glow
-   d'angolo su OGNI sezione. Applicati via ::before così non
-   vengono cancellati dalla shorthand `background` di .bg-sage /
-   .bg-deep. Il tono si adatta al fondo: oliva su crema, crema su
-   salvia, crema+pesca sul verde scuro. Il contenuto (.container)
-   resta sopra grazie a isolation + z-index.
+   Vita degli sfondi — v2.
+   Quattro ingredienti, tutti in CSS/SVG inline (zero richieste):
+   · grana carta reale (noise feTurbulence) + micro-punti;
+   · soft-glow d'angolo, tono adattato al fondo;
+   · foglia line-art oversize come watermark d'angolo (::after);
+   · bordo "carta strappata" sopra/sotto le sezioni colorate,
+     nel crema del body, così il salto di colore non è mai netto.
+   ::before = texture sotto · ::after = decoro sopra · contenuto z-1.
+   Colori: valori dei token (#ece4d2 crema, #3f4a2e oliva, #efe8d8
+   crema-ink) cablati nei data-URI perché var() non entra negli URL.
    ───────────────────────────────────────────────────────────── */
+:root {
+  --tex-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  --tear-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23ece4d2'/%3E%3C/svg%3E");
+  --tear-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cg transform='translate(0,18) scale(1,-1)'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23ece4d2'/%3E%3C/g%3E%3C/svg%3E");
+  --leaf-olive: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(18 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%233f4a2e' stroke-opacity='0.09' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+  --leaf-cream: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(-16 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%23efe8d8' stroke-opacity='0.11' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+  --tex-paws: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Cg fill='%233f4a2e' opacity='0.055'%3E%3Cg transform='translate(46,58) rotate(-14) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3Cg transform='translate(238,242) rotate(13) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
 .section, .section-tight { position: relative; isolation: isolate; }
 .section > *, .section-tight > * { position: relative; z-index: 1; }
-.section::before, .section-tight::before {
+.section::before, .section-tight::before,
+.section::after, .section-tight::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
-/* Fondo chiaro (crema): punti oliva + alone salvia in alto a destra */
+
+/* ── ::before — texture di fondo ── */
+/* Crema: grana + punti oliva + alone salvia in alto a destra */
 .section:not(.bg-sage):not(.bg-deep):not(.bg-paper)::before,
 .section-tight:not(.bg-sage):not(.bg-deep):not(.bg-paper)::before {
   background-image:
-    radial-gradient(rgba(63, 74, 46, 0.06) 1px, transparent 1.6px),
-    radial-gradient(rgba(63, 74, 46, 0.035) 1px, transparent 1.6px),
-    radial-gradient(72% 60% at 100% 0%, rgba(124, 148, 116, 0.18), transparent 68%);
-  background-size: 30px 30px, 16px 16px, 100% 100%;
-  background-position: 0 0, 8px 8px, 0 0;
+    var(--tex-noise),
+    radial-gradient(rgba(63, 74, 46, 0.07) 1px, transparent 1.6px),
+    radial-gradient(72% 60% at 100% 0%, rgba(124, 148, 116, 0.22), transparent 68%);
+  background-size: 180px 180px, 26px 26px, 100% 100%;
+  background-position: 0 0, 0 0, 0 0;
   background-repeat: repeat, repeat, no-repeat;
 }
-/* Fondo salvia: punti crema + alone crema in basso a sinistra */
+/* Salvia: grana + punti crema + alone crema in basso a sinistra */
 .section.bg-sage::before, .section-tight.bg-sage::before {
   background-image:
-    radial-gradient(rgba(239, 232, 216, 0.08) 1px, transparent 1.6px),
-    radial-gradient(78% 68% at 0% 100%, rgba(239, 232, 216, 0.16), transparent 66%);
-  background-size: 22px 22px, 100% 100%;
-  background-position: 0 0, 0 0;
-  background-repeat: repeat, no-repeat;
+    var(--tex-noise),
+    radial-gradient(rgba(239, 232, 216, 0.1) 1px, transparent 1.6px),
+    radial-gradient(78% 68% at 0% 100%, rgba(239, 232, 216, 0.18), transparent 66%);
+  background-size: 180px 180px, 22px 22px, 100% 100%;
+  background-repeat: repeat, repeat, no-repeat;
 }
-/* Fondo verde scuro: punti crema tenui + alone pesca caldo in alto a sinistra */
+/* Verde scuro: grana + punti crema + alone pesca caldo in alto a sinistra */
 .section.bg-deep::before, .section-tight.bg-deep::before {
   background-image:
-    radial-gradient(rgba(239, 232, 216, 0.05) 1px, transparent 1.6px),
-    radial-gradient(68% 60% at 0% 0%, rgba(244, 169, 138, 0.14), transparent 62%);
-  background-size: 26px 26px, 100% 100%;
-  background-position: 0 0, 0 0;
+    var(--tex-noise),
+    radial-gradient(rgba(239, 232, 216, 0.06) 1px, transparent 1.6px),
+    radial-gradient(68% 60% at 0% 0%, rgba(244, 169, 138, 0.16), transparent 62%);
+  background-size: 180px 180px, 26px 26px, 100% 100%;
+  background-repeat: repeat, repeat, no-repeat;
+}
+
+/* ── ::after — decoro: strappi di carta + foglia watermark ── */
+/* Crema: solo foglia oversize in basso a destra */
+.section:not(.bg-sage):not(.bg-deep)::after,
+.section-tight:not(.bg-sage):not(.bg-deep)::after {
+  background-image: var(--leaf-olive);
+  background-repeat: no-repeat;
+  background-size: 440px 440px;
+  background-position: right -110px bottom -90px;
+}
+/* Trama di zampe (opt-in): si aggiunge alla foglia sulle sezioni crema */
+.section.bg-paws::after, .section-tight.bg-paws::after {
+  background-image: var(--tex-paws), var(--leaf-olive);
   background-repeat: repeat, no-repeat;
+  background-size: 380px 380px, 440px 440px;
+  background-position: 0 0, right -110px bottom -90px;
+}
+/* Salvia: strappo crema sopra e sotto + foglia crema in alto a sinistra */
+.section.bg-sage::after, .section-tight.bg-sage::after {
+  background-image: var(--tear-top), var(--tear-bottom), var(--leaf-cream);
+  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-size: 240px 18px, 240px 18px, 420px 420px;
+  background-position: 0 -1px, 0 calc(100% + 1px), left -100px top -70px;
+}
+/* Verde scuro: come salvia, foglia in alto a destra */
+.section.bg-deep::after, .section-tight.bg-deep::after {
+  background-image: var(--tear-top), var(--tear-bottom), var(--leaf-cream);
+  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-size: 240px 18px, 240px 18px, 400px 400px;
+  background-position: 0 -1px, 0 calc(100% + 1px), right -90px top -80px;
+}
+/* Prima sezione della pagina (es. hero scuro sotto l'header): niente
+   strappo in alto — confinerebbe con l'header, non con il crema. */
+main > .section.bg-sage:first-child::after,
+main > .section.bg-deep:first-child::after {
+  background-image: var(--tear-bottom), var(--leaf-cream);
+  background-repeat: repeat-x, no-repeat;
+  background-size: 240px 18px, 400px 400px;
+  background-position: 0 calc(100% + 1px), right -90px top -80px;
+}
+/* Ultima sezione della pagina: niente strappo in basso — sotto c'è
+   il footer scuro, non il crema. */
+main > .section.bg-sage:last-child::after,
+main > .section.bg-deep:last-child::after,
+main > .section-tight.bg-sage:last-child::after,
+main > .section-tight.bg-deep:last-child::after {
+  background-image: var(--tear-top), var(--leaf-cream);
+  background-repeat: repeat-x, no-repeat;
+  background-size: 240px 18px, 400px 400px;
+  background-position: 0 -1px, right -90px top -80px;
 }
 
 .bg-cream  { background: var(--bg-cream); }
