@@ -3,12 +3,11 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import ArrowIcon from '../../components/ArrowIcon.astro';
-import { SITE, LANDING_MODE } from '../../config';
+import { SITE } from '../../config';
 import { longDate } from '../../lib/dates';
 import '../../styles/content.css';
 
 export const getStaticPaths = (async () => {
-  if (LANDING_MODE) return [];
   const all = await getCollection('articoli');
   // Pagine on-site solo per gli articoli pubblicati senza link esterno.
   return all
@@ -32,7 +31,7 @@ const articleLd = {
 
 const crumbs = [
   { name: 'Home', url: '/' },
-  { name: 'Articoli', url: '/articoli' },
+  { name: 'Blog', url: '/articoli' },
   { name: d.title, url: `/articoli/${entry.id}` },
 ];
 ---
@@ -50,7 +49,7 @@ const crumbs = [
 >
   <article class="section-tight">
     <div class="container container-narrow">
-      <a class="text-link" href="/articoli">Tutti gli articoli</a>
+      <a class="text-link" href="/articoli">Torna al blog</a>
       <div class="head-block" data-reveal style="margin-top:18px; margin-bottom:28px;">
         <div class="card-meta">{d.category} · <span>{longDate(d.date)}</span></div>
         <h1 class="display-lg">{d.title}</h1>
@@ -80,7 +79,7 @@ const crumbs = [
         <h2 class="display-md">Hai una domanda<br />sul tuo animale?</h2>
         <p class="lead">Il primo confronto è gratuito e senza impegno.</p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/contatti">Consulenza gratuita <ArrowIcon size={16} /></a>
+          <a class="btn btn-lg" href="/consulenza-gratuita">Consulenza gratuita <ArrowIcon size={16} /></a>
         </div>
       </div>
     </div>

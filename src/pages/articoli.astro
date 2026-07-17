@@ -3,12 +3,14 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import { IG_URL, LANDING_MODE } from '../config';
-
-if (LANDING_MODE) return Astro.redirect('/');
+import { IG_URL, IG_HANDLE } from '../config';
 
 const all = await getCollection('articoli');
-const featured = all.find((a) => a.data.featured) ?? all[0];
+// In evidenza: mai un coming-soon senza link, la cui pagina di dettaglio non viene buildata.
+const featured =
+  all.find((a) => a.data.featured) ??
+  all.find((a) => a.data.status === 'published' && !a.data.externalUrl) ??
+  all[0];
 const statusOrder: Record<string, number> = { published: 0, 'coming-soon': 1 };
 const rest = all
   .filter((a) => a.id !== featured?.id)
@@ -20,13 +22,15 @@ const rest = all
 
 const f = featured?.data;
 const fExternal = Boolean(f?.externalUrl);
-const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
+const fLinkable = Boolean(f && (f.externalUrl || f.status === 'published'));
+const fHref = f?.externalUrl ?? (featured && fLinkable ? `/articoli/${featured.id}` : null);
+const FTag = fHref ? 'a' : 'div';
 ---
 <Base
   active="articoli"
-  title="Articoli — Andrea Bellettati · Alimentazione e benessere"
-  description="Note e approfondimenti su alimentazione naturale, lettura delle etichette, rimedi naturali e benessere di cani e gatti."
-  ogTitle="Articoli — Andrea Bellettati"
+  title="Blog — Andrea Bellettati · Alimentazione e benessere"
+  description="Il blog: alimentazione naturale, comportamento, lettura delle etichette, rimedi naturali e vita quotidiana con cani e gatti."
+  ogTitle="Blog — Andrea Bellettati"
   ogDescription="Approfondimenti su alimentazione e benessere, senza slogan."
   ogImage="/assets/feed-antistaminico.jpg"
 >
@@ -34,7 +38,7 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
   <section class="section-tight">
     <div class="container">
       <div class="head-block" data-reveal style="max-width:760px;">
-        <span class="eyebrow kicker-rule">Note &amp; approfondimenti</span>
+        <span class="eyebrow kicker-rule">Il blog</span>
         <h1 class="display-xl">Senza slogan.<br />Con metodo.</h1>
         <p class="lead">
           Spunti pratici su alimentazione e benessere, nati dalle domande che mi fanno più spesso
@@ -49,9 +53,9 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
     featured && f && (
       <section class="section-tight">
         <div class="container">
-          <a
+          <FTag
             class="svc-block"
-            href={fHref}
+            {...fHref ? { href: fHref } : {}}
             {...fExternal ? { target: '_blank', rel: 'noopener' } : {}}
             data-reveal
             style="text-decoration:none;"
@@ -74,11 +78,19 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
               </div>
               <h2 class="display-md">{f.title}</h2>
               <p>{f.excerpt}</p>
-              <span class="text-link">
-                {fExternal ? 'Leggi su Instagram' : "Leggi l'articolo"} <ArrowIcon size={14} />
-              </span>
+              {
+                fLinkable ? (
+                  <span class="text-link">
+                    {fExternal ? 'Leggi su Instagram' : "Leggi l'articolo"} <ArrowIcon size={14} />
+                  </span>
+                ) : (
+                  <span class="text-link" style="opacity:0.55; cursor:default;">
+                    Presto disponibile
+                  </span>
+                )
+              }
             </div>
-          </a>
+          </FTag>
         </div>
       </section>
     )
@@ -95,7 +107,7 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
           class="text-link"
           href={IG_URL}
           target="_blank"
-          rel="noopener">@comunicazionecinofila</a
+          rel="noopener">{IG_HANDLE}</a
         >.
       </p>
     </div>
@@ -110,7 +122,7 @@ const fHref = f?.externalUrl ?? (featured ? `/articoli/${featured.id}` : '#');
           Spesso la risposta più utile arriva da un confronto diretto. Il primo è gratuito.
         </p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/contatti">Chiedi a me</a>
+          <a class="btn btn-lg" href="/consulenza-gratuita">Chiedi a me</a>
         </div>
       </div>
     </div>

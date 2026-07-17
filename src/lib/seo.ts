@@ -6,7 +6,7 @@
 import { SITE, SITE_NAME, EMAIL, PHONE, IG_URL } from '../config';
 
 export const DEFAULT_DESCRIPTION =
-  'Consulenza in comportamento e alimentazione naturale per cani e gatti. Consulenza gratuita di 45 minuti, piano di lavoro su misura. Partner Reico Italia.';
+  'Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale.';
 export const DEFAULT_OG_IMAGE = '/assets/logo-original.jpg';
 export const LOCALE = 'it_IT';
 export const DEFAULT_ROBOTS = 'index, follow';

@@ -1,14 +1,15 @@
 ---
+// PAGINA ARCHIVIATA — esclusa dal routing/build (fuori da src/pages/).
+// Per riattivare il catalogo: riporta questo file in src/pages/catalogo.astro
+// e ripristina le voci di navigazione in SiteHeader/SiteFooter.
+// Restano intatti e pronti: src/data/catalogo.json, src/scripts/catalog.ts,
+// src/styles/catalog.css e la collection `catalogo` in src/content.config.ts.
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import { waLink } from '../config';
 import '../styles/catalog.css';
-import { LANDING_MODE } from '../config';
-
-if (LANDING_MODE) return Astro.redirect('/');
-
 const products = (await getCollection('catalogo')).map((p, i) => ({ ...p, order: i }));
 
 const animalLabel: Record<string, string> = { cane: 'Cane', gatto: 'Gatto' };

@@ -71,7 +71,7 @@
   }
 }
 
-/* ── CTA WhatsApp in header (landing): niente overflow su mobile ── */
+/* ── CTA WhatsApp in header: niente overflow su mobile ── */
 .header-inner {
   min-width: 0;
 }

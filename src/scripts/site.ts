@@ -71,26 +71,42 @@ function validateField(field: Element): boolean {
   const type = (input as HTMLInputElement).type;
   if (type === 'email' && input.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) ok = false;
   if (type === 'tel' && input.value && input.value.replace(/\D/g, '').length < 6) ok = false;
+  // Collega il messaggio d'errore all'input per le tecnologie assistive.
+  const err = field.querySelector<HTMLElement>('.field-error');
+  if (err && input.id) {
+    if (!err.id) err.id = `${input.id}-error`;
+    input.setAttribute('aria-describedby', err.id);
+  }
+  input.setAttribute('aria-invalid', ok ? 'false' : 'true');
   field.classList.toggle('show-error', !ok);
   input.classList.toggle('invalid', !ok);
   return ok;
 }
 
-/* ── Questionario a step → WhatsApp ──────────────────────────── */
-function initStepForm(): void {
-  const form = document.querySelector<HTMLFormElement>('[data-stepform]');
-  if (!form) return;
+/* ── Navigazione a step (condivisa dai questionari) ──────────── */
+interface StepController {
+  panels: HTMLElement[];
+  readonly current: number;
+  validatePanel(i: number): boolean;
+  validateAll(): boolean;
+  showSuccess(): void;
+}
+
+function setupSteps(form: HTMLFormElement): StepController {
   const panels = Array.from(form.querySelectorAll<HTMLElement>('.step-panel'));
   const dots = Array.from(form.querySelectorAll<HTMLElement>('.step-dot'));
   let current = 0;
 
-  function show(i: number): void {
+  function show(i: number, focusFirst = false): void {
     current = i;
     panels.forEach((p, idx) => p.classList.toggle('active', idx === i));
     dots.forEach((d, idx) => {
       d.classList.toggle('done', idx < i);
       d.classList.toggle('current', idx === i);
     });
+    // Il focus solo sulle navigazioni dell'utente: all'init ruberebbe
+    // focus e scroll alla pagina appena caricata.
+    if (!focusFirst) return;
     const firstInput = panels[i].querySelector<HTMLElement>('input, textarea, select');
     if (firstInput) setTimeout(() => firstInput.focus(), 120);
   }
@@ -101,17 +117,47 @@ function initStepForm(): void {
     });
     return ok;
   }
+  // Al submit vanno controllati TUTTI gli step: l'implicit form submission
+  // (Enter in un input) può arrivare da uno step intermedio.
+  function validateAll(): boolean {
+    for (let i = 0; i < panels.length; i++) {
+      if (!validatePanel(i)) {
+        show(i, true);
+        return false;
+      }
+    }
+    return true;
+  }
+  function showSuccess(): void {
+    panels.forEach((p) => p.classList.remove('active'));
+    const head = form.querySelector<HTMLElement>('.steps-head');
+    if (head) head.style.display = 'none';
+    const success = form.querySelector<HTMLElement>('.form-success');
+    if (success) {
+      success.classList.add('show');
+      success.focus(); // il markup ha tabindex="-1" + role="status"
+    }
+  }
 
   form.querySelectorAll('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
       if (!validatePanel(current)) return;
-      if (current < panels.length - 1) show(current + 1);
+      if (current < panels.length - 1) show(current + 1, true);
     });
   });
   form.querySelectorAll('[data-prev]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (current > 0) show(current - 1);
+      if (current > 0) show(current - 1, true);
     });
+  });
+  // Enter su uno step intermedio = "Continua", non submit.
+  form.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    if (e.target instanceof HTMLTextAreaElement) return;
+    if (current < panels.length - 1) {
+      e.preventDefault();
+      if (validatePanel(current)) show(current + 1, true);
+    }
   });
   form.querySelectorAll('input, textarea, select').forEach((inp) => {
     inp.addEventListener('input', () => {
@@ -123,9 +169,27 @@ function initStepForm(): void {
     });
   });
 
+  show(0);
+  return {
+    panels,
+    get current() {
+      return current;
+    },
+    validatePanel,
+    validateAll,
+    showSuccess,
+  };
+}
+
+/* ── Questionario consulenza (a step) → WhatsApp ─────────────── */
+function initStepForm(): void {
+  const form = document.querySelector<HTMLFormElement>('[data-stepform]');
+  if (!form) return;
+  const steps = setupSteps(form);
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!validatePanel(current)) return;
+    if (!steps.validateAll()) return;
     const d = new FormData(form);
     const nome = (d.get('nome') || '').toString().trim();
     const animale = (d.get('animale') || '').toString().trim();
@@ -145,7 +209,6 @@ function initStepForm(): void {
     ].filter(Boolean);
     const text = lines.join('\n');
 
-    const success = form.querySelector<HTMLElement>('.form-success');
     const waBtn = form.querySelector<HTMLAnchorElement>('[data-wa-out]');
     if (waBtn) waBtn.href = waLink(text);
     const mailBtn = form.querySelector<HTMLAnchorElement>('[data-mail-out]');
@@ -158,14 +221,51 @@ function initStepForm(): void {
         '&body=' +
         encodeURIComponent(text);
     }
-    panels.forEach((p) => p.classList.remove('active'));
-    const head = form.querySelector<HTMLElement>('.steps-head');
-    if (head) head.style.display = 'none';
-    if (success) success.classList.add('show');
+    steps.showSuccess();
     window.open(waLink(text), '_blank', 'noopener');
   });
+}
 
-  show(0);
+/* ── Candidatura "Lavora con noi" (a step) → invio simulato ──── */
+function initWorkForm(): void {
+  const form = document.querySelector<HTMLFormElement>('[data-workform]');
+  if (!form) return;
+  const steps = setupSteps(form);
+  let sending = false;
+
+  form.addEventListener('submit', (e) => {
+    // Niente ricarica pagina, niente chiamate di rete, niente WhatsApp.
+    e.preventDefault();
+    if (sending) return;
+    if (!steps.validateAll()) return;
+
+    // MOCK: sostituire con invio reale. Tutta la logica di invio vive in
+    // questo handler: quando ci sarà un backend basterà rimpiazzare il
+    // setTimeout con la vera richiesta (fetch/endpoint) e mostrare il
+    // successo nella callback.
+    sending = true;
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitHtml = submitBtn?.innerHTML ?? '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-sending');
+      submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.textContent = 'Invio in corso…';
+    }
+    window.setTimeout(() => {
+      steps.showSuccess();
+      // Reset completo: campi E stato del pulsante (icona compresa), così il
+      // form resta riutilizzabile e il passaggio al backend reale è pulito.
+      form.reset();
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-sending');
+        submitBtn.removeAttribute('aria-busy');
+        submitBtn.innerHTML = submitHtml;
+      }
+      sending = false;
+    }, 800);
+  });
 }
 
 /* ── Selettore di percorso (contatti) ────────────────────────── */
@@ -186,10 +286,12 @@ function initPathSelector(): void {
   select(p === 'pro' ? 'pro' : 'famiglia');
 }
 
-/* ── Booking: slot → conferma WhatsApp (modale + card pro) ───── */
+/* ── Booking: slot → conferma WhatsApp (modale consulenza) ───── */
 function callText(slot: string): string {
   return (
-    'Ciao Andrea! Vorrei fissare una call conoscitiva' + (slot ? ' — slot preferito: ' + slot : '') + '.'
+    'Ciao Andrea! Vorrei richiedere la consulenza gratuita' +
+    (slot ? ' — slot preferito: ' + slot : '') +
+    '.'
   );
 }
 function initBookings(): void {
@@ -214,9 +316,12 @@ function initBookings(): void {
 }
 
 /* ── Modale call (apertura/chiusura via delega globale) ──────── */
+let lastCallTrigger: HTMLElement | null = null;
+
 function openCall(): void {
   const ov = document.querySelector<HTMLElement>('[data-call-modal]');
   if (!ov) return;
+  lastCallTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   ov.hidden = false;
   document.documentElement.style.overflow = 'hidden';
   const f = ov.querySelector<HTMLElement>('.cal-slot');
@@ -227,6 +332,28 @@ function closeCall(): void {
   if (!ov || ov.hidden) return;
   ov.hidden = true;
   document.documentElement.style.overflow = '';
+  // Il focus torna al pulsante che ha aperto il modale.
+  if (lastCallTrigger && document.contains(lastCallTrigger)) lastCallTrigger.focus();
+  lastCallTrigger = null;
+}
+// aria-modal dichiara il resto della pagina inerte: il Tab deve restare nel dialog.
+function trapCallFocus(e: KeyboardEvent): void {
+  const ov = document.querySelector<HTMLElement>('[data-call-modal]');
+  if (!ov || ov.hidden) return;
+  const focusables = Array.from(
+    ov.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea')
+  ).filter((el) => el.offsetParent !== null);
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement;
+  if (e.shiftKey && (active === first || !ov.contains(active))) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && (active === last || !ov.contains(active))) {
+    e.preventDefault();
+    first.focus();
+  }
 }
 
 /* ── Parallax ────────────────────────────────────────────────── */
@@ -279,7 +406,7 @@ function initGlobals(): void {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
 
-  // Modale "Prenota una call": delega → robusta tra le navigazioni.
+  // Modale "Richiedi la tua consulenza gratuita": delega → robusta tra le navigazioni.
   document.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
     if (t.closest('[data-open-call]')) {
@@ -291,6 +418,7 @@ function initGlobals(): void {
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeCall();
+    else if (e.key === 'Tab') trapCallFocus(e);
   });
 }
 
@@ -299,6 +427,7 @@ function onPageLoad(): void {
   initNav();
   initReveal();
   initStepForm();
+  initWorkForm();
   initPathSelector();
   initBookings();
   initCatalog();
