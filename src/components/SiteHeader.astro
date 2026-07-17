@@ -1,5 +1,5 @@
 ---
-import { SITE_TAGLINE, LANDING_MODE, WA_LINK, IG_URL } from '../config';
+import { SITE_TAGLINE, WA_LINK, IG_URL } from '../config';
 import WhatsAppIcon from './WhatsAppIcon.astro';
 import InstagramIcon from './InstagramIcon.astro';
 
@@ -35,49 +35,39 @@ const nav = [
         <span class="lockup-tag">{SITE_TAGLINE}</span>
       </span>
     </a>
-    {
-      LANDING_MODE ? (
-        <a class="btn btn-sm header-cta" href={WA_LINK} target="_blank" rel="noopener">
-          <WhatsAppIcon size={16} /> <span class="cta-label">WhatsApp</span>
+    <nav class="site-nav" data-nav aria-label="Navigazione principale">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class={
+            [item.work ? 'nav-work' : null, active === item.key ? 'active' : null]
+              .filter(Boolean)
+              .join(' ') || undefined
+          }
+          aria-current={active === item.key ? 'page' : undefined}
+        >
+          {item.label}
         </a>
-      ) : (
-        <Fragment>
-          <nav class="site-nav" data-nav aria-label="Navigazione principale">
-            {nav.map((item) => (
-              <a
-                href={item.href}
-                class={
-                  [item.work ? 'nav-work' : null, active === item.key ? 'active' : null]
-                    .filter(Boolean)
-                    .join(' ') || undefined
-                }
-                aria-current={active === item.key ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <div class="header-actions">
-            <a
-              class="header-ig"
-              href={IG_URL}
-              target="_blank"
-              rel="noopener"
-              aria-label="Instagram di Andrea Bellettati"
-            >
-              <InstagramIcon size={18} />
-            </a>
-            <a class="btn btn-sm header-cta" href={WA_LINK} target="_blank" rel="noopener">
-              <WhatsAppIcon size={16} /> <span class="cta-label">WhatsApp</span>
-            </a>
-            <button class="nav-toggle" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
-              <span />
-              <span />
-              <span />
-            </button>
-          </div>
-        </Fragment>
-      )
-    }
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a
+        class="header-ig"
+        href={IG_URL}
+        target="_blank"
+        rel="noopener"
+        aria-label="Instagram di Andrea Bellettati"
+      >
+        <InstagramIcon size={18} />
+      </a>
+      <a class="btn btn-sm header-cta" href={WA_LINK} target="_blank" rel="noopener">
+        <WhatsAppIcon size={16} /> <span class="cta-label">WhatsApp</span>
+      </a>
+      <button class="nav-toggle" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
+        <span />
+        <span />
+        <span />
+      </button>
+    </div>
   </div>
 </header>

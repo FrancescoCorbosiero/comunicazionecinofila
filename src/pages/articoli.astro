@@ -3,9 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import { IG_URL, IG_HANDLE, LANDING_MODE } from '../config';
-
-if (LANDING_MODE) return Astro.redirect('/');
+import { IG_URL, IG_HANDLE } from '../config';
 
 const all = await getCollection('articoli');
 // In evidenza: mai un coming-soon senza link, la cui pagina di dettaglio non viene buildata.

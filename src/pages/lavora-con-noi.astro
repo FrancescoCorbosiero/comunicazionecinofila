@@ -2,10 +2,6 @@
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import LeafIcon from '../components/LeafIcon.astro';
-import { LANDING_MODE } from '../config';
-
-if (LANDING_MODE) return Astro.redirect('/');
-
 const profili = [
   'Educatori e istruttori cinofili',
   'Naturopati e operatori del benessere animale',
