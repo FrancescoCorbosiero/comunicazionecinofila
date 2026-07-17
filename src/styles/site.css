@@ -252,6 +252,17 @@ html[data-titlestyle="serif"] .hero-quote { font-family: 'Playfair Display', ser
 .principio h3 { font-size: 22px; }
 .principio p { font-size: 15px; margin: 0; }
 
+/* ── Contrasto: superfici sempre scure, testo sempre chiaro ──────
+   .principio e .booking-card hanno sfondo bg-deep a prescindere dalla
+   sezione che li contiene: senza questo il testo resta scuro (regole
+   .bg-deep/.bg-sage) quando la card sta in una sezione chiara. */
+.principio, .booking-card { color: var(--cream-ink); }
+.principio h3, .booking-card h2, .booking-card h3 { color: var(--cream-ink); }
+.principio p, .booking-card p { color: rgba(239, 232, 216, 0.94); }
+.principio strong, .booking-card strong { color: var(--cream-ink); }
+/* Liste "cosa include" su fondo scuro o salvia: testo chiaro leggibile. */
+.bg-deep .svc-includes li, .bg-sage .svc-includes li { color: rgba(239, 232, 216, 0.94); }
+
 /* ── Timeline ──────────────────────────────────────────────────── */
 .timeline { position: relative; display: flex; flex-direction: column; gap: 0; }
 .timeline::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--rule); }
