@@ -4,7 +4,6 @@ import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import andrea1 from '../assets/andrea-1.jpg';
-import andrea2 from '../assets/andrea-2.jpg';
 import { LANDING_MODE } from '../config';
 
 if (LANDING_MODE) return Astro.redirect('/');
@@ -12,10 +11,10 @@ if (LANDING_MODE) return Astro.redirect('/');
 <Base
   active="approccio"
   ogType="article"
-  title="Approccio — Andrea Bellettati · Comportamento & Nutrizione"
-  description="Il mio approccio: comportamento e alimentazione insieme. Osservazione, letteratura scientifica e contesto reale. La storia di Andrea Bellettati e del suo bassotto."
-  ogTitle="L'approccio — Andrea Bellettati"
-  ogDescription="Non vendo crocchette. Costruisco equilibrio: comportamento e alimentazione, sempre insieme."
+  title="Il mio approccio — Andrea Bellettati · Comportamento & Nutrizione"
+  description="Non parto dal prodotto, parto dall'animale: osservazione del soggetto, letteratura scientifica e contesto reale della famiglia. Il metodo dietro ogni consulenza."
+  ogTitle="Il mio approccio — Andrea Bellettati"
+  ogDescription="Non parto dal prodotto. Parto dall'animale. Alimentazione, comportamento e stile di vita nello stesso equilibrio."
   ogImage="/assets/andrea-1.jpg"
 >
   <!-- PAGE HERO -->
@@ -23,19 +22,19 @@ if (LANDING_MODE) return Astro.redirect('/');
     <div class="container">
       <div class="split">
         <div class="split-body" data-reveal>
-          <span class="eyebrow kicker-rule">Chi sono · L'approccio</span>
+          <span class="eyebrow kicker-rule">Il mio approccio</span>
           <h1 class="display-lg">
-            Non vendo<br />crocchette.<br /><span style="color:var(--peach-deep);"
-              >Costruisco<br />equilibrio.</span
+            Non parto<br />dal prodotto.<br /><span style="color:var(--peach-deep);"
+              >Parto<br />dall'animale.</span
             >
           </h1>
           <p class="lead">
-            Mi chiamo Andrea Bellettati e sono un esperto in comportamento e nutrizione per cani e
-            gatti. Studio da anni la relazione che intercorre tra questi due mondi: non si può
-            parlare di benessere animale senza tenerli insieme.
+            Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
+            lavoro è osservare il soggetto nella sua globalità e costruire un percorso sostenibile
+            per lui e per la sua famiglia.
           </p>
-          <a class="btn btn-lg" href="/contatti">
-            Prenota la consulenza gratuita <ArrowIcon size={16} />
+          <a class="btn btn-lg" href="/consulenza-gratuita">
+            Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
           </a>
         </div>
         <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
@@ -48,11 +47,11 @@ if (LANDING_MODE) return Astro.redirect('/');
     </div>
   </section>
 
-  <!-- MANIFESTO -->
+  <!-- MANIFESTO / METODO -->
   <section class="section bg-deep paper-bg-deep">
     <div class="container">
       <div class="head-block" data-reveal>
-        <span class="eyebrow kicker-rule">Il manifesto</span>
+        <span class="eyebrow kicker-rule">Il metodo</span>
         <h2 class="display-lg">Tre principi<br />che non negozio.</h2>
       </div>
       <div class="principi" data-reveal data-delay="1">
@@ -84,35 +83,25 @@ if (LANDING_MODE) return Astro.redirect('/');
     </div>
   </section>
 
-  <!-- BIO -->
+  <!-- COME LAVORO -->
   <section class="section">
-    <div class="container">
-      <div class="split flip">
-        <div class="split-media parallax-cover" data-reveal style="aspect-ratio:4/5;">
-          <CoverImage
-            src={andrea2}
-            alt="Andrea Bellettati guancia a guancia con il suo bassotto, in inverno"
-          />
-        </div>
-        <div class="split-body" data-reveal data-delay="1">
-          <span class="eyebrow kicker-rule">Vivo con un bassotto</span>
-          <h2 class="display-md">La teoria la verifico<br />ogni giorno, a casa.</h2>
-          <p>
-            Convivo con un bassotto: ogni cosa che studio passa prima dalla nostra quotidianità. Le
-            passeggiate, i pasti, le piccole intolleranze, gli inverni in montagna. È lì che la
-            nutrizione smette di essere una tabella e diventa cura concreta.
-          </p>
-          <p>
-            Questo è anche il modo in cui lavoro con te: con la pazienza e l'onestà di chi sa che
-            dall'altra parte c'è un compagno di vita, non un “caso”.
-          </p>
-          <blockquote style="border-left:3px solid var(--peach); padding-left:18px; margin:6px 0 0;">
-            <p style="font-family:var(--serif); font-style:italic; font-size:20px; color:var(--olive-deep);">
-              «Alimentare correttamente il proprio amico a quattro zampe è, insieme alla sua
-              educazione, la più grande forma di amore.»
-            </p>
-          </blockquote>
-        </div>
+    <div class="container container-narrow">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">Come lavoro</span>
+        <h2 class="display-lg">Tre fonti,<br />una direzione.</h2>
+      </div>
+      <div data-reveal data-delay="1">
+        <p class="lead">
+          Lavoro sull'equilibrio interno dell'animale mettendo insieme tre cose: ciò che la
+          letteratura scientifica dice, ciò che osservo nel singolo soggetto, e il contesto reale
+          della famiglia. Una dieta perfetta sulla carta non serve a nulla se non entra nella vita
+          di tutti i giorni.
+        </p>
+        <p>
+          E il percorso non si chiude con la consulenza: seguo personalmente ogni caso nel tempo, e
+          dietro ogni scelta c'è il confronto con TeamNutrizione, il Team di professionisti con cui
+          condivido un metodo di lavoro comune.
+        </p>
       </div>
     </div>
   </section>
@@ -133,53 +122,6 @@ if (LANDING_MODE) return Astro.redirect('/');
     </div>
   </section>
 
-  <!-- TIMELINE -->
-  <!-- NOTE: date/tappe da confermare con Andrea — struttura pronta, testi modificabili -->
-  <section class="section">
-    <div class="container container-narrow">
-      <div class="head-block" data-reveal>
-        <span class="eyebrow kicker-rule">Il percorso</span>
-        <h2 class="display-lg">Da una passione<br />a un metodo.</h2>
-      </div>
-      <div class="timeline" data-reveal data-delay="1">
-        <div class="tl-item">
-          <div class="tl-year">L'inizio</div>
-          <h4>Dalla convivenza allo studio</h4>
-          <p>
-            La curiosità per ciò che metto nella ciotola del mio cane diventa studio serio:
-            etichette, ingredienti, letteratura scientifica. Capisco quanto poco se ne parli
-            davvero.
-          </p>
-        </div>
-        <div class="tl-item">
-          <div class="tl-year">2021</div>
-          <h4>Entro in un team multidisciplinare</h4>
-          <p>
-            Mi unisco a un gruppo di professionisti nato per portare consapevolezza su un argomento
-            troppo spesso sottovalutato. Formazione continua, confronto e metodo condiviso.
-          </p>
-        </div>
-        <div class="tl-item">
-          <div class="tl-year">Oggi</div>
-          <h4>Consulenze e divulgazione</h4>
-          <p>
-            Consulenze 1:1 per famiglie, collaborazione con Reico, webinar e contenuti come
-            “Etichette a 4 Zampe” e l'antistaminico naturale. Sempre con lo stesso obiettivo: scelte
-            consapevoli.
-          </p>
-        </div>
-        <div class="tl-item is-now">
-          <div class="tl-year">Con te</div>
-          <h4>Il prossimo passo</h4>
-          <p>
-            Una consulenza gratuita di 45 minuti per analizzare alimentazione e comportamento del
-            tuo animale, e un piano di lavoro firmato su misura.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CTA -->
   <section class="section-tight bg-deep paper-bg-deep">
     <div class="container container-narrow">
@@ -187,8 +129,8 @@ if (LANDING_MODE) return Astro.redirect('/');
         <h2 class="display-md">Raccontami il tuo animale.</h2>
         <p class="lead">Il primo passo è gratuito e senza impegno.</p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
-          <a class="btn btn-ghost-cream btn-lg" href="/servizi">Vedi i servizi</a>
+          <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+          <a class="btn btn-ghost-cream btn-lg" href="/chi-sono">Conosci la mia storia</a>
         </div>
       </div>
     </div>

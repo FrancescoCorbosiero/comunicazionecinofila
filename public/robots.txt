@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.comunicazionecinofila.it/sitemap-index.xml
+# TODO: confermare dominio definitivo
+Sitemap: https://www.andreabellettati.it/sitemap-index.xml

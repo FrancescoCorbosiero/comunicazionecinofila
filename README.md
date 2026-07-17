@@ -1,7 +1,9 @@
 # Comunicazione Cinofila — sito di Andrea Bellettati
 
 Sito vetrina/lead-gen di **Andrea Bellettati**, consulente in comportamento e
-nutrizione per cani e gatti (partner Reico Italia). Costruito con **Astro**
+nutrizione per cani e gatti. Due pubblici, un'unica identità: i proprietari
+(imbuto "Consulenza gratuita") e i futuri collaboratori del Team
+**TeamNutrizione** (imbuto "Lavora con noi"). Costruito con **Astro**
 (TypeScript), static-first, mobile-first.
 
 > Il design system e le specifiche complete sono in
@@ -30,12 +32,14 @@ src/
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
   components/            # Header, Footer, CallModal, CoverImage, card/row, icone
-  scripts/site.ts        # nav, reveal, step-form→WhatsApp, modale call, parallax
-  scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo
-  pages/                 # index, approccio, servizi, catalogo, eventi, articoli, contatti, 404
+  scripts/site.ts        # nav, reveal, step-form→WhatsApp, form candidatura (mock), modale, parallax
+  scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
+  pages/                 # index, approccio, chi-sono, consulenza-gratuita, lavora-con-noi,
+                         # servizi, eventi, articoli (Blog), 404
     articoli/[slug].astro  eventi/[slug].astro   # dettagli da Content Collection
   content/articoli/*.md  content/eventi/*.md      # contenuti (Markdown)
   data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
+  _archive/catalogo.astro # pagina Catalogo archiviata: fuori dal build, riattivabile
   content.config.ts      # schema delle Content Collections
   styles/                # brand.css (invariato), site.css (base), content/catalog/effects.css
   assets/                # foto ottimizzate da astro:assets (webp responsive)
@@ -111,6 +115,18 @@ Modifica `src/data/catalogo.json` (un array): ogni prodotto ha un `id` univoco.
 I filtri (animale, tipo, età, caratteristiche) si generano da soli dai dati.
 Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
 
+> **Nota:** la pagina Catalogo è **archiviata** (non buildata). Per riattivarla,
+> riporta `src/_archive/catalogo.astro` in `src/pages/` e ripristina le voci di
+> navigazione in header/footer. Dati, script e stili sono rimasti intatti.
+
+## Form "Lavora con noi" (mock)
+
+Il form candidatura in `/lavora-con-noi` è un **mock client-side**: validazione,
+stato "Invio in corso…" (~800 ms simulati), conferma inline e reset — nessuna
+chiamata di rete. Tutta la logica vive in `initWorkForm()` in
+`src/scripts/site.ts` (commento `MOCK: sostituire con invio reale`): il
+passaggio a un backend vero tocca un solo punto.
+
 ## Performance & SEO (già attive)
 
 - **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
@@ -121,17 +137,19 @@ Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
   pertinente; `sitemap.xml`, `robots.txt`, header di cache (`netlify.toml`, `_headers`).
 - Verifica Search Console e handle social: compila i campi in `src/lib/seo.ts`.
 
-## Integrazione cal.com ("Prenota una call")
+## Integrazione cal.com ("Richiedi la tua consulenza gratuita")
 
-Oggi i pulsanti **Prenota una call** aprono un modale-placeholder con selezione
-slot che conferma via WhatsApp. Per attivare cal.com:
+Oggi i pulsanti **Richiedi la tua consulenza gratuita** aprono un
+modale-placeholder con selezione slot che conferma via WhatsApp. Per attivare
+cal.com:
 
 1. Imposta `CAL_LINK` in [`src/config.ts`](./src/config.ts)
    (es. `'andrea-bellettati/call-conoscitiva'`).
 2. In `src/components/CallModal.astro` sostituisci il corpo `.booking-cal` con
    l'embed ufficiale (`@calcom/embed-react` `<Cal calLink={CAL_LINK} />`).
 
-I trigger `[data-open-call]` sono già presenti su Home, Servizi e Contatti.
+I trigger `[data-open-call]` sono già presenti su Home, Servizi e
+Consulenza gratuita.
 
 ## Contatti
 
@@ -149,8 +167,10 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
 
 ## Da completare
 
-- **Dominio** definitivo (placeholder attuale: `www.comunicazionecinofila.it`).
-- **Foto reali** al posto dei `.placeholder` (team/formazione, ciotola, gatto) e foto prodotto del catalogo.
-- **Testi articoli** on-site (le bozze sono marcate nel Markdown).
-- **Prodotti catalogo**: i dati in `src/data/catalogo.json` sono esempi indicativi, da allineare alla gamma Reico reale.
+- **Dominio** definitivo (placeholder attuale: `www.andreabellettati.it` — vedi i TODO in `src/config.ts`, `astro.config.mjs`, `public/robots.txt`).
+- **Foto reali**: hero della home (`public/assets/hero.jpg`, oggi assente), placeholder team/formazione.
+- **Testi articoli/blog** on-site (12 stub `coming-soon` + bozze marcate nel Markdown).
+- **Form "Lavora con noi"**: sostituire il mock con l'invio reale (vedi sezione dedicata).
+- **Sezioni future in `/servizi`** (solo TODO nel codice): dieta casalinga/BARF con referral alla biologa Stefania Bartoloni; servizi in affiliazione.
 - **Link cal.com** (`CAL_LINK` in `src/config.ts`) + immagine OG dedicata 1200×630.
+- **Catalogo archiviato**: se tornerà, aggiornare i dati in `src/data/catalogo.json` alla gamma reale.

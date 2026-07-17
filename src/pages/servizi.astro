@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import CalendarIcon from '../components/CalendarIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import feedEtichette from '../assets/feed-etichette.jpg';
 import andrea2 from '../assets/andrea-2.jpg';
@@ -13,7 +12,7 @@ if (LANDING_MODE) return Astro.redirect('/');
 <Base
   active="servizi"
   title="Servizi — Andrea Bellettati · Alimentazione, Consulenza, Lavoro"
-  description="Alimentazione naturale, consulenza 1:1 e opportunità lavorative nel settore pet. Consulenza gratuita di 45 minuti e piano di lavoro su misura. Partner Reico."
+  description="Alimentazione naturale, consulenza 1:1 e opportunità lavorative nel settore pet. Consulenza gratuita di 45 minuti e piano di lavoro su misura."
   ogTitle="Servizi — Andrea Bellettati"
   ogDescription="Tre strade, un'unica cura: alimentazione naturale, consulenza 1:1, opportunità lavorative."
 >
@@ -47,14 +46,14 @@ if (LANDING_MODE) return Astro.redirect('/');
           <h3>Alimentazione Naturale</h3>
           <p>
             Capire cosa stai davvero comprando per il tuo animale e costruire una ciotola adatta a
-            lui — non alla pubblicità. Lavoro in collaborazione con Reico, alimentazione naturale per
-            cani e gatti.
+            lui — non alla pubblicità. Alimentazione naturale per cani e gatti, scelta a partire dal
+            soggetto.
           </p>
           <div class="svc-tag-row">
             <span class="pill">Carne fresca</span>
             <span class="pill">Grain free</span>
             <span class="pill">Lettura etichette</span>
-            <span class="pill pill-peach">Partner Reico</span>
+            <span class="pill pill-peach">Percorso su misura</span>
           </div>
           <ul class="svc-includes">
             <li>Analisi dell'alimentazione attuale e degli ingredienti reali</li>
@@ -63,13 +62,19 @@ if (LANDING_MODE) return Astro.redirect('/');
             <li>Supporto nel tempo, non una tabella e via</li>
           </ul>
           <div class="hero-cta-row" style="margin-top:6px;">
-            <a class="btn" href="/contatti">Richiedi un preventivo <ArrowIcon size={15} /></a>
-            <a class="btn btn-ghost" href="/articoli">Leggi gli articoli</a>
+            <a class="btn" href="/consulenza-gratuita">Richiedi un preventivo <ArrowIcon size={15} /></a>
+            <a class="btn btn-ghost" href="/articoli">Leggi il blog</a>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!--
+    TODO (sezioni future — NON costruire ora):
+    · "Dieta casalinga / BARF" con referral alla biologa nutrizionista Stefania Bartoloni
+    · "Servizi in affiliazione"
+  -->
 
   <!-- SERVICE 2 — Consulenza 1:1 -->
   <section class="section-tight" id="consulenza">
@@ -100,8 +105,8 @@ if (LANDING_MODE) return Astro.redirect('/');
             <li>Verrai ricontattato al numero che lasci nel form</li>
           </ul>
           <div class="hero-cta-row" style="margin-top:6px;">
-            <a class="btn" href="/contatti">
-              Prenota la consulenza gratuita <ArrowIcon size={15} />
+            <a class="btn" href="/consulenza-gratuita">
+              Richiedi la tua consulenza gratuita <ArrowIcon size={15} />
             </a>
           </div>
         </div>
@@ -139,12 +144,12 @@ if (LANDING_MODE) return Astro.redirect('/');
             <li>Competenze pratiche e scientifiche per seguire i clienti</li>
             <li>Affiancamento di un team multidisciplinare</li>
             <li>Strumenti per avviare un'attività o ampliare le tue competenze</li>
-            <li>Una call conoscitiva per capire se fa per te</li>
+            <li>Un primo confronto senza impegno per capire se fa per te</li>
           </ul>
           <div class="hero-cta-row" style="margin-top:6px;">
-            <button type="button" class="btn btn-dark" data-open-call>
-              Fissa una call conoscitiva <CalendarIcon size={15} />
-            </button>
+            <a class="btn btn-dark" href="/lavora-con-noi">
+              Lavora con noi <ArrowIcon size={15} />
+            </a>
           </div>
         </div>
       </div>
@@ -194,8 +199,10 @@ if (LANDING_MODE) return Astro.redirect('/');
         <span class="eyebrow">Pronto a iniziare?</span>
         <h2 class="display-md">Il primo confronto<br />è sempre gratuito.</h2>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
-          <button type="button" class="btn btn-ghost btn-lg" data-open-call>Prenota una call</button>
+          <a class="btn btn-lg" href="/consulenza-gratuita">Consulenza gratuita</a>
+          <button type="button" class="btn btn-ghost btn-lg" data-open-call>
+            Richiedi la tua consulenza gratuita
+          </button>
         </div>
       </div>
     </div>

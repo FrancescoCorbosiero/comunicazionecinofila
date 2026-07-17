@@ -1,19 +1,22 @@
 ---
-import { SITE_TAGLINE, LANDING_MODE, WA_LINK } from '../config';
+import { SITE_TAGLINE, LANDING_MODE, WA_LINK, IG_URL } from '../config';
 import WhatsAppIcon from './WhatsAppIcon.astro';
+import InstagramIcon from './InstagramIcon.astro';
 
 interface Props {
   active?: string;
 }
 const { active } = Astro.props;
 
+// "Lavora con noi" ha un trattamento visivo distinto (pill outline pesca):
+// deve saltare all'occhio senza competere con la CTA WhatsApp.
 const nav = [
-  { href: '/approccio', label: 'Approccio', key: 'approccio' },
-  { href: '/servizi', label: 'Servizi', key: 'servizi' },
-  { href: '/catalogo', label: 'Catalogo', key: 'catalogo' },
-  { href: '/eventi', label: 'Eventi', key: 'eventi' },
-  { href: '/articoli', label: 'Articoli', key: 'articoli' },
-  { href: '/contatti', label: 'Contatti', key: 'contatti' },
+  { href: '/', label: 'Home', key: 'home' },
+  { href: '/approccio', label: 'Il mio approccio', key: 'approccio' },
+  { href: '/consulenza-gratuita', label: 'Consulenza gratuita', key: 'consulenza' },
+  { href: '/lavora-con-noi', label: 'Lavora con noi', key: 'lavora', work: true },
+  { href: '/articoli', label: 'Blog', key: 'articoli' },
+  { href: '/chi-sono', label: 'Chi sono', key: 'chi-sono' },
 ];
 ---
 <header class="site-header">
@@ -43,21 +46,36 @@ const nav = [
             {nav.map((item) => (
               <a
                 href={item.href}
-                class={active === item.key ? 'active' : undefined}
+                class={
+                  [item.work ? 'nav-work' : null, active === item.key ? 'active' : null]
+                    .filter(Boolean)
+                    .join(' ') || undefined
+                }
                 aria-current={active === item.key ? 'page' : undefined}
               >
                 {item.label}
               </a>
             ))}
-            <a class="btn btn-sm" href="/contatti">
-              Consulenza gratuita
-            </a>
           </nav>
-          <button class="nav-toggle" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
-            <span />
-            <span />
-            <span />
-          </button>
+          <div class="header-actions">
+            <a
+              class="header-ig"
+              href={IG_URL}
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram di Andrea Bellettati"
+            >
+              <InstagramIcon size={18} />
+            </a>
+            <a class="btn btn-sm header-cta" href={WA_LINK} target="_blank" rel="noopener">
+              <WhatsAppIcon size={16} /> <span class="cta-label">WhatsApp</span>
+            </a>
+            <button class="nav-toggle" data-nav-toggle aria-label="Apri menu" aria-expanded="false">
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </Fragment>
       )
     }

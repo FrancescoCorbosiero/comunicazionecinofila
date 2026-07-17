@@ -21,6 +21,8 @@ const rest = all
   );
 
 const f = featured?.data;
+// La pagina di dettaglio esiste solo per eventi on-site (vedi eventi/[slug].astro).
+const fHasPage = Boolean(f && !f.externalUrl && !f.internalUrl && f.status !== 'coming-soon');
 const reserve = f?.reserveWaText
   ? waLink(f.reserveWaText)
   : waLink('Ciao Andrea! Vorrei riservare il mio posto al prossimo webinar.');
@@ -151,9 +153,11 @@ const eventLd = f
                 <a class="btn btn-lg" href={reserve} target="_blank" rel="noopener">
                   Riserva il tuo posto <WhatsAppIcon size={16} />
                 </a>
-                <a class="btn btn-ghost btn-lg" href={`/eventi/${featured.id}`}>
-                  Tutti i dettagli <ArrowIcon size={16} />
-                </a>
+                {fHasPage && (
+                  <a class="btn btn-ghost btn-lg" href={`/eventi/${featured.id}`}>
+                    Tutti i dettagli <ArrowIcon size={16} />
+                  </a>
+                )}
               </div>
               {f.collab && (
                 <p class="field-hint" style="margin-top:2px;">
@@ -183,7 +187,7 @@ const eventLd = f
           </div>
           <p class="field-hint" style="margin-top:16px;">
             I nuovi eventi vengono annunciati prima su Instagram. Vuoi essere avvisato?{' '}
-            <a class="text-link" href="/contatti">
+            <a class="text-link" href="/consulenza-gratuita">
               Scrivimi
             </a>
             .
@@ -200,7 +204,7 @@ const eventLd = f
         <h2 class="display-md">Preferisci un confronto<br />tutto tuo?</h2>
         <p class="lead">La consulenza 1:1 parte da un primo incontro gratuito di 45 minuti.</p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/contatti">Consulenza gratuita</a>
+          <a class="btn btn-lg" href="/consulenza-gratuita">Consulenza gratuita</a>
         </div>
       </div>
     </div>

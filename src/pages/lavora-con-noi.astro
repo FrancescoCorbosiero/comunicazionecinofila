@@ -1,0 +1,309 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import LeafIcon from '../components/LeafIcon.astro';
+import { LANDING_MODE } from '../config';
+
+if (LANDING_MODE) return Astro.redirect('/');
+
+const profili = [
+  'Educatori e istruttori cinofili',
+  'Naturopati e operatori del benessere animale',
+  'Toelettatori',
+  'Allevatori',
+  'Pet sitter e dog sitter',
+  'Professionisti del settore pet',
+  'Appassionati di alimentazione e benessere naturale',
+  'Chi vuole costruire una nuova attività nel mondo animale',
+];
+
+const ambiti = [
+  'Educazione cinofila',
+  'Toelettatura',
+  'Allevamento',
+  'Pet sitting',
+  'Naturopatia',
+  'Veterinaria',
+  'Altro',
+];
+
+const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', 'Non lo so ancora'];
+---
+<Base
+  active="lavora"
+  title="Lavora con noi — Andrea Bellettati · TeamNutrizione"
+  description="Il benessere animale può diventare anche il tuo lavoro. TeamNutrizione: formazione, affiancamento e un modello di lavoro dichiarato con trasparenza. Raccontami chi sei."
+  ogTitle="Lavora con noi — TeamNutrizione"
+  ogDescription="Non una rete di venditori: un Team di persone e professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere animale."
+>
+  <!-- HERO -->
+  <section class="section bg-deep paper-bg-deep">
+    <div class="container">
+      <div class="head-block" data-reveal style="max-width:820px;">
+        <span class="eyebrow kicker-rule">Lavora con noi · TeamNutrizione</span>
+        <h1 class="display-xl">Il benessere animale<br />può diventare anche<br />il tuo lavoro.</h1>
+        <p class="lead">
+          Non stiamo costruendo una rete di venditori. Stiamo creando un Team di persone e
+          professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere
+          animale.
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NON CERCHIAMO VENDITORI -->
+  <section class="section">
+    <div class="container">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">Come lavoriamo</span>
+        <h2 class="display-lg">Non cerchiamo<br />semplici venditori.</h2>
+      </div>
+      <div class="principi" data-reveal data-delay="1">
+        <div class="principio">
+          <span class="pno">01</span>
+          <h3>Si parte<br />dall'ascolto</h3>
+          <p>
+            Il lavoro non parte da un listino: parte dall'ascolto delle persone e dei loro animali.
+            Prima capire, poi proporre.
+          </p>
+        </div>
+        <div class="principio">
+          <span class="pno">02</span>
+          <h3>Analisi,<br />non catalogo</h3>
+          <p>
+            Analizziamo abitudini, stile di vita ed esigenze reali di ogni soggetto. È da lì che
+            nasce ogni proposta, mai dal prodotto.
+          </p>
+        </div>
+        <div class="principio">
+          <span class="pno">03</span>
+          <h3>Supporto<br />nel tempo</h3>
+          <p>
+            Consulenza, formazione e supporto continuo sono la base del metodo: il cliente non viene
+            lasciato solo dopo la prima ciotola.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A CHI È RIVOLTO -->
+  <section class="section-tight bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container">
+      <div class="split">
+        <div class="split-body" data-reveal>
+          <span class="eyebrow kicker-rule">A chi è rivolto</span>
+          <h2 class="display-md">Persone diverse,<br />stessa serietà.</h2>
+          <p>
+            Non serve sapere già tutto: servono ascolto, serietà, sensibilità e una reale volontà di
+            formarsi.
+          </p>
+        </div>
+        <div class="split-body" data-reveal data-delay="1">
+          <ul class="svc-includes">
+            {profili.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLESSIBILITÀ + FORMAZIONE -->
+  <section class="section">
+    <div class="container">
+      <div class="principi" data-reveal>
+        <div class="principio">
+          <span class="pno" aria-hidden="true"><LeafIcon size={26} stroke="var(--peach-deep)" /></span>
+          <h3>Attività flessibile,<br />online e offline</h3>
+          <p>
+            Sviluppi l'attività sui tuoi tempi e sui tuoi obiettivi: può affiancare il lavoro che
+            fai già oppure crescere fino a diventare la tua attività principale, di persona o a
+            distanza.
+          </p>
+        </div>
+        <div class="principio">
+          <span class="pno" aria-hidden="true"><LeafIcon size={26} stroke="var(--peach-deep)" /></span>
+          <h3>Formazione<br />e affiancamento</h3>
+          <p>
+            Hai accesso a formazione, materiali e confronto costante con il Team. Ti accompagniamo
+            dal primo contatto fino alla costruzione della tua rete.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IL MODELLO, CON TRASPARENZA -->
+  <section class="section-tight">
+    <div class="container container-narrow">
+      <div class="booking-card" data-reveal>
+        <span class="eyebrow kicker-rule" style="color:var(--peach);">Trasparenza, prima di tutto</span>
+        <h2 class="display-md">Il nostro modello<br />di lavoro.</h2>
+        <p>
+          TeamNutrizione lavora con un modello di <strong style="color:var(--cream-ink);">Multi
+          Level Marketing</strong> applicato al benessere animale — e preferiamo dirlo subito, con
+          trasparenza. È un'attività indipendente, costruita sulla consulenza e sulla relazione con
+          il cliente, con la possibilità di creare e formare un proprio Team.
+        </p>
+        <p>
+          La crescita è legata al lavoro reale: nessuna promessa di guadagni facili. Quello che
+          offriamo è un metodo, formazione, esperienza e affiancamento.
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn btn-cream" href="#candidatura">Raccontami chi sei <ArrowIcon size={15} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM CANDIDATURA -->
+  <section class="section-tight" id="candidatura">
+    <div class="container">
+      <div class="form-card" style="display:grid; gap:clamp(28px,4vw,52px); grid-template-columns:1fr;">
+        <div>
+          <span class="eyebrow kicker-rule">Candidatura</span>
+          <h2 class="display-md" style="margin-top:14px;">Raccontami<br />chi sei.</h2>
+          <p style="margin-top:14px;">
+            Tre passaggi, un paio di minuti. Ti ricontatto personalmente per un primo confronto
+            senza impegno: nessun automatismo, nessuna lista d'attesa.
+          </p>
+          <ul class="svc-includes" style="margin-top:18px;">
+            <li>Primo confronto conoscitivo, senza impegno</li>
+            <li>Formazione e affiancamento dal primo giorno</li>
+            <li>Modello di lavoro dichiarato con trasparenza</li>
+          </ul>
+        </div>
+
+        <form data-workform novalidate>
+          <div class="steps-head">
+            <span class="step-dot"></span>
+            <span class="step-dot"></span>
+            <span class="step-dot"></span>
+          </div>
+
+          <!-- STEP 1 — chi sei -->
+          <div class="step-panel active">
+            <span class="step-label">Passo 1 di 3</span>
+            <h3 class="step-q">Chi sei?</h3>
+            <div class="field">
+              <label for="w-nome">Nome e cognome</label>
+              <input id="w-nome" name="nome" type="text" placeholder="Es. Marco Rossi" required />
+              <span class="field-error">Scrivi il tuo nome per continuare.</span>
+            </div>
+            <div class="field">
+              <label for="w-email">Email</label>
+              <input id="w-email" name="email" type="email" placeholder="nome@esempio.it" required />
+              <span class="field-error">Serve un'email valida per ricontattarti.</span>
+            </div>
+            <div class="field">
+              <label for="w-tel">Telefono</label>
+              <input id="w-tel" name="telefono" type="tel" placeholder="+39 3xx xxx xxxx" required />
+              <span class="field-error">Serve un recapito telefonico.</span>
+            </div>
+            <div class="step-nav">
+              <span></span>
+              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+            </div>
+          </div>
+
+          <!-- STEP 2 — il tuo percorso -->
+          <div class="step-panel">
+            <span class="step-label">Passo 2 di 3</span>
+            <h3 class="step-q">Il tuo percorso.</h3>
+            <div class="field">
+              <label for="w-occupazione">Di cosa ti occupi attualmente?</label>
+              <input
+                id="w-occupazione"
+                name="occupazione"
+                type="text"
+                placeholder="Es. educatrice cinofila, impiegato, studentessa…"
+                required
+              />
+              <span class="field-error">Una riga basta: mi aiuta a capire da dove parti.</span>
+            </div>
+            <div class="field">
+              <label for="w-settore">Lavori già nel settore animale?</label>
+              <select id="w-settore" name="settore_animale" required>
+                <option value="" disabled selected>Seleziona…</option>
+                <option value="Sì">Sì</option>
+                <option value="No">No</option>
+              </select>
+              <span class="field-error">Seleziona una risposta.</span>
+            </div>
+            <div class="field">
+              <label for="w-ambito">Qual è il tuo ambito?</label>
+              <select id="w-ambito" name="ambito" required>
+                <option value="" disabled selected>Seleziona…</option>
+                {ambiti.map((a) => <option value={a}>{a}</option>)}
+              </select>
+              <span class="field-error">Seleziona l'ambito più vicino a te.</span>
+            </div>
+            <div class="step-nav">
+              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+            </div>
+          </div>
+
+          <!-- STEP 3 — il progetto -->
+          <div class="step-panel">
+            <span class="step-label">Passo 3 di 3</span>
+            <h3 class="step-q">Il progetto.</h3>
+            <div class="field">
+              <label for="w-perche">Perché ti interessa questo progetto?</label>
+              <textarea
+                id="w-perche"
+                name="perche"
+                rows="3"
+                placeholder="Due righe sincere valgono più di una lettera di presentazione."
+                required></textarea>
+              <span class="field-error">Raccontami in due righe cosa ti attira del progetto.</span>
+            </div>
+            <div class="field">
+              <label for="w-tempo">Quanto tempo vorresti dedicare?</label>
+              <select id="w-tempo" name="tempo" required>
+                <option value="" disabled selected>Seleziona…</option>
+                {tempi.map((t) => <option value={t}>{t}</option>)}
+              </select>
+              <span class="field-error">Seleziona una risposta.</span>
+            </div>
+            <div class="field">
+              <label for="w-social">
+                Instagram o sito professionale
+                <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--ink-mute);"
+                  >(facoltativo)</span
+                >
+              </label>
+              <input
+                id="w-social"
+                name="social"
+                type="text"
+                placeholder="@iltuoprofilo oppure www.iltuosito.it"
+              />
+            </div>
+            <div class="step-nav">
+              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+              <button type="submit" class="btn">Invia la candidatura <ArrowIcon size={15} /></button>
+            </div>
+            <p class="field-hint">
+              Nessuna newsletter, nessuno spam: uso questi dati solo per ricontattarti.
+            </p>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="form-success" role="status" tabindex="-1">
+            <span class="success-check">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <h3 class="display-md">Candidatura inviata.</h3>
+            <p style="max-width:420px;">Grazie, ti ricontatto presto. — Andrea</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import CoverImage from '../components/CoverImage.astro';
+import andrea2 from '../assets/andrea-2.jpg';
+import andrea3 from '../assets/andrea-3.jpg';
+import { LANDING_MODE } from '../config';
+
+if (LANDING_MODE) return Astro.redirect('/');
+---
+<Base
+  active="chi-sono"
+  ogType="article"
+  title="Chi sono — Andrea Bellettati · La mia storia"
+  description="Mi chiamo Andrea Bellettati, esperto in comportamento e nutrizione per cani e gatti. Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia e il mio percorso."
+  ogTitle="Chi sono — Andrea Bellettati"
+  ogDescription="Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia, dal primo sacco di crocchette a un metodo condiviso."
+  ogImage="/assets/andrea-3.jpg"
+>
+  <!-- PAGE HERO -->
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split-body" data-reveal>
+          <span class="eyebrow kicker-rule">Chi sono</span>
+          <h1 class="display-lg">Mi chiamo<br />Andrea<br />Bellettati.</h1>
+          <p class="lead">
+            Sono un esperto in comportamento e nutrizione per cani e gatti. Studio da anni la
+            relazione che intercorre tra questi due mondi: non si può parlare di benessere animale
+            senza tenerli insieme.
+          </p>
+          <div class="hero-cta-row">
+            <a class="btn btn-lg" href="/consulenza-gratuita">
+              Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
+            </a>
+            <a class="btn btn-ghost btn-lg" href="/approccio">Il mio approccio</a>
+          </div>
+        </div>
+        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
+          <CoverImage
+            src={andrea3}
+            alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIO / IL BASSOTTO -->
+  <section class="section bg-sage paper-bg" style="background-color:var(--sage);">
+    <div class="container">
+      <div class="split flip">
+        <div class="split-media parallax-cover" data-reveal style="aspect-ratio:4/5;">
+          <CoverImage
+            src={andrea2}
+            alt="Andrea Bellettati guancia a guancia con il suo segugio, in inverno"
+          />
+        </div>
+        <div class="split-body" data-reveal data-delay="1">
+          <span class="eyebrow kicker-rule">Vivo con un bassotto</span>
+          <h2 class="display-md">La teoria la verifico<br />ogni giorno, a casa.</h2>
+          <p>
+            Convivo con un bassotto: ogni cosa che studio passa prima dalla nostra quotidianità. Le
+            passeggiate, i pasti, le piccole intolleranze, gli inverni in montagna. È lì che la
+            nutrizione smette di essere una tabella e diventa cura concreta.
+          </p>
+          <p>
+            Questo è anche il modo in cui lavoro con te: con la pazienza e l'onestà di chi sa che
+            dall'altra parte c'è un compagno di vita, non un “caso”.
+          </p>
+          <blockquote style="border-left:3px solid var(--peach); padding-left:18px; margin:6px 0 0;">
+            <p style="font-family:var(--serif); font-style:italic; font-size:20px; color:var(--olive-deep);">
+              «Alimentare correttamente il proprio amico a quattro zampe è, insieme alla sua
+              educazione, la più grande forma di amore.»
+            </p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <!-- NOTE: date/tappe da confermare con Andrea — struttura pronta, testi modificabili -->
+  <section class="section">
+    <div class="container container-narrow">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">Il percorso</span>
+        <h2 class="display-lg">Da una passione<br />a un metodo.</h2>
+      </div>
+      <div class="timeline" data-reveal data-delay="1">
+        <div class="tl-item">
+          <div class="tl-year">L'inizio</div>
+          <h4>Dalla convivenza allo studio</h4>
+          <p>
+            La curiosità per ciò che metto nella ciotola del mio cane diventa studio serio:
+            etichette, ingredienti, letteratura scientifica. Capisco quanto poco se ne parli
+            davvero.
+          </p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2021</div>
+          <h4>Entro in un team multidisciplinare</h4>
+          <p>
+            Mi unisco a un gruppo di professionisti nato per portare consapevolezza su un argomento
+            troppo spesso sottovalutato: il Team che oggi chiamiamo TeamNutrizione. Formazione
+            continua, confronto e metodo condiviso.
+          </p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">Oggi</div>
+          <h4>Consulenze e divulgazione</h4>
+          <p>
+            Consulenze 1:1 per famiglie, webinar e contenuti come “Etichette a 4 Zampe” e
+            l'antistaminico naturale. Sempre con lo stesso obiettivo: scelte consapevoli.
+          </p>
+        </div>
+        <div class="tl-item is-now">
+          <div class="tl-year">Con te</div>
+          <h4>Il prossimo passo</h4>
+          <p>
+            Una consulenza gratuita di 45 minuti per analizzare alimentazione e comportamento del
+            tuo animale, e un piano di lavoro firmato su misura.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-tight bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="cta-band">
+        <h2 class="display-md">Raccontami il tuo animale.</h2>
+        <p class="lead">Il primo passo è gratuito e senza impegno.</p>
+        <div class="cta-row">
+          <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+          <a class="btn btn-ghost-cream btn-lg" href="/lavora-con-noi">Lavora con noi</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

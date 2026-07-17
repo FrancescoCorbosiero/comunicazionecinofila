@@ -5,7 +5,8 @@
  */
 
 /** Dominio di produzione — aggiorna qui e in astro.config.mjs. */
-export const SITE = 'https://www.comunicazionecinofila.it';
+// TODO: confermare dominio definitivo
+export const SITE = 'https://www.andreabellettati.it';
 
 /** Brand */
 export const SITE_NAME = 'Andrea Bellettati · Comunicazione Cinofila';
@@ -34,7 +35,7 @@ export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
 
 /**
  * cal.com — UNICA costante per l'integrazione del calendario.
- * Finché è vuota, i pulsanti "Prenota una call" aprono il modale-placeholder
+ * Finché è vuota, i pulsanti "Richiedi la tua consulenza gratuita" aprono il modale-placeholder
  * (selezione slot → conferma via WhatsApp).
  * In produzione: incolla qui es. 'andrea-bellettati/call-conoscitiva'
  * e attiva l'embed @calcom/embed-react in src/components/CallModal.astro.

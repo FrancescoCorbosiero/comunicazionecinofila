@@ -1,12 +1,12 @@
 /* Andrea Bellettati — Mini Brand System v2
    Riscritto sulla base del feed reale.
-   Riferimento: post "Antistaminico Naturale" + locandina Etichette + sito Reico.
+   Riferimento: post "Antistaminico Naturale" + locandina Etichette.
 */
 
 :root {
   /* ── PALETTE ───────────────────────────────────────────
      Verdi salvia desaturati (campionati dal feed reale),
-     crema avorio per testo, accento pesca/corallo da Reico.
+     crema avorio per testo, accento caldo pesca/corallo.
   */
   --bg-cream:        #ece4d2;   /* sfondo principale carta riciclata */
   --bg-paper:        #f5efe1;   /* superficie chiara */
@@ -18,7 +18,7 @@
   --olive-deep:      #3f4a2e;   /* oliva profondo headline / badge */
   --olive-darkest:   #1f2515;   /* quasi nero, footer */
 
-  /* Accento caldo — il pesca/corallo Reico */
+  /* Accento caldo — pesca/corallo */
   --peach:           #f4a98a;   /* CTA, hover, badge attivi */
   --peach-soft:      #f8c9b1;
   --peach-deep:      #d97a55;   /* hover/active scuro */
@@ -165,7 +165,7 @@
   color: var(--cream-ink);
 }
 
-/* Pill / tag — stile Reico */
+/* Pill / tag */
 .brand .pill {
   display: inline-flex;
   align-items: center;

@@ -1,7 +1,7 @@
 ---
 // Corpo della landing temporanea (vedi LANDING_MODE in src/config.ts).
 // Compone: hero (Home) + contenuti di Approccio + proof (Home) + CTA finali.
-// Tutte le CTA puntano a WhatsApp o al modale "Prenota una call": nessun form/contatti.
+// Tutte le CTA puntano a WhatsApp o al modale "Richiedi la tua consulenza gratuita": nessun form.
 import LeafIcon from './LeafIcon.astro';
 import CalendarIcon from './CalendarIcon.astro';
 import WhatsAppIcon from './WhatsAppIcon.astro';
@@ -14,7 +14,9 @@ const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il 
 ---
 <!-- HERO (da Home) -->
 <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);">
-  <div class="hero-bg" data-parallax="80" aria-hidden="true" style="background-image:url('/assets/hero.jpg');"></div>
+  <!-- TODO: quando ci sarà la foto hero reale, caricarla in public/assets/hero.jpg
+       e ripristinare style="background-image:url('/assets/hero.jpg');" qui sotto. -->
+  <div class="hero-bg" data-parallax="80" aria-hidden="true"></div>
   <div class="container">
     <div class="hero-center-inner">
       <span class="hero-portrait-xl" data-parallax="50">
@@ -29,10 +31,10 @@ const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il 
       </p>
       <div class="hero-cta-row center">
         <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
-          Consulenza gratuita <WhatsAppIcon size={16} />
+          Scrivimi su WhatsApp <WhatsAppIcon size={16} />
         </a>
         <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
-          Prenota una call <CalendarIcon size={16} />
+          Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
         </button>
       </div>
       <span class="hero-note">Primo confronto gratuito · cane e gatto</span>
@@ -45,16 +47,16 @@ const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il 
   <div class="container">
     <div class="split">
       <div class="split-body" data-reveal>
-        <span class="eyebrow kicker-rule">Chi sono · L'approccio</span>
+        <span class="eyebrow kicker-rule">L'approccio</span>
         <h2 class="display-lg">
-          Non vendo<br />crocchette.<br /><span style="color:var(--peach-deep);"
-            >Costruisco<br />equilibrio.</span
+          Non parto<br />dal prodotto.<br /><span style="color:var(--peach-deep);"
+            >Parto<br />dall'animale.</span
           >
         </h2>
         <p class="lead">
-          Mi chiamo Andrea Bellettati e sono un esperto in comportamento e nutrizione per cani e
-          gatti. Studio da anni la relazione che intercorre tra questi due mondi: non si può parlare
-          di benessere animale senza tenerli insieme.
+          Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
+          lavoro è osservare il soggetto nella sua globalità e costruire un percorso sostenibile per
+          lui e per la sua famiglia.
         </p>
         <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
           Scrivimi su WhatsApp <WhatsAppIcon size={16} />
@@ -173,7 +175,7 @@ const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il 
         </div>
         <div class="pl">Cane &amp; Gatto</div>
       </div>
-      <div class="proof-item"><div class="pn">Reico</div><div class="pl">Partner ufficiale</div></div>
+      <div class="proof-item"><div class="pn">Team</div><div class="pl">Metodo condiviso</div></div>
     </div>
   </div>
 </section>
@@ -192,10 +194,10 @@ const waConsulenza = waLink('Ciao Andrea! Vorrei una consulenza gratuita per il 
       </p>
       <div class="cta-row">
         <a class="btn btn-lg" href={waConsulenza} target="_blank" rel="noopener">
-          Consulenza gratuita <WhatsAppIcon size={16} />
+          Scrivimi su WhatsApp <WhatsAppIcon size={16} />
         </a>
         <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
-          Prenota una call <CalendarIcon size={16} />
+          Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
         </button>
       </div>
     </div>

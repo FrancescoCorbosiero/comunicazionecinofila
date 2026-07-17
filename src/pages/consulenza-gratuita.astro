@@ -2,74 +2,39 @@
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import InstagramIcon from '../components/InstagramIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import andrea3 from '../assets/andrea-3.jpg';
-import { waLink, WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL, LANDING_MODE } from '../config';
+import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL, LANDING_MODE } from '../config';
 
 if (LANDING_MODE) return Astro.redirect('/');
-
-const proWa = waLink("Ciao Andrea! Sono interessato/a all'opportunità lavorativa.");
-const proCallWa = waLink(
-  "Ciao Andrea! Sono interessato/a all'opportunità lavorativa. Vorrei fissare una call conoscitiva."
-);
 ---
 <Base
-  active="contatti"
-  title="Contatti — Andrea Bellettati · Consulenza gratuita"
-  description="Prenota la consulenza gratuita di 45 minuti o fissa una call per le opportunità lavorative. Scrivimi su WhatsApp, email o Instagram."
-  ogTitle="Contatti — Andrea Bellettati"
-  ogDescription="Parliamo del tuo animale. Il primo passo è gratuito e senza impegno."
+  active="consulenza"
+  title="Consulenza gratuita — Andrea Bellettati · 45 minuti per il tuo animale"
+  description="45 minuti insieme per analizzare alimentazione e comportamento del tuo cane o gatto. Gratuita e senza impegno, con un piano di lavoro firmato al termine."
+  ogTitle="Consulenza gratuita — Andrea Bellettati"
+  ogDescription="45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno."
 >
-  <!-- INTRO + PATH SELECTOR -->
+  <!-- INTRO -->
   <section class="section-tight">
     <div class="container">
       <div class="head-block" data-reveal style="max-width:760px;">
-        <span class="eyebrow kicker-rule">Iniziamo</span>
+        <span class="eyebrow kicker-rule">Consulenza gratuita</span>
         <h1 class="display-xl">Parliamo del<br />tuo animale.</h1>
         <p class="lead">
-          Dimmi prima di tutto da dove arrivi: posso aiutarti a nutrire e gestire meglio il tuo cane
-          o gatto, oppure accompagnarti se vuoi farne una professione.
+          45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
         </p>
-      </div>
-      <div class="path-grid" data-reveal data-delay="1">
-        <button class="path-card" data-path="famiglia" type="button">
-          <span class="pc-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z" stroke="var(--olive-deep)" stroke-width="1.6" stroke-linejoin="round"></path>
-              <circle cx="12" cy="11" r="2.4" stroke="var(--olive-deep)" stroke-width="1.6"></circle>
-            </svg>
-          </span>
-          <h3>Ho un cane o un gatto</h3>
-          <p>
-            Voglio migliorare alimentazione e benessere del mio animale. Compilo il questionario e mi
-            ricontatti tu.
-          </p>
-          <span class="text-link">Consulenza gratuita <ArrowIcon size={14} /></span>
-        </button>
-        <button class="path-card" data-path="pro" type="button">
-          <span class="pc-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 7h16v12H4z" stroke="var(--olive-deep)" stroke-width="1.6"></path>
-              <path d="M9 7V5h6v2" stroke="var(--olive-deep)" stroke-width="1.6"></path>
-            </svg>
-          </span>
-          <h3>Voglio farne un lavoro</h3>
-          <p>
-            Mi interessa l'opportunità professionale nel settore pet. Fisso una call conoscitiva con
-            il calendario.
-          </p>
-          <span class="text-link">Prenota una call <ArrowIcon size={14} /></span>
-        </button>
       </div>
     </div>
   </section>
 
-  <!-- FAMILY PATH -->
-  <section class="section-tight" data-path-target="famiglia">
+  <!-- FORM -->
+  <section class="section-tight">
     <div class="container">
       <div class="form-card" style="display:grid; gap:clamp(28px,4vw,52px); grid-template-columns:1fr;">
         <div>
-          <span class="eyebrow kicker-rule">Consulenza gratuita</span>
+          <span class="eyebrow kicker-rule">Come funziona</span>
           <h2 class="display-md" style="margin-top:14px;">45 minuti, su misura.<br />Senza impegno.</h2>
           <p style="margin-top:14px;">
             A seguito del questionario verrai ricontattato al numero che indichi. La consulenza dura
@@ -161,15 +126,15 @@ const proCallWa = waLink(
               stesso.
             </p>
             <div class="call-opt">
-              <span>Preferisci fissare direttamente una call?</span>
+              <span>Preferisci scegliere subito uno slot per sentirci?</span>
               <button type="button" class="btn btn-ghost btn-sm" data-open-call>
-                Prenota una call <ArrowIcon size={14} />
+                Richiedi la tua consulenza gratuita <ArrowIcon size={14} />
               </button>
             </div>
           </div>
 
           <!-- SUCCESS -->
-          <div class="form-success">
+          <div class="form-success" role="status" tabindex="-1">
             <span class="success-check">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -184,58 +149,30 @@ const proCallWa = waLink(
               <a class="btn" data-wa-out href="#" target="_blank" rel="noopener">Apri WhatsApp</a>
               <a class="btn btn-ghost" data-mail-out href="#">Invia per email</a>
             </div>
-            <p class="field-hint" style="text-align:center;">
-              Vuoi anche fissare una call? <button
-                type="button"
-                class="text-link"
-                data-open-call
-                style="background:none;border:0;font:inherit;cursor:pointer;">Prenotala qui</button
-              >
-            </p>
           </div>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- PRO PATH -->
-  <section class="section-tight" data-path-target="pro" style="display:none;">
-    <div class="container">
-      <div class="booking-card" data-reveal>
-        <span class="eyebrow kicker-rule" style="color:var(--peach);">Opportunità lavorative</span>
-        <h2 class="display-md">Fissa una call<br />conoscitiva.</h2>
-        <p style="max-width:560px;">
-          Se ami gli animali e vuoi trasformare questa passione in una professione, parliamone.
-          Scegli uno slot indicativo qui sotto: confermiamo insieme data e orario sul calendario.
+  <!-- NON FINISCE QUI -->
+  <section class="section bg-deep paper-bg-deep">
+    <div class="container container-narrow">
+      <div class="head-block" data-reveal>
+        <span class="eyebrow kicker-rule">Dopo il primo incontro</span>
+        <h2 class="display-lg">La consulenza non finisce<br />con un consiglio alimentare.</h2>
+      </div>
+      <div data-reveal data-delay="1">
+        <p class="lead">
+          Il mio lavoro parte dal primo confronto, ma continua nel tempo. Seguo personalmente ogni
+          percorso, monitorando adattamento, appetito, feci, digestione e cambiamenti nelle
+          abitudini dell'animale. Dietro ogni consulenza c'è inoltre il confronto con un Team di
+          professionisti e consulenti che condividono un metodo di lavoro comune.
         </p>
-        <div class="booking-cal" data-booking>
-          <div style="font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-soft);">
-            Slot disponibili · questa settimana
-          </div>
-          <div class="cal-slots">
-            <button class="cal-slot" type="button">Mar · 18:00</button>
-            <button class="cal-slot" type="button">Mer · 21:00</button>
-            <button class="cal-slot" type="button">Gio · 18:30</button>
-            <button class="cal-slot" type="button">Ven · 19:00</button>
-            <button class="cal-slot" type="button">Sab · 10:30</button>
-          </div>
-          <div data-cal-confirm style="display:none; width:100%; padding-top:6px; flex-direction:column; gap:12px;">
-            <p style="margin:0; color:var(--cream-ink);">
-              Slot scelto: <b data-cal-label>—</b>. Confermalo su WhatsApp e ti mando il link del
-              calendario.
-            </p>
-            <a class="btn" data-cal-wa href={proCallWa} target="_blank" rel="noopener" style="align-self:flex-start;">
-              Conferma su WhatsApp <WhatsAppIcon size={15} />
-            </a>
-          </div>
-          <p style="font-size:11px; color:rgba(239,232,216,0.5); margin:4px 0 0;">
-            Prenotazione gestita via calendario smart (cal.com) — collegamento in arrivo.
-          </p>
-        </div>
-        <div class="hero-cta-row">
-          <a class="btn btn-cream" href={proWa} target="_blank" rel="noopener">Scrivimi direttamente</a>
-          <a class="btn btn-ghost-cream" href="/servizi#opportunita">Cosa significa entrare nel team</a>
-        </div>
+        <p style="color:var(--sage-soft);">
+          Quel Team ha un nome: TeamNutrizione. Se il benessere animale ti interessa anche come
+          professione, <a class="text-link" href="/lavora-con-noi">scopri come lavorare con noi</a>.
+        </p>
       </div>
     </div>
   </section>
@@ -266,13 +203,7 @@ const proCallWa = waLink(
               <span class="channel-text"><b>Email</b><span>{EMAIL}</span></span>
             </a>
             <a class="channel" href={IG_URL} target="_blank" rel="noopener">
-              <span class="channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"></rect>
-                  <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"></circle>
-                  <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"></circle>
-                </svg>
-              </span>
+              <span class="channel-icon"><InstagramIcon size={22} /></span>
               <span class="channel-text"><b>Instagram</b><span>{IG_HANDLE}</span></span>
             </a>
             <a class="channel" href={`tel:${PHONE}`}>
@@ -288,7 +219,7 @@ const proCallWa = waLink(
         <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
           <CoverImage
             src={andrea3}
-            alt="I bassotti di Andrea con i maglioni a quadri, sul letto"
+            alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
           />
         </div>
       </div>
