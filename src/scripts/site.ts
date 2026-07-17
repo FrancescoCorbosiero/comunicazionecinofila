@@ -371,11 +371,13 @@ function updateParallax(): void {
     const progress = (center - vh / 2) / (vh / 2 + rect.height / 2);
     const clamped = Math.max(-1, Math.min(1, progress));
     if (el.hasAttribute('data-parallax-cover')) {
-      const shift = rect.height * 0.06 * -clamped;
-      el.style.transform = `translate3d(0, ${shift.toFixed(2)}px, 0) scale(1.12)`;
+      // Escursione più ampia (0.10·h): l'immagine è pre-scalata a 1.24 in
+      // effects.css, quindi c'è margine sufficiente a non scoprire i bordi.
+      const shift = rect.height * 0.1 * -clamped;
+      el.style.transform = `translate3d(0, ${shift.toFixed(2)}px, 0) scale(1.24)`;
     } else {
       const speed = parseFloat(el.getAttribute('data-parallax') || '') || 40;
-      el.style.transform = `translate3d(0, ${(-clamped * (speed / 2)).toFixed(2)}px, 0)`;
+      el.style.transform = `translate3d(0, ${(-clamped * (speed / 1.3)).toFixed(2)}px, 0)`;
     }
   }
 }
