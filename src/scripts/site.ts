@@ -268,6 +268,17 @@ function initWorkForm(): void {
   });
 }
 
+/* ── Spotlight delle carte-scelta (home): segue il puntatore ── */
+function initPathGlow(): void {
+  document.querySelectorAll<HTMLElement>('.path-choice').forEach((card) => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+      card.style.setProperty('--my', `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+    });
+  });
+}
+
 /* ── Filtro per categoria del blog ───────────────────────────── */
 function initBlogFilter(): void {
   const bar = document.querySelector<HTMLElement>('[data-blog-filters]');
@@ -541,6 +552,7 @@ function onPageLoad(): void {
   initStepForm();
   initWorkForm();
   initBlogFilter();
+  initPathGlow();
   initPathSelector();
   initBookings();
   initCatalog();

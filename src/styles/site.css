@@ -423,6 +423,81 @@ html[data-titlestyle="serif"] .hero-quote { font-family: 'Playfair Display', ser
 .read-progress { position: fixed; top: 70px; left: 0; right: 0; height: 3px; z-index: 60; pointer-events: none; }
 .read-progress span { display: block; height: 100%; width: 0; background: var(--peach); }
 
+/* ── Smistatore home: le tre scelte (bivio di conversione) ───────
+   Carte da gioco vere: icona in medaglione, badge, numero ghost,
+   spotlight che segue il puntatore e — al hover — i fratelli si
+   attenuano così la scelta su cui sei "domina" il gruppo. */
+.path-cards { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.path-choice {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px;
+  background: var(--bg-paper); border: 1.5px solid var(--rule); border-radius: var(--r-3);
+  padding: 26px 24px 22px;
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1), box-shadow 0.5s ease,
+    border-color 0.35s ease, opacity 0.45s ease;
+}
+.path-choice > :not(.pc-glow):not(.pc-num) { position: relative; z-index: 1; }
+.path-choice:hover {
+  transform: translateY(-7px) rotate(-0.4deg);
+  border-color: var(--olive-deep);
+  box-shadow: 0 26px 46px -24px rgba(31, 37, 21, 0.42);
+}
+/* La scelta su cui sei domina: le altre si fanno da parte */
+@media (hover: hover) {
+  .path-cards:hover .path-choice:not(:hover) { opacity: 0.55; transform: scale(0.985); }
+}
+/* Spotlight caldo che segue il puntatore (coordinate da site.ts) */
+.pc-glow {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 40%),
+    rgba(244, 169, 138, 0.22), transparent 65%);
+}
+.path-choice:hover .pc-glow { opacity: 1; }
+/* Numero ghost oversize, da poster */
+.pc-num {
+  position: absolute; top: 4px; right: 14px; pointer-events: none;
+  font-family: var(--display); font-size: 88px; line-height: 1;
+  color: rgba(63, 74, 46, 0.09);
+}
+@supports (-webkit-text-stroke: 1px black) {
+  .pc-num { color: transparent; -webkit-text-stroke: 1.2px rgba(63, 74, 46, 0.18); }
+}
+.pc-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-right: 56px; }
+.pc-ico { width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; }
+.tone-sage .pc-ico { background: var(--sage-mist); color: var(--olive-deep); }
+.tone-peach .pc-ico { background: var(--peach-soft); color: var(--olive-darkest); }
+.tone-olive .pc-ico { background: var(--olive-deep); color: var(--cream-ink); }
+.path-choice:hover .pc-ico svg { animation: ico-wag 0.6s ease; }
+@keyframes ico-wag {
+  0% { transform: rotate(0); }
+  30% { transform: rotate(-10deg); }
+  65% { transform: rotate(8deg); }
+  100% { transform: rotate(0); }
+}
+.pc-badge { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  padding: 5px 11px; border-radius: var(--r-pill); border: 1px solid var(--rule);
+  background: var(--bg-cream); color: var(--ink-mute); white-space: nowrap; }
+.path-choice h3 { font-size: 21px; }
+.path-choice p { font-size: 14.5px; margin: 0; flex-grow: 1; }
+.pc-cta { display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 700; color: var(--peach-deep);
+  border-top: 1px solid var(--rule-soft); padding-top: 14px; margin-top: 4px;
+  transition: gap 0.35s ease; }
+.path-choice:hover .pc-cta { gap: 15px; }
+/* Freccia scarabocchiata che accompagna l'occhio verso le carte */
+.path-doodle { display: none; }
+@media (min-width: 940px) {
+  .path-cards { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .path-doodle { display: block; position: absolute; right: clamp(30px, 8vw, 130px);
+    top: 34px; width: 110px; color: var(--peach-deep); transform: rotate(14deg); opacity: 0.85; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .path-choice:hover { transform: none; }
+  .path-cards:hover .path-choice:not(:hover) { transform: none; opacity: 1; }
+  .path-choice:hover .pc-ico svg { animation: none; }
+}
+
 /* ── Blog: filtri categoria, indice articolo, condivisione ─────── */
 .blog-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: clamp(22px, 3vw, 34px); }
 .chip { padding: 9px 18px; border-radius: var(--r-pill); border: 1.5px solid var(--rule);
