@@ -11,9 +11,12 @@ const comingSoon = d.status === 'coming-soon';
 const external = Boolean(d.externalUrl);
 const href = d.externalUrl ?? (comingSoon ? null : `/articoli/${entry.id}`);
 const Tag = href ? 'a' : 'div';
+// Tempo di lettura stimato (~200 parole/min) dal corpo Markdown.
+const minutes = Math.max(1, Math.round((entry.body ?? '').trim().split(/\s+/).length / 200));
 ---
 <Tag
   class="card"
+  data-cat={d.category}
   {...href ? { href } : {}}
   {...external ? { target: '_blank', rel: 'noopener' } : {}}
 >
@@ -31,11 +34,13 @@ const Tag = href ? 'a' : 'div';
   <div class="card-body">
     <div class="card-meta">
       {d.category}
-      {comingSoon && (
+      {comingSoon ? (
         <Fragment>
           {' · '}
           <span style="color:var(--peach-deep);">In arrivo</span>
         </Fragment>
+      ) : (
+        <Fragment>{` · ${minutes} min`}</Fragment>
       )}
     </div>
     <h3 style="font-size:21px;" transition:name={comingSoon ? undefined : `art-${entry.id}`}>

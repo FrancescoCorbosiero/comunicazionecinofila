@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import ArrowIcon from '../../components/ArrowIcon.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
 import { SITE } from '../../config';
 import { longDate } from '../../lib/dates';
 import '../../styles/content.css';
@@ -16,8 +18,27 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const d = entry.data;
+
+// Tempo di lettura (~200 parole/min) e indice dai titoli di secondo livello.
+const minutes = Math.max(1, Math.round((entry.body ?? '').trim().split(/\s+/).length / 200));
+const toc = headings.filter((h) => h.depth === 2);
+
+// Condivisione: WhatsApp e copia link.
+const pageUrl = new URL(`/articoli/${entry.id}/`, SITE).href;
+const shareWa = `https://wa.me/?text=${encodeURIComponent(`${d.title} — ${pageUrl}`)}`;
+
+// Articoli correlati: stessa categoria; se non bastano, i più recenti.
+const all = await getCollection('articoli');
+const onSite = all.filter(
+  (a) => a.id !== entry.id && a.data.status === 'published' && !a.data.externalUrl
+);
+const sameCat = onSite.filter((a) => a.data.category === d.category);
+const others = onSite.filter((a) => a.data.category !== d.category);
+const related = [...sameCat, ...others]
+  .sort((a, b) => (a.data.category === d.category ? -1 : 0) - (b.data.category === d.category ? -1 : 0))
+  .slice(0, 3);
 
 const articleLd = {
   '@type': 'Article',
@@ -54,7 +75,9 @@ const crumbs = [
     <div class="container container-narrow">
       <a class="text-link" href="/articoli">Torna al blog</a>
       <div class="head-block" data-reveal style="margin-top:18px; margin-bottom:28px;">
-        <div class="card-meta">{d.category} · <span>{longDate(d.date)}</span></div>
+        <div class="card-meta">
+          {d.category} · <span>{longDate(d.date)}</span> · <span>{minutes} min di lettura</span>
+        </div>
         <h1 class="display-lg" transition:name={`art-${entry.id}`}>{d.title}</h1>
         <p class="lead">{d.excerpt}</p>
       </div>
@@ -69,11 +92,58 @@ const crumbs = [
           </div>
         )
       }
+      {
+        toc.length >= 3 && (
+          <nav class="toc" data-reveal aria-label="Indice dell'articolo">
+            <span class="toc-title">In questo articolo</span>
+            <ol>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
       <div class="prose" data-reveal>
         <Content />
       </div>
+
+      <!-- CONDIVISIONE -->
+      <div class="share-row" data-reveal>
+        <span class="share-label">Ti è stato utile? Condividilo:</span>
+        <a class="btn btn-sm" href={shareWa} target="_blank" rel="noopener">
+          WhatsApp <WhatsAppIcon size={15} />
+        </a>
+        <button class="btn btn-ghost btn-sm" type="button" data-copy-url>Copia link</button>
+      </div>
     </div>
   </article>
+
+  <!-- CORRELATI -->
+  {
+    related.length > 0 && (
+      <section class="section-tight">
+        <div class="container">
+          <div class="section-head-row" data-reveal>
+            <div class="head-block" style="margin-bottom:0;">
+              <span class="eyebrow kicker-rule">Continua a leggere</span>
+              <h2 class="display-md">Potrebbero interessarti.</h2>
+            </div>
+            <a class="btn btn-ghost" href="/articoli">
+              Tutti gli articoli <ArrowIcon size={15} />
+            </a>
+          </div>
+          <div class="card-grid cols-3 stagger" data-reveal data-delay="1">
+            {related.map((r) => (
+              <ArticleCard entry={r} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- CTA -->
   <section class="section-tight bg-sage paper-bg" style="background-color:var(--sage);">
