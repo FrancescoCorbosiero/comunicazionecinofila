@@ -12,6 +12,15 @@
   max-width: 720px;
 }
 .prose > :first-child { margin-top: 0; }
+/* Capolettera editoriale sul primo paragrafo */
+.prose > p:first-of-type::first-letter {
+  font-family: var(--display);
+  float: left;
+  font-size: 3.4em;
+  line-height: 0.82;
+  padding: 5px 12px 0 0;
+  color: var(--peach-deep);
+}
 .prose h2 {
   font-family: var(--display);
   text-transform: uppercase;

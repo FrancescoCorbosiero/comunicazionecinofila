@@ -47,12 +47,15 @@ const crumbs = [
   breadcrumbs={crumbs}
   jsonLd={articleLd}
 >
+  <!-- Avanzamento di lettura (solo qui: è una pagina da leggere) -->
+  <div class="read-progress" aria-hidden="true"><span data-progress></span></div>
+
   <article class="section-tight">
     <div class="container container-narrow">
       <a class="text-link" href="/articoli">Torna al blog</a>
       <div class="head-block" data-reveal style="margin-top:18px; margin-bottom:28px;">
         <div class="card-meta">{d.category} · <span>{longDate(d.date)}</span></div>
-        <h1 class="display-lg">{d.title}</h1>
+        <h1 class="display-lg" transition:name={`art-${entry.id}`}>{d.title}</h1>
         <p class="lead">{d.excerpt}</p>
       </div>
       {

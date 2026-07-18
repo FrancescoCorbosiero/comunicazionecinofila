@@ -38,7 +38,9 @@ const Tag = href ? 'a' : 'div';
         </Fragment>
       )}
     </div>
-    <h3 style="font-size:21px;">{d.title}</h3>
+    <h3 style="font-size:21px;" transition:name={comingSoon ? undefined : `art-${entry.id}`}>
+      {d.title}
+    </h3>
     <p style="font-size:14.5px; margin:0;">{d.excerpt}</p>
     {
       comingSoon ? (

@@ -76,7 +76,9 @@ const FTag = fHref ? 'a' : 'div';
               <div class="card-meta">
                 <span style="color:var(--peach-deep);">In evidenza</span> · <span>{f.category}</span>
               </div>
-              <h2 class="display-md">{f.title}</h2>
+              <h2 class="display-md" transition:name={fLinkable && !fExternal ? `art-${featured.id}` : undefined}>
+                {f.title}
+              </h2>
               <p>{f.excerpt}</p>
               {
                 fLinkable ? (
