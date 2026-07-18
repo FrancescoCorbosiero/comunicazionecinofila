@@ -138,7 +138,7 @@
   background: var(--peach);
   color: var(--olive-darkest);
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 10px;

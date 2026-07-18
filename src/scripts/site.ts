@@ -268,6 +268,28 @@ function initWorkForm(): void {
   });
 }
 
+/* ── Filtro per categoria del blog ───────────────────────────── */
+function initBlogFilter(): void {
+  const bar = document.querySelector<HTMLElement>('[data-blog-filters]');
+  if (!bar) return;
+  const chips = Array.from(bar.querySelectorAll<HTMLButtonElement>('.chip'));
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-blog-grid] [data-cat]')
+  );
+  bar.addEventListener('click', (e) => {
+    const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip');
+    if (!chip) return;
+    chips.forEach((c) => {
+      c.classList.toggle('is-active', c === chip);
+      c.setAttribute('aria-pressed', String(c === chip));
+    });
+    const cat = chip.dataset.cat || '*';
+    cards.forEach((card) => {
+      card.classList.toggle('is-hidden', cat !== '*' && card.dataset.cat !== cat);
+    });
+  });
+}
+
 /* ── Selettore di percorso (contatti) ────────────────────────── */
 function initPathSelector(): void {
   const cards = document.querySelectorAll<HTMLElement>('[data-path]');
@@ -436,13 +458,14 @@ function updateDeal(): void {
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const rect = dealHost.getBoundingClientRect();
   // 0 quando il bordo alto della sezione tocca il fondo del viewport,
-  // 1 quando ha risalito il 55% dell'altezza dello schermo.
-  const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.55)));
+  // 1 quando ha risalito il 75% dell'altezza dello schermo: la corsa
+  // più lunga rende la distribuzione lenta ed elegante.
+  const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
 
   dealCards.forEach((card, i) => {
     // Ogni carta ha la sua finestra di progresso, sfalsata: la prima
     // parte subito, le altre seguono come una mano che le distribuisce.
-    const local = Math.max(0, Math.min(1, progress * 1.5 - i * 0.22));
+    const local = Math.max(0, Math.min(1, progress * 1.3 - i * 0.28));
     if (local >= 1) {
       card.style.transform = '';
       card.style.opacity = '';
@@ -492,6 +515,17 @@ function initGlobals(): void {
       closeCall();
     } else if (t.closest('[data-to-top]')) {
       window.scrollTo({ top: 0, behavior: prefersReduced() ? 'auto' : 'smooth' });
+    } else if (t.closest('[data-copy-url]')) {
+      const btn = t.closest<HTMLElement>('[data-copy-url]');
+      if (btn && navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          const original = btn.textContent;
+          btn.textContent = 'Link copiato!';
+          window.setTimeout(() => {
+            btn.textContent = original;
+          }, 1800);
+        });
+      }
     }
   });
   document.addEventListener('keydown', (e) => {
@@ -506,6 +540,7 @@ function onPageLoad(): void {
   initReveal();
   initStepForm();
   initWorkForm();
+  initBlogFilter();
   initPathSelector();
   initBookings();
   initCatalog();

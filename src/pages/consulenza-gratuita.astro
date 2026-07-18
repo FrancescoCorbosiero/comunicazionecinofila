@@ -14,42 +14,25 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
   ogTitle="Consulenza gratuita — Andrea Bellettati"
   ogDescription="45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno."
 >
-  <!-- INTRO -->
-  <section class="section-tight">
+  <!-- HERO CONTENUTO: pitch + questionario in un solo schermo -->
+  <section class="consulto-hero section-tight bg-paws">
     <div class="container">
-      <div class="head-block" data-reveal style="max-width:760px;">
-        <span class="eyebrow kicker-rule">Consulenza gratuita</span>
-        <h1 class="display-xl">Parliamo del<br />tuo animale.</h1>
-        <p class="lead">
-          45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FORM -->
-  <section class="section-tight bg-paws">
-    <div class="container">
-      <div class="form-card" style="display:grid; gap:clamp(28px,4vw,52px); grid-template-columns:1fr;">
-        <div>
-          <span class="eyebrow kicker-rule">Come funziona</span>
-          <h2 class="display-md" style="margin-top:14px;">45 minuti, su misura.<br />Senza impegno.</h2>
-          <p style="margin-top:14px;">
-            A seguito del questionario verrai ricontattato al numero che indichi. La consulenza dura
-            circa 45 minuti: analizziamo insieme tutti gli aspetti legati ad alimentazione e
-            comportamento del tuo animale.
+      <div class="consulto-grid">
+        <div class="consulto-intro" data-reveal>
+          <span class="eyebrow kicker-rule">Consulenza gratuita</span>
+          <h1 class="display-lg">Parliamo del<br />tuo animale.</h1>
+          <p class="lead">
+            45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
           </p>
-          <p>
-            Al termine ricevi un documento firmato in cui spiego il piano di lavoro che possiamo
-            mettere in atto per migliorare la situazione.
-          </p>
-          <ul class="svc-includes" style="margin-top:18px;">
-            <li>Gratuita e senza impegno</li>
-            <li>Cane &amp; gatto, alimentazione e comportamento</li>
-            <li>Piano di lavoro firmato</li>
-          </ul>
+          <ol class="consulto-steps">
+            <li><b>1</b><span>Compili il questionario<small>Due minuti, tre domande.</small></span></li>
+            <li><b>2</b><span>Ti richiamo io<small>Al numero che lasci, quando preferisci.</small></span></li>
+            <li><b>3</b><span>Piano di lavoro firmato<small>Concreto e su misura, al termine della call.</small></span></li>
+          </ol>
+          <p class="consulto-note">Cane &amp; gatto · gratuita e senza impegno</p>
         </div>
 
+        <div class="form-card consulto-card" data-reveal data-delay="1">
         <form data-stepform novalidate>
           <input type="hidden" name="profilo" value="Una famiglia" />
           <div class="steps-head">
@@ -149,6 +132,7 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
             </div>
           </div>
         </form>
+        </div>
       </div>
     </div>
   </section>

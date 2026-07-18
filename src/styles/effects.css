@@ -21,7 +21,7 @@
 /* View Transitions (Astro ClientRouter): crossfade un filo più morbido. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.3s;
+  animation-duration: 0.5s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -90,14 +90,14 @@
   .hero-title-center .line > span {
     display: inline-block;
     transform: translateY(112%);
-    animation: line-rise 0.85s cubic-bezier(0.2, 0.75, 0.2, 1) 0.18s forwards;
+    animation: line-rise 1.3s cubic-bezier(0.18, 0.7, 0.16, 1) 0.25s forwards;
   }
-  .hero-title-center .line:nth-child(2) > span { animation-delay: 0.32s; }
-  .hero-center .hero-eyebrow { animation: rise-in 0.6s ease 0.08s both; }
-  .hero-center .hero-lead-c { animation: rise-in 0.7s ease 0.62s both; }
-  .hero-center .hero-cta-row { animation: rise-in 0.7s ease 0.78s both; }
-  .hero-center .hero-note { animation: rise-in 0.7s ease 0.92s both; }
-  .hero-portrait-xl img { animation: pop-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .hero-title-center .line:nth-child(2) > span { animation-delay: 0.5s; }
+  .hero-center .hero-eyebrow { animation: rise-in 0.9s ease 0.1s both; }
+  .hero-center .hero-lead-c { animation: rise-in 1s ease 0.9s both; }
+  .hero-center .hero-cta-row { animation: rise-in 1s ease 1.12s both; }
+  .hero-center .hero-note { animation: rise-in 1s ease 1.32s both; }
+  .hero-portrait-xl img { animation: pop-in 1.05s cubic-bezier(0.34, 1.45, 0.64, 1) both; }
 }
 @keyframes line-rise { to { transform: translateY(0); } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }

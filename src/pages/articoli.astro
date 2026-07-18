@@ -25,6 +25,9 @@ const fExternal = Boolean(f?.externalUrl);
 const fLinkable = Boolean(f && (f.externalUrl || f.status === 'published'));
 const fHref = f?.externalUrl ?? (featured && fLinkable ? `/articoli/${featured.id}` : null);
 const FTag = fHref ? 'a' : 'div';
+
+// Categorie reali presenti, per i filtri client-side della griglia.
+const categorie = [...new Set(rest.map((a) => a.data.category))];
 ---
 <Base
   active="articoli"
@@ -98,10 +101,20 @@ const FTag = fHref ? 'a' : 'div';
     )
   }
 
-  <!-- GRID -->
+  <!-- GRID + FILTRI -->
   <section class="section-tight bg-paws">
     <div class="container">
-      <div class="card-grid cols-3 stagger" data-reveal data-delay="1">
+      <div class="blog-filters" data-blog-filters data-reveal role="group" aria-label="Filtra per categoria">
+        <button class="chip is-active" type="button" data-cat="*" aria-pressed="true">Tutti</button>
+        {
+          categorie.map((c) => (
+            <button class="chip" type="button" data-cat={c} aria-pressed="false">
+              {c}
+            </button>
+          ))
+        }
+      </div>
+      <div class="card-grid cols-3 stagger" data-blog-grid data-reveal data-delay="1">
         {rest.map((entry) => <ArticleCard entry={entry} />)}
       </div>
       <p class="field-hint" style="margin-top:20px;">

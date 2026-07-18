@@ -12,6 +12,8 @@
   max-width: 720px;
 }
 .prose > :first-child { margin-top: 0; }
+/* Le ancore dell'indice non finiscono sotto l'header sticky */
+.prose :is(h2, h3) { scroll-margin-top: 96px; }
 /* Capolettera editoriale sul primo paragrafo */
 .prose > p:first-of-type::first-letter {
   font-family: var(--display);
