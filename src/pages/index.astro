@@ -10,38 +10,55 @@ import ArticleCard from '../components/ArticleCard.astro';
 import andrea1 from '../assets/andrea-1.jpg';
 import andrea2 from '../assets/andrea-2.jpg';
 
-// Home-smistatore: due pubblici diversi (famiglie e futuri collaboratori)
-// più il blog, serviti da un'unica identità.
-const paths = [
-  {
-    num: '01',
-    href: '/consulenza-gratuita',
-    title: "Voglio migliorare l'alimentazione del mio animale",
-    body: 'Analizziamo insieme alimentazione, abitudini e stile di vita del tuo cane o gatto.',
-    cta: 'Consulenza gratuita',
-  },
-  {
-    num: '02',
-    href: '/lavora-con-noi',
-    title: 'Voglio lavorare nel benessere animale',
-    body: 'TeamNutrizione è un Team di persone e professionisti che crescono con un metodo condiviso — non una rete di venditori.',
-    cta: 'Lavora con noi',
-  },
-  {
-    num: '03',
-    href: '/articoli',
-    title: 'Voglio approfondire',
-    body: 'Alimentazione, comportamento, intestino, integrazione naturale e vita quotidiana con cani e gatti.',
-    cta: 'Leggi il blog',
-  },
-];
-
 // I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
 const articoli = await getCollection('articoli');
 const latestArticoli = articoli
   .filter((a) => a.data.status === 'published' && !a.data.externalUrl)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
+const nArticoli = articoli.filter((a) => a.data.status === 'published').length;
+
+// Home-smistatore: due pubblici diversi (famiglie e futuri collaboratori)
+// più il blog, serviti da un'unica identità. È IL bivio di conversione.
+const paths = [
+  {
+    num: '01',
+    href: '/consulenza-gratuita',
+    badge: 'Gratuita · 45 min',
+    title: "Voglio migliorare l'alimentazione del mio animale",
+    body: 'Analizziamo insieme alimentazione, abitudini e stile di vita del tuo cane o gatto.',
+    cta: 'Consulenza gratuita',
+    icon: 'paw',
+    tone: 'sage',
+  },
+  {
+    num: '02',
+    href: '/lavora-con-noi',
+    badge: 'TeamNutrizione',
+    title: 'Voglio lavorare nel benessere animale',
+    body: 'Un Team di persone e professionisti che crescono con un metodo condiviso — non una rete di venditori.',
+    cta: 'Lavora con noi',
+    icon: 'leaf',
+    tone: 'peach',
+  },
+  {
+    num: '03',
+    href: '/articoli',
+    badge: `${nArticoli} articoli`,
+    title: 'Voglio approfondire',
+    body: 'Alimentazione, comportamento, intestino, integrazione naturale e vita quotidiana con cani e gatti.',
+    cta: 'Leggi il blog',
+    icon: 'book',
+    tone: 'olive',
+  },
+];
+
+// Icone line-art delle tre scelte (stroke/fill currentColor, tinte dal tono).
+const pathIcons: Record<string, string> = {
+  paw: `<svg viewBox="0 0 50 44" width="27" height="24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="15" rx="4.3" ry="5.8"/><ellipse cx="21" cy="10" rx="4.3" ry="6"/><ellipse cx="30" cy="11" rx="4.3" ry="6"/><ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"/><ellipse cx="25" cy="29" rx="9.5" ry="8"/></svg>`,
+  leaf: `<svg viewBox="0 0 32 32" width="26" height="26" fill="none" aria-hidden="true"><path d="M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`,
+  book: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true"><path d="M12 6c-2-1.6-5-1.6-8-.5V20c3-1.1 6-1.1 8 .5 2-1.6 5-1.6 8-.5V5.5c-3-1.1-6-1.1-8 .5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 6v14.5" stroke="currentColor" stroke-width="1.7"/></svg>`,
+};
 
 // Evento in evidenza per il rimando alla pagina Eventi.
 const eventi = await getCollection('eventi');
@@ -94,9 +111,13 @@ const ev = featuredEvent?.data;
     </div>
   </section>
 
-  <!-- SMISTATORE: da dove vuoi iniziare? -->
+  <!-- SMISTATORE: da dove vuoi iniziare? — IL bivio di conversione -->
   <section class="section bg-paws">
-    <div class="container">
+    <div class="container" style="position:relative;">
+      <svg class="path-doodle" viewBox="0 0 120 100" aria-hidden="true">
+        <path d="M14 8 C64 4, 98 26, 88 74" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+        <path d="M72 62 L88 78 L100 58" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
       <div class="head-block" data-reveal>
         <span class="eyebrow kicker-rule">Da dove vuoi iniziare?</span>
         <h2 class="display-lg">Dimmi perché<br />sei qui.</h2>
@@ -105,15 +126,20 @@ const ev = featuredEvent?.data;
           approfondire con calma.
         </p>
       </div>
-      <div class="svc-strip" data-deal>
+      <div class="path-cards" data-deal>
         {
           paths.map((p) => (
-            <a class="svc-item" href={p.href}>
-              <span class="svc-num">{p.num}</span>
+            <a class={`path-choice tone-${p.tone}`} href={p.href}>
+              <span class="pc-glow" aria-hidden="true" />
+              <span class="pc-num" aria-hidden="true">{p.num}</span>
+              <span class="pc-top">
+                <span class="pc-ico" set:html={pathIcons[p.icon]} />
+                <span class="pc-badge">{p.badge}</span>
+              </span>
               <h3>{p.title}</h3>
               <p>{p.body}</p>
-              <span class="text-link">
-                {p.cta} <ArrowIcon size={14} />
+              <span class="pc-cta">
+                {p.cta} <ArrowIcon size={15} />
               </span>
             </a>
           ))
