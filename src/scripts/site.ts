@@ -398,6 +398,67 @@ function updateReadProgress(): void {
   bar.style.width = pct.toFixed(2) + '%';
 }
 
+/* ── Torna su: visibilità + anello di avanzamento ────────────── */
+const RING_LEN = 100.53; // 2π · r(16)
+function updateToTop(): void {
+  const btn = document.querySelector<HTMLElement>('[data-to-top]');
+  if (!btn) return;
+  const doc = document.documentElement;
+  btn.classList.toggle('show', window.scrollY > 480);
+  const ring = btn.querySelector<SVGCircleElement>('[data-ring]');
+  if (ring) {
+    const max = doc.scrollHeight - doc.clientHeight;
+    const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    ring.style.strokeDashoffset = (RING_LEN * (1 - p)).toFixed(2);
+  }
+}
+
+/* ── Smistatore: le tre strade si sfogliano dal mazzo ─────────────
+   Animazione guidata dallo scroll (scrubbed): le card partono
+   impilate e ruotate come un mazzo di carte e si distribuiscono
+   nelle loro posizioni man mano che la sezione entra in viewport.
+   A fine corsa gli stili inline vengono rimossi, così gli hover
+   CSS riprendono il controllo. Off con prefers-reduced-motion. */
+let dealCards: HTMLElement[] = [];
+let dealHost: HTMLElement | null = null;
+
+function collectDeal(): void {
+  dealHost = prefersReduced() ? null : document.querySelector<HTMLElement>('[data-deal]');
+  dealCards = dealHost ? (Array.from(dealHost.children) as HTMLElement[]) : [];
+}
+
+function easeOutCubic(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function updateDeal(): void {
+  if (!dealHost || !dealCards.length) return;
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  const rect = dealHost.getBoundingClientRect();
+  // 0 quando il bordo alto della sezione tocca il fondo del viewport,
+  // 1 quando ha risalito il 55% dell'altezza dello schermo.
+  const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.55)));
+
+  dealCards.forEach((card, i) => {
+    // Ogni carta ha la sua finestra di progresso, sfalsata: la prima
+    // parte subito, le altre seguono come una mano che le distribuisce.
+    const local = Math.max(0, Math.min(1, progress * 1.5 - i * 0.22));
+    if (local >= 1) {
+      card.style.transform = '';
+      card.style.opacity = '';
+      return;
+    }
+    const e = easeOutCubic(local);
+    const fan = i - 1; // -1 · 0 · 1 → direzione del ventaglio
+    const x = (1 - e) * fan * -60;
+    const y = (1 - e) * 46;
+    const rot = (1 - e) * fan * 6;
+    const scale = 0.92 + e * 0.08;
+    card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+    card.style.opacity = (0.2 + e * 0.8).toFixed(2);
+  });
+}
+
 /* ── Listener globali (una sola volta) ───────────────────────── */
 let globalsReady = false;
 function initGlobals(): void {
@@ -412,6 +473,8 @@ function initGlobals(): void {
       requestAnimationFrame(() => {
         updateParallax();
         updateReadProgress();
+        updateToTop();
+        updateDeal();
         ticking = false;
       });
     }
@@ -427,6 +490,8 @@ function initGlobals(): void {
       openCall();
     } else if (t.closest('[data-close-call]')) {
       closeCall();
+    } else if (t.closest('[data-to-top]')) {
+      window.scrollTo({ top: 0, behavior: prefersReduced() ? 'auto' : 'smooth' });
     }
   });
   document.addEventListener('keydown', (e) => {
@@ -445,9 +510,12 @@ function onPageLoad(): void {
   initBookings();
   initCatalog();
   collectParallax();
+  collectDeal();
   updateParallax();
   updateHeader();
   updateReadProgress();
+  updateToTop();
+  updateDeal();
 }
 
 initGlobals();

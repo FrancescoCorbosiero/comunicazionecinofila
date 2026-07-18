@@ -178,7 +178,7 @@ const eventLd = f
             <span class="eyebrow kicker-rule">In programma &amp; in replay</span>
             <h2 class="display-md">Altri appuntamenti</h2>
           </div>
-          <div class="event-list" data-reveal data-delay="1">
+          <div class="event-list stagger" data-reveal data-delay="1">
             {rest.map((entry) => (
               <EventRow entry={entry} />
             ))}
