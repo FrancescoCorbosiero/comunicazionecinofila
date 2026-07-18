@@ -112,16 +112,28 @@ const speculationRules = JSON.stringify({
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
     <script type="speculationrules" is:inline set:html={speculationRules} />
 
+    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href="/rss.xml" />
+
     <ClientRouter />
     <slot name="head" />
   </head>
   <body class="brand paper-bg">
+    <a class="skip-link" href="#contenuto">Salta al contenuto</a>
     <SiteHeader active={active} />
-    <main>
+    <main id="contenuto">
       <slot />
     </main>
     <SiteFooter />
     <CallModal />
+    <button class="to-top" data-to-top type="button" aria-label="Torna all'inizio della pagina">
+      <svg class="to-top-ring" viewBox="0 0 36 36" aria-hidden="true">
+        <circle class="ring-bg" cx="18" cy="18" r="16"></circle>
+        <circle class="ring-fg" cx="18" cy="18" r="16" data-ring></circle>
+      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 19V5m0 0-6 6m6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
     <script>
       import '../scripts/site.ts';
     </script>

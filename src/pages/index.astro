@@ -74,7 +74,10 @@ const ev = featuredEvent?.data;
           <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
-        <h1 class="hero-title-center">Il benessere parte<br />dalla <span class="hl">ciotola.</span></h1>
+        <h1 class="hero-title-center">
+          <span class="line"><span>Il benessere parte</span></span>
+          <span class="line"><span>dalla <span class="hl">ciotola.</span></span></span>
+        </h1>
         <p class="hero-lead-c">
           Studio la relazione tra <strong style="color:var(--cream-ink); font-weight:700;"
             >comportamento e alimentazione</strong
@@ -102,7 +105,7 @@ const ev = featuredEvent?.data;
           approfondire con calma.
         </p>
       </div>
-      <div class="svc-strip" data-reveal data-delay="1">
+      <div class="svc-strip" data-deal>
         {
           paths.map((p) => (
             <a class="svc-item" href={p.href}>
@@ -161,7 +164,7 @@ const ev = featuredEvent?.data;
               Tutti gli articoli <ArrowIcon size={15} />
             </a>
           </div>
-          <div class="card-grid cols-3" data-reveal data-delay="1">
+          <div class="card-grid cols-3 stagger" data-reveal data-delay="1">
             {latestArticoli.map((entry) => (
               <ArticleCard entry={entry} />
             ))}
@@ -209,7 +212,7 @@ const ev = featuredEvent?.data;
   <!-- PROOF -->
   <section class="section-tight">
     <div class="container">
-      <div class="proof paper-bg-deep" data-reveal>
+      <div class="proof paper-bg-deep stagger" data-reveal>
         <div class="proof-item"><div class="pn">2021</div><div class="pl">Nel team dal</div></div>
         <div class="proof-item"><div class="pn">45'</div><div class="pl">Consulenza gratuita</div></div>
         <div class="proof-item">

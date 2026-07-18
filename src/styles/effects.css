@@ -80,6 +80,44 @@
   }
 }
 
+/* ── Coreografia d'ingresso dell'hero (home) ─────────────────────
+   Le due righe del titolo salgono da una maschera, il ritratto fa
+   "pop", eyebrow/lead/CTA seguono in cascata. Solo CSS, una volta
+   per visita; disattivata con prefers-reduced-motion. ── */
+.hero-title-center .line { display: block; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title-center .line { overflow: hidden; }
+  .hero-title-center .line > span {
+    display: inline-block;
+    transform: translateY(112%);
+    animation: line-rise 0.85s cubic-bezier(0.2, 0.75, 0.2, 1) 0.18s forwards;
+  }
+  .hero-title-center .line:nth-child(2) > span { animation-delay: 0.32s; }
+  .hero-center .hero-eyebrow { animation: rise-in 0.6s ease 0.08s both; }
+  .hero-center .hero-lead-c { animation: rise-in 0.7s ease 0.62s both; }
+  .hero-center .hero-cta-row { animation: rise-in 0.7s ease 0.78s both; }
+  .hero-center .hero-note { animation: rise-in 0.7s ease 0.92s both; }
+  .hero-portrait-xl img { animation: pop-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+}
+@keyframes line-rise { to { transform: translateY(0); } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.55); } to { opacity: 1; transform: scale(1); } }
+
+/* ── Accessibilità con carattere ── */
+.skip-link {
+  position: fixed; top: 10px; left: 10px; z-index: 100;
+  background: var(--peach); color: var(--olive-darkest);
+  padding: 12px 20px; border-radius: var(--r-pill);
+  font-weight: 700; font-size: 14px;
+  transform: translateY(-72px); transition: transform 0.2s ease;
+}
+.skip-link:focus { transform: none; }
+a:focus-visible, button:focus-visible, .cal-slot:focus-visible {
+  outline: 2px solid var(--peach-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 /* ── CTA WhatsApp in header: niente overflow su mobile ── */
 .header-inner {
   min-width: 0;
