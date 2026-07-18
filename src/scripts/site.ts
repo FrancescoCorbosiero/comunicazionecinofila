@@ -388,6 +388,16 @@ function updateHeader(): void {
   if (h) h.style.boxShadow = window.scrollY > 8 ? '0 8px 28px -20px rgba(31,37,21,0.5)' : 'none';
 }
 
+/* ── Avanzamento lettura (pagine articolo) ───────────────────── */
+function updateReadProgress(): void {
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  if (!bar) return;
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - doc.clientHeight;
+  const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+  bar.style.width = pct.toFixed(2) + '%';
+}
+
 /* ── Listener globali (una sola volta) ───────────────────────── */
 let globalsReady = false;
 function initGlobals(): void {
@@ -401,6 +411,7 @@ function initGlobals(): void {
       ticking = true;
       requestAnimationFrame(() => {
         updateParallax();
+        updateReadProgress();
         ticking = false;
       });
     }
@@ -436,6 +447,7 @@ function onPageLoad(): void {
   collectParallax();
   updateParallax();
   updateHeader();
+  updateReadProgress();
 }
 
 initGlobals();
