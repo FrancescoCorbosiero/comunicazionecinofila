@@ -7,7 +7,7 @@ import { SITE, SITE_NAME, EMAIL, PHONE, IG_URL } from '../config';
 
 export const DEFAULT_DESCRIPTION =
   'Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale.';
-export const DEFAULT_OG_IMAGE = '/assets/logo-original.jpg';
+export const DEFAULT_OG_IMAGE = '/assets/logo-andrea.jpg';
 export const LOCALE = 'it_IT';
 export const DEFAULT_ROBOTS = 'index, follow';
 export const THEME_COLOR = '#7c9474';
@@ -30,7 +30,7 @@ export function siteGraph(): Record<string, unknown>[] {
       name: 'Andrea Bellettati',
       jobTitle: 'Consulente in comportamento e nutrizione per cani e gatti',
       url: SITE,
-      image: absoluteUrl('/assets/logo-original.jpg'),
+      image: absoluteUrl('/assets/logo-andrea.jpg'),
       sameAs: [IG_URL],
     },
     {
@@ -38,7 +38,7 @@ export function siteGraph(): Record<string, unknown>[] {
       '@id': `${SITE}/#business`,
       name: SITE_NAME,
       description: DEFAULT_DESCRIPTION,
-      image: absoluteUrl('/assets/logo-original.jpg'),
+      image: absoluteUrl('/assets/logo-andrea.jpg'),
       url: SITE,
       email: EMAIL,
       telephone: PHONE,
