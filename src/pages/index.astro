@@ -7,8 +7,8 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import andrea1 from '../assets/andrea-1.jpg';
-import andrea2 from '../assets/andrea-2.jpg';
+import andrea1 from '../assets/andrea-cane-fiume.jpg';
+import andrea2 from '../assets/andrea-selfie-inverno.jpg';
 
 // I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
 const articoli = await getCollection('articoli');
@@ -71,6 +71,10 @@ const ev = featuredEvent?.data;
   description="Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale."
   ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
   ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e percorso su misura per il tuo animale."
+  ogImage="/assets/andrea-cane-fiume.jpg"
+  ogImageAlt="Andrea Bellettati con il suo bassotto lungo un fiume di montagna"
+  ogImageWidth={1440}
+  ogImageHeight={1440}
 >
   <!-- HERO -->
   <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);">
@@ -88,7 +92,7 @@ const ev = featuredEvent?.data;
     <div class="container">
       <div class="hero-center-inner">
         <span class="hero-portrait-xl" data-parallax="40">
-          <img src="/assets/logo-original.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
+          <img src="/assets/logo-andrea.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
         <h1 class="hero-title-center">

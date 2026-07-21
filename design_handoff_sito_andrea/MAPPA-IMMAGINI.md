@@ -1,13 +1,16 @@
 # Mappa delle immagini del sito
 
-Questo documento mappa **tutte le immagini attualmente usate**, dove compaiono, e
-propone un **nome unico e descrittivo** per ciascuna. Serve per poter rinominare i
-file e ricaricarli in modo ordinato.
+Questo documento mappa **tutte le immagini del sito**, dove compaiono, e il
+**nome unico e descrittivo** di ciascuna.
 
-> ⚠️ **Leggi prima la sezione "Si caricano da sole?" in fondo.** Il rename NON è
-> automatico solo cambiando il nome del file: ogni immagine è "agganciata" nel
-> codice o nei contenuti. Automatico è solo **sovrascrivere un file mantenendo lo
-> stesso nome**.
+> ✅ **Aggiornamento:** i nomi descrittivi della sezione 3 sono già stati
+> **cablati nel codice**. Quindi ora, per aggiornare una foto, ti basta
+> ri-esportarla con **lo stesso nome** e caricarla in `public/assets/`
+> (e, se è una foto usata nei layout, anche in `src/assets/`): si carica da sola,
+> senza toccare il codice.
+>
+> ⚠️ Se in futuro vuoi un nome **nuovo/diverso**, va aggiornato una volta il
+> riferimento nel codice (vedi sezione "Si caricano da sole?").
 
 ---
 
