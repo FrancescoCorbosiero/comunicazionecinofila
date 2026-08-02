@@ -12,7 +12,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "assets": "node scripts/optimize-assets.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

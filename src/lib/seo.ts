@@ -21,9 +21,17 @@ export function absoluteUrl(path: string): string {
   return new URL(path, SITE).href;
 }
 
-/** Grafo base presente su ogni pagina: Person + LocalBusiness. */
+/** Grafo base presente su ogni pagina: WebSite + Person + LocalBusiness. */
 export function siteGraph(): Record<string, unknown>[] {
   return [
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#website`,
+      url: SITE,
+      name: SITE_NAME,
+      inLanguage: 'it-IT',
+      publisher: { '@id': `${SITE}/#andrea` },
+    },
     {
       '@type': 'Person',
       '@id': `${SITE}/#andrea`,

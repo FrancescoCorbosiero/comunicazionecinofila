@@ -67,7 +67,10 @@ const categorie = [...new Set(rest.map((a) => a.data.category))];
             style="text-decoration:none;"
           >
             {f.cover ? (
-              <div class="svc-block-media parallax-cover">
+              <div
+                class="svc-block-media parallax-cover"
+                transition:name={fLinkable && !fExternal ? `art-img-${featured.id}` : undefined}
+              >
                 <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               </div>
             ) : (
@@ -104,22 +107,45 @@ const categorie = [...new Set(rest.map((a) => a.data.category))];
     )
   }
 
-  <!-- GRID + FILTRI -->
+  <!-- GRID + FILTRI + RICERCA -->
   <section class="section-tight bg-paws">
     <div class="container">
-      <div class="blog-filters" data-blog-filters data-reveal role="group" aria-label="Filtra per categoria">
-        <button class="chip is-active" type="button" data-cat="*" aria-pressed="true">Tutti</button>
-        {
-          categorie.map((c) => (
-            <button class="chip" type="button" data-cat={c} aria-pressed="false">
-              {c}
-            </button>
-          ))
-        }
+      <div class="blog-toolbar" data-reveal>
+        <div class="blog-filters" data-blog-filters role="group" aria-label="Filtra per categoria">
+          <button class="chip is-active" type="button" data-cat="*" aria-pressed="true">Tutti</button>
+          {
+            categorie.map((c) => (
+              <button class="chip" type="button" data-cat={c} aria-pressed="false">
+                {c}
+              </button>
+            ))
+          }
+        </div>
+        <label class="blog-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle>
+            <path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <input
+            type="search"
+            placeholder="Cerca nel blog…"
+            data-blog-search
+            aria-label="Cerca negli articoli per titolo o argomento"
+            autocomplete="off"
+          />
+        </label>
       </div>
       <div class="card-grid cols-3 stagger" data-blog-grid data-reveal data-delay="1">
         {rest.map((entry) => <ArticleCard entry={entry} />)}
       </div>
+      <div class="blog-empty" data-blog-empty hidden>
+        <p style="margin:0 0 12px;">
+          Nessun articolo trovato. Prova con un'altra parola (es. “prurito”, “etichette”,
+          “crocchette”)…
+        </p>
+        <button class="btn btn-ghost btn-sm" type="button" data-blog-reset>Mostra tutti gli articoli</button>
+      </div>
+      <p class="visually-hidden" role="status" aria-live="polite" data-blog-count></p>
       <p class="field-hint" style="margin-top:20px;">
         Pubblico nuovi contenuti prima su Instagram. Seguimi su <a
           class="text-link"

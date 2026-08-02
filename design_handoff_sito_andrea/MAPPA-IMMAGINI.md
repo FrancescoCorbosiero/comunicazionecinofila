@@ -37,8 +37,10 @@ Questo documento mappa **tutte le immagini del sito**, dove compaiono, e il
 - Logo nell'header — `src/components/SiteHeader.astro`
 - Logo nel footer — `src/components/SiteFooter.astro`
 - Ritratto grande nell'hero della home — `src/pages/index.astro`
-- Favicon + icona Apple — `src/layouts/Base.astro`
 - Immagine social (OG) predefinita di tutto il sito — `src/lib/seo.ts`
+- **Favicon derivate** (`favicon.ico`, `favicon-16/32.png`, `apple-touch-icon.png`,
+  `icon-192/512.png`): generate automaticamente dal logo con `npm run assets`
+  (`scripts/optimize-assets.mjs`). Se cambi il logo, rilancia quel comando.
 
 ### `andrea-1.jpg` — Andrea + cane al fiume
 - Sfondo dell'hero della home — `src/pages/index.astro`

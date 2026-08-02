@@ -15,20 +15,54 @@ function waLink(text: string): string {
 const prefersReduced = () =>
   window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ── Netlify Forms ───────────────────────────────────────────────
+   I form statici (name= + data-netlify) vengono registrati dal bot
+   di deploy; qui li inviamo via fetch senza ricaricare la pagina.
+   In `astro dev` non c'è nessun endpoint: l'invio fallisce e scatta
+   il fallback (per il questionario resta comunque WhatsApp). */
+function encodeForm(form: HTMLFormElement): string {
+  const params = new URLSearchParams();
+  new FormData(form).forEach((value, key) => {
+    params.append(key, typeof value === 'string' ? value : value.name);
+  });
+  return params.toString();
+}
+function submitNetlifyForm(form: HTMLFormElement): Promise<boolean> {
+  return fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: encodeForm(form),
+    // keepalive: la richiesta sopravvive anche se l'utente naviga subito via.
+    keepalive: true,
+  })
+    .then((res) => res.ok)
+    .catch(() => false);
+}
+
 /* ── Mobile nav ──────────────────────────────────────────────── */
+function setNavOpen(nav: HTMLElement, toggle: HTMLElement, open: boolean): void {
+  nav.classList.toggle('open', open);
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  toggle.setAttribute('aria-label', open ? 'Chiudi menu' : 'Apri menu');
+}
+/* Chiusura da listener globali (Escape / click fuori): interroga il DOM
+   corrente, così funziona anche dopo gli swap delle View Transitions. */
+function closeNav(refocus = false): void {
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  if (!nav || !toggle || !nav.classList.contains('open')) return;
+  setNavOpen(nav, toggle, false);
+  if (refocus) toggle.focus();
+}
 function initNav(): void {
   const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
   const nav = document.querySelector<HTMLElement>('[data-nav]');
   if (!toggle || !nav) return;
   toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    setNavOpen(nav, toggle, !nav.classList.contains('open'));
   });
   nav.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
+    a.addEventListener('click', () => setNavOpen(nav, toggle, false));
   });
 }
 
@@ -221,29 +255,62 @@ function initStepForm(): void {
         '&body=' +
         encodeURIComponent(text);
     }
+    // Rete di sicurezza: salva il contatto su Netlify Forms in background.
+    // Se la persona chiude WhatsApp senza premere invio, il lead resta ad Andrea.
+    void submitNetlifyForm(form);
     steps.showSuccess();
     window.open(waLink(text), '_blank', 'noopener');
   });
 }
 
-/* ── Candidatura "Lavora con noi" (a step) → invio simulato ──── */
+/* ── Candidatura "Lavora con noi" (a step) → Netlify Forms ───── */
 function initWorkForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-workform]');
   if (!form) return;
+  const formEl = form; // snapshot post-guard: il tipo resta stretto nelle closure
   const steps = setupSteps(form);
   let sending = false;
 
-  form.addEventListener('submit', (e) => {
-    // Niente ricarica pagina, niente chiamate di rete, niente WhatsApp.
+  const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
+  function showError(): void {
+    if (!errorBox) return;
+    // Fallback email con le risposte già compilate: il lavoro non si perde.
+    const mail = errorBox.querySelector<HTMLAnchorElement>('[data-error-mail]');
+    if (mail) {
+      const d = new FormData(formEl);
+      const body = [
+        'Ciao Andrea, ti mando la mia candidatura per TeamNutrizione.',
+        '',
+        'Nome: ' + (d.get('nome') || '—'),
+        'Email: ' + (d.get('email') || '—'),
+        'Telefono: ' + (d.get('telefono') || '—'),
+        'Occupazione: ' + (d.get('occupazione') || '—'),
+        'Nel settore animale: ' + (d.get('settore_animale') || '—'),
+        'Ambito: ' + (d.get('ambito') || '—'),
+        'Tempo da dedicare: ' + (d.get('tempo') || '—'),
+        'Instagram/sito: ' + (d.get('social') || '—'),
+        '',
+        'Perché mi interessa: ' + (d.get('perche') || '—'),
+      ].join('\n');
+      mail.href =
+        'mailto:' +
+        EMAIL +
+        '?subject=' +
+        encodeURIComponent('Candidatura TeamNutrizione — ' + (d.get('nome') || '')) +
+        '&body=' +
+        encodeURIComponent(body);
+    }
+    errorBox.classList.add('show');
+  }
+
+  form.addEventListener('submit', async (e) => {
+    // Niente ricarica pagina: invio via fetch a Netlify Forms.
     e.preventDefault();
     if (sending) return;
     if (!steps.validateAll()) return;
 
-    // MOCK: sostituire con invio reale. Tutta la logica di invio vive in
-    // questo handler: quando ci sarà un backend basterà rimpiazzare il
-    // setTimeout con la vera richiesta (fetch/endpoint) e mostrare il
-    // successo nella callback.
     sending = true;
+    errorBox?.classList.remove('show');
     const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     const submitHtml = submitBtn?.innerHTML ?? '';
     if (submitBtn) {
@@ -252,19 +319,23 @@ function initWorkForm(): void {
       submitBtn.setAttribute('aria-busy', 'true');
       submitBtn.textContent = 'Invio in corso…';
     }
-    window.setTimeout(() => {
+
+    const ok = await submitNetlifyForm(form);
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('is-sending');
+      submitBtn.removeAttribute('aria-busy');
+      submitBtn.innerHTML = submitHtml;
+    }
+    sending = false;
+
+    if (ok) {
       steps.showSuccess();
-      // Reset completo: campi E stato del pulsante (icona compresa), così il
-      // form resta riutilizzabile e il passaggio al backend reale è pulito.
       form.reset();
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('is-sending');
-        submitBtn.removeAttribute('aria-busy');
-        submitBtn.innerHTML = submitHtml;
-      }
-      sending = false;
-    }, 800);
+    } else {
+      showError();
+    }
   });
 }
 
@@ -279,7 +350,9 @@ function initPathGlow(): void {
   });
 }
 
-/* ── Filtro per categoria del blog ───────────────────────────── */
+/* ── Blog: filtro per categoria + ricerca live ───────────────────
+   Stato (categoria e query) sincronizzato nell'URL (?cat=…&q=…):
+   i filtri sono condivisibili e sopravvivono a refresh/back. */
 function initBlogFilter(): void {
   const bar = document.querySelector<HTMLElement>('[data-blog-filters]');
   if (!bar) return;
@@ -287,18 +360,80 @@ function initBlogFilter(): void {
   const cards = Array.from(
     document.querySelectorAll<HTMLElement>('[data-blog-grid] [data-cat]')
   );
+  const search = document.querySelector<HTMLInputElement>('[data-blog-search]');
+  const empty = document.querySelector<HTMLElement>('[data-blog-empty]');
+  const counter = document.querySelector<HTMLElement>('[data-blog-count]');
+
+  // Stessa normalizzazione dell'indice generato in ArticleCard.astro.
+  const norm = (s: string) =>
+    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  let cat = '*';
+  let query = '';
+
+  function apply(syncUrl = true): void {
+    const q = norm(query.trim());
+    let visible = 0;
+    cards.forEach((card) => {
+      const okCat = cat === '*' || card.dataset.cat === cat;
+      const okQuery = !q || (card.dataset.search || '').includes(q);
+      const show = okCat && okQuery;
+      card.classList.toggle('is-hidden', !show);
+      if (show) visible++;
+    });
+    chips.forEach((c) => {
+      const active = (c.dataset.cat || '*') === cat;
+      c.classList.toggle('is-active', active);
+      c.setAttribute('aria-pressed', String(active));
+    });
+    if (empty) empty.hidden = visible > 0;
+    if (counter) {
+      counter.textContent =
+        visible === 1 ? '1 articolo trovato' : `${visible} articoli trovati`;
+    }
+    if (syncUrl) {
+      const params = new URLSearchParams(location.search);
+      if (cat === '*') params.delete('cat');
+      else params.set('cat', cat);
+      if (!query.trim()) params.delete('q');
+      else params.set('q', query.trim());
+      const qs = params.toString();
+      // replaceState conserva history.state (scroll delle View Transitions).
+      history.replaceState(history.state, '', location.pathname + (qs ? `?${qs}` : '') + location.hash);
+    }
+  }
+
   bar.addEventListener('click', (e) => {
     const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip');
     if (!chip) return;
-    chips.forEach((c) => {
-      c.classList.toggle('is-active', c === chip);
-      c.setAttribute('aria-pressed', String(c === chip));
-    });
-    const cat = chip.dataset.cat || '*';
-    cards.forEach((card) => {
-      card.classList.toggle('is-hidden', cat !== '*' && card.dataset.cat !== cat);
-    });
+    cat = chip.dataset.cat || '*';
+    apply();
   });
+
+  let debounce = 0;
+  search?.addEventListener('input', () => {
+    window.clearTimeout(debounce);
+    debounce = window.setTimeout(() => {
+      query = search.value;
+      apply();
+    }, 120);
+  });
+
+  document.querySelector<HTMLButtonElement>('[data-blog-reset]')?.addEventListener('click', () => {
+    cat = '*';
+    query = '';
+    if (search) search.value = '';
+    apply();
+    search?.focus();
+  });
+
+  // Stato iniziale dall'URL (link condivisi, refresh, back/forward).
+  const params = new URLSearchParams(location.search);
+  const urlCat = params.get('cat');
+  if (urlCat && chips.some((c) => c.dataset.cat === urlCat)) cat = urlCat;
+  query = params.get('q') ?? '';
+  if (search && query) search.value = query;
+  if (cat !== '*' || query) apply(false);
 }
 
 /* ── Selettore di percorso (contatti) ────────────────────────── */
@@ -415,6 +550,35 @@ function updateParallax(): void {
   }
 }
 
+/* ── Copia link con fallback (contesti senza Clipboard API) ──── */
+function copyPageUrl(btn: HTMLElement): void {
+  const feedback = () => {
+    const original = btn.textContent;
+    btn.textContent = 'Link copiato!';
+    window.setTimeout(() => {
+      btn.textContent = original;
+    }, 1800);
+  };
+  const legacyCopy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = window.location.href;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      if (document.execCommand('copy')) feedback();
+    } finally {
+      ta.remove();
+    }
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(window.location.href).then(feedback).catch(legacyCopy);
+  } else {
+    legacyCopy();
+  }
+}
+
 /* ── Elevazione header allo scroll ───────────────────────────── */
 function updateHeader(): void {
   const h = document.querySelector<HTMLElement>('.site-header');
@@ -528,20 +692,17 @@ function initGlobals(): void {
       window.scrollTo({ top: 0, behavior: prefersReduced() ? 'auto' : 'smooth' });
     } else if (t.closest('[data-copy-url]')) {
       const btn = t.closest<HTMLElement>('[data-copy-url]');
-      if (btn && navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-          const original = btn.textContent;
-          btn.textContent = 'Link copiato!';
-          window.setTimeout(() => {
-            btn.textContent = original;
-          }, 1800);
-        });
-      }
+      if (btn) copyPageUrl(btn);
+    } else if (!t.closest('.site-header')) {
+      // Click/tap fuori dall'header: il menu mobile aperto si chiude.
+      closeNav();
     }
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeCall();
-    else if (e.key === 'Tab') trapCallFocus(e);
+    if (e.key === 'Escape') {
+      closeCall();
+      closeNav(true);
+    } else if (e.key === 'Tab') trapCallFocus(e);
   });
 }
 

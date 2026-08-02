@@ -13,16 +13,27 @@ const href = d.externalUrl ?? (comingSoon ? null : `/articoli/${entry.id}`);
 const Tag = href ? 'a' : 'div';
 // Tempo di lettura stimato (~200 parole/min) dal corpo Markdown.
 const minutes = Math.max(1, Math.round((entry.body ?? '').trim().split(/\s+/).length / 200));
+// Indice per la ricerca client-side: minuscolo e senza accenti,
+// la stessa normalizzazione applicata alla query in site.ts.
+const searchIndex = [d.title, d.excerpt, d.category]
+  .join(' ')
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '');
 ---
 <Tag
   class="card"
   data-cat={d.category}
+  data-search={searchIndex}
   {...href ? { href } : {}}
   {...external ? { target: '_blank', rel: 'noopener' } : {}}
 >
   {
     d.cover ? (
-      <div class="card-media">
+      <div
+        class="card-media"
+        transition:name={comingSoon || external ? undefined : `art-img-${entry.id}`}
+      >
         <img src={d.cover} alt={d.coverAlt ?? d.title} loading="lazy" decoding="async" />
       </div>
     ) : (

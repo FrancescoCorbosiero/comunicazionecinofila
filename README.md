@@ -21,6 +21,7 @@ npm run dev        # sviluppo su http://localhost:4321
 npm run build      # build statica in dist/
 npm run preview    # anteprima della build
 npm run check      # type-check (astro check)
+npm run assets     # rigenera favicon + comprime le foto di public/assets
 ```
 
 ## Struttura
@@ -32,7 +33,7 @@ src/
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
   components/            # Header, Footer, CallModal, CoverImage, card/row, icone
-  scripts/site.ts        # nav, reveal, step-form→WhatsApp, form candidatura (mock), modale, parallax
+  scripts/site.ts        # nav, reveal, step-form→WhatsApp, form→Netlify, ricerca blog, modale, parallax
   scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
   pages/                 # index, approccio, chi-sono, consulenza-gratuita, lavora-con-noi,
                          # servizi, eventi, articoli (Blog), 404
@@ -119,22 +120,48 @@ Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
 > riporta `src/_archive/catalogo.astro` in `src/pages/` e ripristina le voci di
 > navigazione in header/footer. Dati, script e stili sono rimasti intatti.
 
-## Form "Lavora con noi" (mock)
+## Form → Netlify Forms (senza backend)
 
-Il form candidatura in `/lavora-con-noi` è un **mock client-side**: validazione,
-stato "Invio in corso…" (~800 ms simulati), conferma inline e reset — nessuna
-chiamata di rete. Tutta la logica vive in `initWorkForm()` in
-`src/scripts/site.ts` (commento `MOCK: sostituire con invio reale`): il
-passaggio a un backend vero tocca un solo punto.
+I due questionari inviano a **[Netlify Forms](https://docs.netlify.com/manage/forms/setup/)**
+(zero codice server, incluso nel piano free):
+
+- **`/lavora-con-noi`** (`candidatura-team`): invio reale via fetch, stato
+  "Invio in corso…", conferma inline. Se la rete fallisce compare un fallback
+  con **email precompilata** — la candidatura non si perde mai.
+- **`/consulenza-gratuita`** (`consulenza-gratuita`): il flusso resta
+  WhatsApp-first, ma ogni questionario completato viene **anche salvato su
+  Netlify in background**. Se la persona chiude WhatsApp senza premere invio,
+  il contatto resta comunque ad Andrea nella dashboard.
+
+Al primo deploy Netlify registra i form da solo (attributo `data-netlify`
+nell'HTML statico); in **Site → Forms** si attivano le notifiche email.
+Anti-spam: honeypot `bot-field` già configurato. In `astro dev`/`preview`
+l'endpoint non esiste: il form di candidatura mostra il fallback, ed è il
+comportamento atteso.
 
 ## Performance & SEO (già attive)
 
+- **Font self-hosted** (Fonts API di Astro, provider locale): i `.woff2` subset
+  latin vivono in `src/assets/fonts/` e vengono serviti da `/_astro` con cache
+  immutabile. Zero richieste a Google Fonts dal browser (privacy/GDPR), build
+  deterministica, fallback con metriche adattate contro il layout shift.
+  Preload solo dei font above-the-fold (Anton + Inter 400).
 - **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
-  interni e **Speculation Rules** per navigazione più rapida.
-- **Immagini ottimizzate** con `astro:assets` (webp responsive) per le foto pesanti.
+  interni e **Speculation Rules** per navigazione più rapida. Le cover degli
+  articoli fanno **morph** dalla card alla pagina di dettaglio.
+- **Immagini ottimizzate** con `astro:assets` (webp responsive) per le foto pesanti;
+  le foto di `public/assets` (OG e cover) restano sotto ~350 kB via `npm run assets`
+  — sopra quella soglia WhatsApp può scartare l'anteprima del link.
+- **Ricerca live nel blog** + filtri per categoria sincronizzati nell'URL
+  (`/articoli?cat=…&q=…`): i filtri sono condivisibili.
+- **Favicon reali** (ICO+PNG+apple-touch) e `site.webmanifest`, generati da
+  `scripts/optimize-assets.mjs`.
+- **Stampa**: le pagine articolo hanno uno stile print dedicato (via il guscio
+  interattivo, testo nero su bianco, URL dei link esterni in chiaro).
 - **Parallax** accessibile su hero e cover (off con `prefers-reduced-motion`).
-- **JSON-LD** Person/LocalBusiness ovunque, Article/Event/ItemList/Breadcrumb dove
-  pertinente; `sitemap.xml`, `robots.txt`, header di cache (`netlify.toml`, `_headers`).
+- **JSON-LD** WebSite/Person/LocalBusiness ovunque, Article (con wordCount e
+  tempo di lettura)/Event/ItemList/Breadcrumb dove pertinente; `sitemap.xml`,
+  `robots.txt`, header di cache (`netlify.toml`, `_headers`).
 - Verifica Search Console e handle social: compila i campi in `src/lib/seo.ts`.
 
 ## Integrazione cal.com ("Richiedi la tua consulenza gratuita")
@@ -170,7 +197,8 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
 - **Dominio** definitivo (placeholder attuale: `www.andreabellettati.it` — vedi i TODO in `src/config.ts`, `astro.config.mjs`, `public/robots.txt`).
 - **Foto reali**: hero della home (`public/assets/hero.jpg`, oggi assente), placeholder team/formazione.
 - **Testi articoli/blog** on-site (12 stub `coming-soon` + bozze marcate nel Markdown).
-- **Form "Lavora con noi"**: sostituire il mock con l'invio reale (vedi sezione dedicata).
+- **Netlify Forms**: dopo il primo deploy, attivare le notifiche email in
+  Site → Forms (i form si registrano da soli).
 - **Sezioni future in `/servizi`** (solo TODO nel codice): dieta casalinga/BARF con referral alla biologa Stefania Bartoloni; servizi in affiliazione.
 - **Link cal.com** (`CAL_LINK` in `src/config.ts`) + immagine OG dedicata 1200×630.
 - **Catalogo archiviato**: se tornerà, aggiornare i dati in `src/data/catalogo.json` alla gamma reale.
