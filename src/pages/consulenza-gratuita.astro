@@ -37,7 +37,21 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
         </div>
 
         <div class="form-card consulto-card" data-reveal data-delay="1">
-        <form data-stepform novalidate>
+        <!-- Netlify Forms come rete di sicurezza: oltre ad aprire WhatsApp,
+             ogni questionario completato viene salvato nella dashboard Netlify.
+             Così il contatto non va perso se la persona non invia il messaggio. -->
+        <form
+          data-stepform
+          novalidate
+          name="consulenza-gratuita"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="consulenza-gratuita" />
+          <p class="hp-field" aria-hidden="true">
+            <label>Non compilare questo campo: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
           <input type="hidden" name="profilo" value="Una famiglia" />
           <div class="steps-head">
             <span class="step-dot"></span>

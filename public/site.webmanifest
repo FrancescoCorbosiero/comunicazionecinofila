@@ -1,0 +1,24 @@
+{
+  "name": "Andrea Bellettati — Comunicazione Cinofila",
+  "short_name": "A. Bellettati",
+  "description": "Comportamento e alimentazione naturale per cani e gatti.",
+  "lang": "it",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "#ece4d2",
+  "theme_color": "#7c9474",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

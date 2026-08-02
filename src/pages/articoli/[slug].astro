@@ -5,7 +5,7 @@ import Base from '../../layouts/Base.astro';
 import ArrowIcon from '../../components/ArrowIcon.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
-import { SITE } from '../../config';
+import { SITE, waLink } from '../../config';
 import { longDate } from '../../lib/dates';
 import '../../styles/content.css';
 
@@ -22,12 +22,15 @@ const { Content, headings } = await render(entry);
 const d = entry.data;
 
 // Tempo di lettura (~200 parole/min) e indice dai titoli di secondo livello.
-const minutes = Math.max(1, Math.round((entry.body ?? '').trim().split(/\s+/).length / 200));
+const words = (entry.body ?? '').trim().split(/\s+/).length;
+const minutes = Math.max(1, Math.round(words / 200));
 const toc = headings.filter((h) => h.depth === 2);
 
 // Condivisione: WhatsApp e copia link.
 const pageUrl = new URL(`/articoli/${entry.id}/`, SITE).href;
 const shareWa = `https://wa.me/?text=${encodeURIComponent(`${d.title} — ${pageUrl}`)}`;
+// CTA contestuale: chi scrive dopo la lettura arriva già "presentato".
+const askWa = waLink(`Ciao Andrea! Ho letto "${d.title}" e avrei una domanda sul mio animale.`);
 
 // Articoli correlati: stessa categoria; se non bastano, i più recenti.
 const all = await getCollection('articoli');
@@ -45,6 +48,10 @@ const articleLd = {
   headline: d.title,
   description: d.excerpt,
   datePublished: d.date.toISOString(),
+  inLanguage: 'it',
+  wordCount: words,
+  timeRequired: `PT${minutes}M`,
+  articleSection: d.category,
   ...(d.cover ? { image: new URL(d.cover, SITE).href } : {}),
   author: { '@id': `${SITE}/#andrea` },
   mainEntityOfPage: new URL(`/articoli/${entry.id}`, SITE).href,
@@ -87,6 +94,7 @@ const crumbs = [
             class="card-media parallax-cover"
             style="aspect-ratio:16/10; border-radius:var(--r-3); margin-bottom:36px;"
             data-reveal
+            transition:name={`art-img-${entry.id}`}
           >
             <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
           </div>
@@ -145,7 +153,7 @@ const crumbs = [
     )
   }
 
-  <!-- CTA -->
+  <!-- CTA — il pulsante WhatsApp arriva con l'articolo già citato nel messaggio -->
   <section class="section-tight bg-sage paper-bg" style="background-color:var(--sage);">
     <div class="container container-narrow">
       <div class="cta-band">
@@ -153,6 +161,9 @@ const crumbs = [
         <p class="lead">Il primo confronto è gratuito e senza impegno.</p>
         <div class="cta-row">
           <a class="btn btn-lg" href="/consulenza-gratuita">Consulenza gratuita <ArrowIcon size={16} /></a>
+          <a class="btn btn-ghost-cream btn-lg" href={askWa} target="_blank" rel="noopener">
+            Scrivimi su WhatsApp <WhatsAppIcon size={16} />
+          </a>
         </div>
       </div>
     </div>

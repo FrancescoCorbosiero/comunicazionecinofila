@@ -38,12 +38,14 @@
      Display: Anton — sans condensed pesante, all-caps, da poster.
      Body: Inter — pulito, neutro.
      Script accent: Caveat — solo per parole singole decorative.
+     Le var(--font-*) arrivano dalla Fonts API (astro.config.mjs):
+     font self-hosted + fallback locali con metriche adattate.
   */
-  --display: 'Anton', 'Bebas Neue', 'Oswald', sans-serif;
-  --sans:    'Inter', -apple-system, system-ui, sans-serif;
-  --serif:   'Cormorant Garamond', Georgia, serif;  /* fallback per qualche dettaglio */
-  --script:  'Caveat', 'Brush Script MT', cursive;
-  --mono:    'JetBrains Mono', ui-monospace, monospace;
+  --display: var(--font-anton, 'Anton', 'Bebas Neue', 'Oswald', sans-serif);
+  --sans:    var(--font-inter, 'Inter', -apple-system, system-ui, sans-serif);
+  --serif:   var(--font-cormorant, 'Cormorant Garamond', Georgia, serif);
+  --script:  var(--font-caveat, 'Caveat', 'Brush Script MT', cursive);
+  --mono:    var(--font-jetbrains-mono, 'JetBrains Mono', ui-monospace, monospace);
 
   /* Radii — angoli quasi vivi, leggermente smussati come la grafica reale */
   --r-1: 2px;

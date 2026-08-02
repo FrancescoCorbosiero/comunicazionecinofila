@@ -173,7 +173,21 @@ const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', '
           </ul>
         </div>
 
-        <form data-workform novalidate>
+        <!-- Netlify Forms: il bot di deploy registra il form dall'HTML statico;
+             l'invio reale avviene via fetch in site.ts (initWorkForm).
+             Le candidature arrivano nella dashboard Netlify (+ notifiche email). -->
+        <form
+          data-workform
+          novalidate
+          name="candidatura-team"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="candidatura-team" />
+          <p class="hp-field" aria-hidden="true">
+            <label>Non compilare questo campo: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
           <div class="steps-head">
             <span class="step-dot"></span>
             <span class="step-dot"></span>
@@ -298,6 +312,13 @@ const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', '
             <h3 class="display-md">Candidatura inviata.</h3>
             <p style="max-width:420px;">Grazie, ti ricontatto presto. — Andrea</p>
           </div>
+
+          <!-- ERRORE DI RETE: la candidatura non si perde, si sposta sull'email -->
+          <p class="form-error" role="alert" data-form-error>
+            Non sono riuscito a inviare la candidatura (problema di rete?). Riprova tra poco
+            oppure <a class="text-link" data-error-mail href="#">scrivimi via email</a>: il
+            messaggio è già pronto con le tue risposte.
+          </p>
         </form>
       </div>
     </div>
