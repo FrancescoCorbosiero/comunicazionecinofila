@@ -5,7 +5,7 @@
    - gli inizializzatori legati agli elementi girano a ogni `astro:page-load`
      (gli elementi vecchi vengono scartati dallo swap, niente doppi bind).
    ===================================================================== */
-import { WA_NUMBER, EMAIL } from '../config';
+import { WA_NUMBER, EMAIL, FORM_ENDPOINT } from '../config';
 import { initCatalog } from './catalog';
 // Quando attiverai cal.com, importa anche CAL_LINK da '../config'.
 
@@ -15,9 +15,12 @@ function waLink(text: string): string {
 const prefersReduced = () =>
   window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ── Netlify Forms ───────────────────────────────────────────────
-   I form statici (name= + data-netlify) vengono registrati dal bot
-   di deploy; qui li inviamo via fetch senza ricaricare la pagina.
+/* ── Invio form ──────────────────────────────────────────────────
+   Un solo punto di uscita per entrambi i form, endpoint configurabile:
+   · FORM_ENDPOINT vuoto → Netlify Forms (POST alla pagina, i form
+     statici con name= + data-netlify sono registrati dal bot di deploy);
+   · FORM_ENDPOINT valorizzato → il tuo backend (es. function che inoltra
+     via AWS SES). Stesso payload urlencoded, `form-name` incluso.
    In `astro dev` non c'è nessun endpoint: l'invio fallisce e scatta
    il fallback (per il questionario resta comunque WhatsApp). */
 function encodeForm(form: HTMLFormElement): string {
@@ -27,8 +30,8 @@ function encodeForm(form: HTMLFormElement): string {
   });
   return params.toString();
 }
-function submitNetlifyForm(form: HTMLFormElement): Promise<boolean> {
-  return fetch('/', {
+function submitForm(form: HTMLFormElement): Promise<boolean> {
+  return fetch(FORM_ENDPOINT || '/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: encodeForm(form),
@@ -255,15 +258,16 @@ function initStepForm(): void {
         '&body=' +
         encodeURIComponent(text);
     }
-    // Rete di sicurezza: salva il contatto su Netlify Forms in background.
+    // Rete di sicurezza: salva il contatto in background (Netlify Forms oggi,
+    // il tuo endpoint/AWS SES domani — vedi FORM_ENDPOINT in config.ts).
     // Se la persona chiude WhatsApp senza premere invio, il lead resta ad Andrea.
-    void submitNetlifyForm(form);
+    void submitForm(form);
     steps.showSuccess();
     window.open(waLink(text), '_blank', 'noopener');
   });
 }
 
-/* ── Candidatura "Lavora con noi" (a step) → Netlify Forms ───── */
+/* ── Candidatura "Lavora con noi" (a step) → submitForm() ────── */
 function initWorkForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-workform]');
   if (!form) return;
@@ -320,7 +324,7 @@ function initWorkForm(): void {
       submitBtn.textContent = 'Invio in corso…';
     }
 
-    const ok = await submitNetlifyForm(form);
+    const ok = await submitForm(form);
 
     if (submitBtn) {
       submitBtn.disabled = false;
