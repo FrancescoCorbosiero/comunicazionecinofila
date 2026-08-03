@@ -120,24 +120,36 @@ Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
 > riporta `src/_archive/catalogo.astro` in `src/pages/` e ripristina le voci di
 > navigazione in header/footer. Dati, script e stili sono rimasti intatti.
 
-## Form → Netlify Forms (senza backend)
+## Form: invio configurabile (Netlify Forms oggi, AWS SES quando vuoi)
 
-I due questionari inviano a **[Netlify Forms](https://docs.netlify.com/manage/forms/setup/)**
-(zero codice server, incluso nel piano free):
+Entrambi i questionari passano da **un solo punto di uscita**
+(`submitForm()` in `src/scripts/site.ts`), con endpoint configurabile via
+`FORM_ENDPOINT` in `src/config.ts`:
 
 - **`/lavora-con-noi`** (`candidatura-team`): invio reale via fetch, stato
   "Invio in corso…", conferma inline. Se la rete fallisce compare un fallback
   con **email precompilata** — la candidatura non si perde mai.
 - **`/consulenza-gratuita`** (`consulenza-gratuita`): il flusso resta
-  WhatsApp-first, ma ogni questionario completato viene **anche salvato su
-  Netlify in background**. Se la persona chiude WhatsApp senza premere invio,
-  il contatto resta comunque ad Andrea nella dashboard.
+  **WhatsApp-first** (il pulsante apre WhatsApp col messaggio pronto, come
+  sempre), ma ogni questionario completato viene **anche salvato in
+  background**. Se la persona chiude WhatsApp senza premere invio, il
+  contatto non va perso.
 
-Al primo deploy Netlify registra i form da solo (attributo `data-netlify`
-nell'HTML statico); in **Site → Forms** si attivano le notifiche email.
-Anti-spam: honeypot `bot-field` già configurato. In `astro dev`/`preview`
-l'endpoint non esiste: il form di candidatura mostra il fallback, ed è il
-comportamento atteso.
+**Oggi (default, `FORM_ENDPOINT = ''`)** → [Netlify Forms](https://docs.netlify.com/manage/forms/setup/):
+zero backend, al primo deploy Netlify registra i form da solo (attributo
+`data-netlify` nell'HTML statico) e in **Site → Forms** si attivano le
+notifiche email. Anti-spam: honeypot `bot-field` già configurato.
+
+**Domani (AWS SES)** → scrivi una function che riceve il POST
+`application/x-www-form-urlencoded` e inoltra via SES (`SendEmail`), poi
+metti il suo URL in `FORM_ENDPOINT` (es. `/.netlify/functions/invia-form` o
+un endpoint API Gateway). Il payload include `form-name`
+(`candidatura-team` / `consulenza-gratuita`) per distinguere i due form e
+il campo honeypot `bot-field` da scartare se valorizzato. Il client non
+cambia; a quel punto puoi rimuovere gli attributi `data-netlify` dai form.
+
+In `astro dev`/`preview` l'endpoint non esiste: il form di candidatura
+mostra il fallback, ed è il comportamento atteso.
 
 ## Performance & SEO (già attive)
 
@@ -197,8 +209,9 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
 - **Dominio** definitivo (placeholder attuale: `www.andreabellettati.it` — vedi i TODO in `src/config.ts`, `astro.config.mjs`, `public/robots.txt`).
 - **Foto reali**: hero della home (`public/assets/hero.jpg`, oggi assente), placeholder team/formazione.
 - **Testi articoli/blog** on-site (12 stub `coming-soon` + bozze marcate nel Markdown).
-- **Netlify Forms**: dopo il primo deploy, attivare le notifiche email in
-  Site → Forms (i form si registrano da soli).
+- **Form**: dopo il primo deploy, attivare le notifiche email in Site → Forms
+  (i form si registrano da soli). Quando arriva **AWS SES**: function che
+  inoltra via email + URL in `FORM_ENDPOINT` (`src/config.ts`).
 - **Sezioni future in `/servizi`** (solo TODO nel codice): dieta casalinga/BARF con referral alla biologa Stefania Bartoloni; servizi in affiliazione.
 - **Link cal.com** (`CAL_LINK` in `src/config.ts`) + immagine OG dedicata 1200×630.
 - **Catalogo archiviato**: se tornerà, aggiornare i dati in `src/data/catalogo.json` alla gamma reale.

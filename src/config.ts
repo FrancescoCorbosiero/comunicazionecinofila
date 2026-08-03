@@ -30,6 +30,19 @@ export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
  */
 export const CAL_LINK = '';
 
+/**
+ * Endpoint di invio dei form (candidatura "Lavora con noi" + backup del
+ * questionario consulenza — il questionario resta comunque WhatsApp-first).
+ *
+ * Vuoto = Netlify Forms: POST alla pagina stessa, zero backend, funziona da subito.
+ * Con AWS SES (o altro backend): metti qui l'URL della function che inoltra
+ * via email — es. '/.netlify/functions/invia-form' o un endpoint API Gateway.
+ * Il client non cambia: submitForm() in scripts/site.ts POSTa lo stesso
+ * payload application/x-www-form-urlencoded (campo `form-name` incluso,
+ * utile per distinguere i due form anche lato SES).
+ */
+export const FORM_ENDPOINT = '';
+
 /** Helper: costruisce un deep-link WhatsApp con testo precompilato. */
 export function waLink(text: string): string {
   return `${WA_LINK}?text=${encodeURIComponent(text)}`;
