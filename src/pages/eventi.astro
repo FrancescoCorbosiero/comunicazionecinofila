@@ -6,6 +6,7 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import { waLink, IG_URL, SITE } from '../config';
 import { eventDay, eventMonthTime } from '../lib/dates';
+import { autoCover } from '../lib/images';
 
 const all = await getCollection('eventi');
 const featured = all.find((e) => e.data.featured) ?? all[0];
@@ -19,6 +20,7 @@ const rest = all
   );
 
 const f = featured?.data;
+const fCover = featured && f ? autoCover('evento', featured.id, f.cover) : undefined;
 // La pagina di dettaglio esiste solo per eventi on-site (vedi eventi/[slug].astro).
 const fHasPage = Boolean(f && !f.externalUrl && !f.internalUrl && f.status !== 'coming-soon');
 const reserve = f?.reserveWaText
@@ -34,7 +36,7 @@ const eventLd = f
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: { '@type': 'VirtualLocation', url: IG_URL },
-      ...(f.cover ? { image: new URL(f.cover, SITE).href } : {}),
+      ...(fCover ? { image: new URL(fCover, SITE).href } : {}),
       isAccessibleForFree: f.free,
       organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
     }
@@ -83,8 +85,8 @@ const eventLd = f
                   <span class="pill pill-peach">{f.statusLabel}</span>
                 </span>
               )}
-              {f.cover ? (
-                <img src={f.cover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
+              {fCover ? (
+                <img src={fCover} alt={f.coverAlt ?? f.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               ) : (
                 <div class="placeholder" style="position:absolute; inset:0;">
                   {f.placeholderLabel ?? 'EVENTO'}

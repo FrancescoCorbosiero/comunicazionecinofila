@@ -4,10 +4,13 @@
    quando i contenuti saranno reali (titoli, description, OG image dedicate…).
    ===================================================================== */
 import { SITE, SITE_NAME, EMAIL, PHONE, IG_URL } from '../config';
+import { publicImage } from './images';
 
 export const DEFAULT_DESCRIPTION =
   'Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale.';
-export const DEFAULT_OG_IMAGE = '/assets/logo-andrea.jpg';
+/** Carica og-home.jpg (1200×630) in public/assets per un'anteprima social
+    dedicata; finché manca si usa il logo. */
+export const DEFAULT_OG_IMAGE = publicImage('og-home') ?? '/assets/logo-andrea.jpg';
 export const LOCALE = 'it_IT';
 export const DEFAULT_ROBOTS = 'index, follow';
 export const THEME_COLOR = '#7c9474';

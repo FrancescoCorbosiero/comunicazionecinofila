@@ -7,6 +7,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
 import { SITE, waLink } from '../../config';
 import { longDate } from '../../lib/dates';
+import { autoCover } from '../../lib/images';
 import '../../styles/content.css';
 
 export const getStaticPaths = (async () => {
@@ -20,6 +21,8 @@ export const getStaticPaths = (async () => {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const d = entry.data;
+// Cover dal frontmatter, oppure auto-rilevata (articolo-<slug>.* in public/assets).
+const cover = autoCover('articolo', entry.id, d.cover);
 
 // Tempo di lettura (~200 parole/min) e indice dai titoli di secondo livello.
 const words = (entry.body ?? '').trim().split(/\s+/).length;
@@ -52,7 +55,7 @@ const articleLd = {
   wordCount: words,
   timeRequired: `PT${minutes}M`,
   articleSection: d.category,
-  ...(d.cover ? { image: new URL(d.cover, SITE).href } : {}),
+  ...(cover ? { image: new URL(cover, SITE).href } : {}),
   author: { '@id': `${SITE}/#andrea` },
   mainEntityOfPage: new URL(`/articoli/${entry.id}`, SITE).href,
 };
@@ -70,7 +73,7 @@ const crumbs = [
   description={d.excerpt}
   ogTitle={d.title}
   ogDescription={d.excerpt}
-  ogImage={d.cover ?? '/assets/articolo-antistaminico.jpg'}
+  ogImage={cover ?? '/assets/articolo-antistaminico.jpg'}
   ogImageAlt={d.coverAlt ?? d.title}
   breadcrumbs={crumbs}
   jsonLd={articleLd}
@@ -89,14 +92,14 @@ const crumbs = [
         <p class="lead">{d.excerpt}</p>
       </div>
       {
-        d.cover && (
+        cover && (
           <div
             class="card-media parallax-cover"
             style="aspect-ratio:16/10; border-radius:var(--r-3); margin-bottom:36px;"
             data-reveal
             transition:name={`art-img-${entry.id}`}
           >
-            <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
+            <img src={cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
           </div>
         )
       }

@@ -5,6 +5,11 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import feedEtichette from '../assets/evento-etichette-4-zampe.jpg';
 import andrea2 from '../assets/andrea-selfie-inverno.jpg';
+import { publicImage } from '../lib/images';
+
+// Foto del blocco "Opportunità Lavorative": appare da sola appena carichi
+// team-formazione.jpg in public/assets (vedi public/assets/README.md).
+const teamPhoto = publicImage('team-formazione');
 ---
 <Base
   active="servizi"
@@ -119,13 +124,28 @@ import andrea2 from '../assets/andrea-selfie-inverno.jpg';
   <section class="section-tight" id="opportunita">
     <div class="container">
       <div class="svc-block" data-reveal>
-        <div
-          class="svc-block-media placeholder"
-          style="min-height:280px; flex-direction:column; gap:8px; text-align:center; padding:24px;"
-        >
-          <LeafIcon size={40} stroke="var(--olive-deep)" />
-          <span>FOTO TEAM · FORMAZIONE</span>
-        </div>
+        {
+          teamPhoto ? (
+            <div class="svc-block-media parallax-cover">
+              <img
+                src={teamPhoto}
+                alt="Il team di TeamNutrizione durante una sessione di formazione"
+                loading="lazy"
+                decoding="async"
+                data-parallax
+                data-parallax-cover
+              />
+            </div>
+          ) : (
+            <div
+              class="svc-block-media placeholder"
+              style="min-height:280px; flex-direction:column; gap:8px; text-align:center; padding:24px;"
+            >
+              <LeafIcon size={40} stroke="var(--olive-deep)" />
+              <span>FOTO TEAM · FORMAZIONE</span>
+            </div>
+          )
+        }
         <div class="svc-block-body">
           <span class="svc-num">Servizio 03</span>
           <h3>Opportunità Lavorative</h3>

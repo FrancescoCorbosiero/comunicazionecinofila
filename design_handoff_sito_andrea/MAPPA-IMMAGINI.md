@@ -3,6 +3,10 @@
 Questo documento mappa **tutte le immagini del sito**, dove compaiono, e il
 **nome unico e descrittivo** di ciascuna.
 
+> 📸 **Per caricare foto nuove o sostituirle** la guida operativa è
+> [`public/assets/README.md`](../public/assets/README.md): nomi già decisi,
+> auto-rilevati dal build (cover articoli/eventi, team, og-home).
+
 > ✅ **Aggiornamento:** i nomi descrittivi della sezione 3 sono già stati
 > **cablati nel codice**. Quindi ora, per aggiornare una foto, ti basta
 > ri-esportarla con **lo stesso nome** e caricarla in `public/assets/`
