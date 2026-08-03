@@ -1,151 +1,57 @@
 # Mappa delle immagini del sito
 
-Questo documento mappa **tutte le immagini del sito**, dove compaiono, e il
-**nome unico e descrittivo** di ciascuna.
+Le immagini hanno **nomi di ruolo** (dicono *dove va* la foto, non cosa
+raffigura): per cambiare una foto basta caricare un file con lo stesso nome.
+La guida operativa, con formati consigliati e l'elenco completo dei nomi, è
+[`public/assets/README.md`](../public/assets/README.md).
 
-> 📸 **Per caricare foto nuove o sostituirle** la guida operativa è
-> [`public/assets/README.md`](../public/assets/README.md): nomi già decisi,
-> auto-rilevati dal build (cover articoli/eventi, team, og-home).
+## Dove compare ogni immagine
 
-> ✅ **Aggiornamento:** i nomi descrittivi della sezione 3 sono già stati
-> **cablati nel codice**. Quindi ora, per aggiornare una foto, ti basta
-> ri-esportarla con **lo stesso nome** e caricarla in `public/assets/`
-> (e, se è una foto usata nei layout, anche in `src/assets/`): si carica da sola,
-> senza toccare il codice.
->
-> ⚠️ Se in futuro vuoi un nome **nuovo/diverso**, va aggiornato una volta il
-> riferimento nel codice (vedi sezione "Si caricano da sole?").
-
----
-
-## 1. Immagini uniche attuali (6 file)
-
-| # | File attuale | Cosa raffigura | Dove è salvato oggi |
-|---|---|---|---|
-| 1 | `logo-original.jpg` | Ritratto Andrea + bassotto (logo/marchio) | solo `public/assets/` (~4 KB) |
-| 2 | `andrea-1.jpg` | Andrea con il cane lungo un fiume di montagna | `src/assets/` **e** `public/assets/` |
-| 3 | `andrea-2.jpg` | Selfie invernale, guancia a guancia con il cane | `src/assets/` **e** `public/assets/` |
-| 4 | `andrea-3.jpg` | I due cani con i maglioni a quadri sul letto | `src/assets/` **e** `public/assets/` |
-| 5 | `feed-etichette.jpg` | Locandina evento "Etichette a 4 Zampe" | `src/assets/` **e** `public/assets/` |
-| 6 | `feed-antistaminico.jpg` | Cover articolo "Antistaminico naturale" | `src/assets/` **e** `public/assets/` |
-
-> Nota: le foto esistono in **doppia copia** (`src/assets/` + `public/assets/`)
-> perché il sito le usa in due modi diversi (vedi sezione tecnica). Se rinomini/
-> sostituisci una foto, va aggiornata **in entrambe le cartelle**.
-
----
-
-## 2. Dove compare ogni immagine (mappa d'uso)
-
-### `logo-original.jpg` — Logo / marchio
+### `logo.jpg` — Logo / marchio
 - Logo nell'header — `src/components/SiteHeader.astro`
 - Logo nel footer — `src/components/SiteFooter.astro`
 - Ritratto grande nell'hero della home — `src/pages/index.astro`
-- Immagine social (OG) predefinita di tutto il sito — `src/lib/seo.ts`
-- **Favicon derivate** (`favicon.ico`, `favicon-16/32.png`, `apple-touch-icon.png`,
-  `icon-192/512.png`): generate automaticamente dal logo con `npm run assets`
-  (`scripts/optimize-assets.mjs`). Se cambi il logo, rilancia quel comando.
+- Immagine social (OG) di riserva di tutto il sito — `src/lib/seo.ts`
+- Sorgente delle **favicon derivate** (`favicon.ico`, `favicon-16/32.png`,
+  `apple-touch-icon.png`, `icon-192/512.png`), rigenerate con `npm run assets`
 
-### `andrea-1.jpg` — Andrea + cane al fiume
-- Sfondo dell'hero della home — `src/pages/index.astro`
-- Foto del blocco "L'approccio" in home — `src/pages/index.astro`
-- Hero della pagina Approccio + sua immagine social — `src/pages/approccio.astro`
+### `hero.jpg` — Foto simbolo
+- Sfondo dell'hero della home + blocco "L'approccio" — `src/pages/index.astro`
+- Pagina Approccio + sua immagine social — `src/pages/approccio.astro`
 
-### `andrea-2.jpg` — Selfie invernale
-- Fallback del teaser Eventi in home (se l'evento non ha cover) — `src/pages/index.astro`
-- Blocco "Consulenza 1:1" nella pagina Servizi — `src/pages/servizi.astro`
+### `chi-sono.jpg` — Foto bio
 - Bio nella pagina Chi sono — `src/pages/chi-sono.astro`
+- Blocco "Consulenza 1:1" nella pagina Servizi — `src/pages/servizi.astro`
+- Riserva del teaser Eventi in home (se l'evento non ha cover) — `src/pages/index.astro`
 
-### `andrea-3.jpg` — I due cani coi maglioni
-- Pagina Chi sono + sua immagine social — `src/pages/chi-sono.astro`
-- Pagina Consulenza gratuita — `src/pages/consulenza-gratuita.astro`
+### `consulenza.jpg`
+- Pagina Consulenza gratuita + sua immagine social — `src/pages/consulenza-gratuita.astro`
+- Seconda foto e immagine social di Chi sono — `src/pages/chi-sono.astro`
 
-### `feed-etichette.jpg` — Locandina "Etichette a 4 Zampe"
-- Blocco "Alimentazione" nella pagina Servizi — `src/pages/servizi.astro`
-- Cover dell'evento — `src/content/eventi/etichette-a-4-zampe.md` (campo `cover:`)
-- Cover dell'articolo — `src/content/articoli/leggere-le-etichette.md` (campo `cover:`)
-- Immagine social della pagina Eventi + fallback dettaglio evento
+### `alimentazione.jpg`
+- Blocco "Alimentazione Naturale" nella pagina Servizi + immagine social — `src/pages/servizi.astro`
 
-### `feed-antistaminico.jpg` — Cover "Antistaminico naturale"
-- Cover dell'articolo — `src/content/articoli/antistaminico-naturale-per-cani.md` (campo `cover:`)
-- Immagine social della pagina Articoli + fallback dettaglio articolo
+### `team-formazione.jpg` *(opzionale, auto-rilevata)*
+- Blocco "Opportunità Lavorative" nella pagina Servizi; finché manca si vede
+  il placeholder
 
----
+### `og-home.jpg` *(opzionale, auto-rilevata)*
+- Anteprima social predefinita (1200×630) al posto del logo — `src/lib/seo.ts`
 
-## 3. Mappa dei nomi proposti
+### Cover di articoli ed eventi *(auto-rilevate)*
+- Convenzione: `articolo-<nome-file-md>.jpg` / `evento-<nome-file-md>.jpg`
+  in `public/assets/`. Carichi il file → card, pagina di dettaglio, `og:image`
+  e JSON-LD lo usano da soli (`src/lib/images.ts`). Un `cover:` esplicito nel
+  frontmatter, se presente, vince sulla convenzione.
 
-Nomi unici, descrittivi, tutto minuscolo con trattini (nessuno spazio, nessun
-accento). Suggeriti così che dal nome si capisca subito il contenuto.
+## Come funziona il caricamento
 
-| Nome attuale | ➜ Nome proposto | Descrizione |
-|---|---|---|
-| `logo-original.jpg` | `logo-andrea.jpg` | Logo / ritratto con il bassotto |
-| `andrea-1.jpg` | `andrea-cane-fiume.jpg` | Andrea con il cane al fiume |
-| `andrea-2.jpg` | `andrea-selfie-inverno.jpg` | Selfie invernale con il cane |
-| `andrea-3.jpg` | `andrea-due-cani-maglioni.jpg` | I due cani con i maglioni |
-| `feed-etichette.jpg` | `evento-etichette-4-zampe.jpg` | Locandina evento "Etichette a 4 Zampe" |
-| `feed-antistaminico.jpg` | `articolo-antistaminico.jpg` | Cover articolo "Antistaminico naturale" |
-
-*(Puoi tenere `.jpg` oppure passare a `.webp` per file più leggeri — in quel caso
-vanno aggiornati anche i riferimenti, come per il rename.)*
-
----
-
-## 4. (Opzionale) Cover per ogni articolo/evento
-
-Molti articoli oggi **non hanno una foto** e mostrano un placeholder "FOTO".
-Se vuoi dare a ciascuno una cover, la convenzione più semplice è nominare il file
-**come lo slug** dell'articolo e metterlo in `public/assets/`, poi aggiungere il
-campo `cover:` nel relativo file `.md`.
-
-Esempi (articoli senza cover oggi):
-
-| Articolo (slug) | Nome cover suggerito | Campo da aggiungere nel `.md` |
-|---|---|---|
-| `muco-nelle-feci-del-cane` | `muco-nelle-feci-del-cane.jpg` | `cover: "/assets/muco-nelle-feci-del-cane.jpg"` |
-| `feci-molli-nel-cane` | `feci-molli-nel-cane.jpg` | `cover: "/assets/feci-molli-nel-cane.jpg"` |
-| `cane-si-lecca-le-zampe` | `cane-si-lecca-le-zampe.jpg` | `cover: "/assets/cane-si-lecca-le-zampe.jpg"` |
-| `rotazione-delle-proteine` | `rotazione-delle-proteine.jpg` | `cover: "/assets/rotazione-delle-proteine.jpg"` |
-| `umido-o-crocchette` | `umido-o-crocchette.jpg` | `cover: "/assets/umido-o-crocchette.jpg"` |
-| … *(stesso schema per gli altri)* | `<slug>.jpg` | `cover: "/assets/<slug>.jpg"` |
-
-Consiglio: aggiungi anche `coverAlt: "..."` con una breve descrizione (utile per
-accessibilità e SEO).
-
----
-
-## 5. "Si caricano da sole?" — la parte importante
-
-**Risposta breve:** *cambiare solo il nome del file NON basta.* Nel progetto ogni
-immagine è collegata in un punto preciso; non c'è un meccanismo che "trova le foto
-dalla cartella in base al nome".
-
-Ci sono due modi in cui le immagini sono agganciate:
-
-1. **Foto ottimizzate (`src/assets/`)** → richiamate con un `import` per nome esatto
-   nel codice `.astro`. Se rinomini il file **senza** aggiornare l'`import`, il
-   build si rompe.
-2. **File statici (`public/assets/`)** → serviti così come sono all'indirizzo
-   `/assets/<nome>`. Sono richiamati:
-   - da **stringhe fisse nel codice** (logo, favicon, immagini social) → il rename
-     richiede una modifica al codice;
-   - dal campo **`cover:`** nei contenuti `.md` → questo è **dato**, non codice:
-     se carichi `public/assets/foo.jpg` e scrivi `cover: "/assets/foo.jpg"`, si
-     carica **senza toccare il codice** (ma il nome deve comunque essere scritto
-     nel campo `cover:`, non viene dedotto dallo slug in automatico).
-
-### Cosa è davvero "automatico"
-- ✅ **Sostituire un file tenendo lo STESSO nome** (es. ricaricare un
-  `andrea-1.jpg` di qualità migliore) → funziona subito, zero modifiche.
-- ✅ **Aggiungere una cover a un articolo/evento**: carichi il file in
-  `public/assets/` e imposti `cover:` nel `.md` → si carica da solo.
-- ❌ **Dare un NOME NUOVO a una foto già in uso** (es. `andrea-1` ➜
-  `andrea-cane-fiume`) → NON è automatico: va aggiornato il riferimento nel codice
-  una volta. Dopo quella modifica, ricaricare file con il nuovo nome diventa
-  automatico.
-
-### Come rendere automatici i nomi della sezione 3
-Serve fare **una volta** il "cablaggio": rinominare i file nel repo e aggiornare
-tutti i riferimenti (import, stringhe del logo/social, campi `cover:`). Fatto
-quello, potrai ri-esportare e caricare le immagini con quei nomi e si
-caricheranno da sole.
+- **Stesso nome = zero modifiche.** Tutte le foto si sostituiscono
+  ricaricando un file con lo stesso nome. `hero`, `chi-sono`, `consulenza` e
+  `alimentazione` esistono in **doppia copia** (`src/assets/` per i layout
+  ottimizzati + `public/assets/` per social/cover): vanno sostituite in
+  entrambe le cartelle.
+- **Le foto opzionali** (team, og-home, cover) si attivano da sole appena il
+  file esiste: nessuna modifica a template o frontmatter.
+- Dopo ogni caricamento: `npm run assets` (compressione + favicon), commit,
+  deploy.

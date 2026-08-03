@@ -7,8 +7,8 @@ import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import andrea1 from '../assets/andrea-cane-fiume.jpg';
-import andrea2 from '../assets/andrea-selfie-inverno.jpg';
+import heroPhoto from '../assets/hero.jpg';
+import chiSonoPhoto from '../assets/chi-sono.jpg';
 import { autoCover } from '../lib/images';
 
 // I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
@@ -73,7 +73,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   description="Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale."
   ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
   ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e percorso su misura per il tuo animale."
-  ogImage="/assets/andrea-cane-fiume.jpg"
+  ogImage="/assets/hero.jpg"
   ogImageAlt="Andrea Bellettati con il suo bassotto lungo un fiume di montagna"
   ogImageWidth={1440}
   ogImageHeight={1440}
@@ -82,7 +82,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);">
     <div class="hero-bg" data-parallax="70" aria-hidden="true">
       <Image
-        src={andrea1}
+        src={heroPhoto}
         alt=""
         widths={[768, 1280, 1920]}
         sizes="100vw"
@@ -95,7 +95,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
     <div class="container">
       <div class="hero-center-inner">
         <span class="hero-portrait-xl" data-parallax="40">
-          <img src="/assets/logo-andrea.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
+          <img src="/assets/logo.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
         <h1 class="hero-title-center">
@@ -160,7 +160,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
     <div class="container">
       <div class="split">
         <div class="split-media parallax-cover photo-tape" data-reveal>
-          <CoverImage src={andrea1} alt="Andrea con il suo bassotto lungo un fiume di montagna" />
+          <CoverImage src={heroPhoto} alt="Andrea con il suo bassotto lungo un fiume di montagna" />
         </div>
         <div class="split-body" data-reveal data-delay="1">
           <span class="eyebrow kicker-rule">L'approccio</span>
@@ -233,7 +233,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
               {evCover ? (
                 <img src={evCover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               ) : (
-                <CoverImage src={andrea2} alt="Andrea Bellettati con il suo cane" />
+                <CoverImage src={chiSonoPhoto} alt="Andrea Bellettati con il suo cane" />
               )}
             </div>
           </div>

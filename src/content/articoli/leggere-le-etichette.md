@@ -3,7 +3,6 @@ title: "Leggere le etichette: da dove si parte"
 date: 2026-03-10
 category: "Alimentazione"
 excerpt: "Ingredienti, percentuali, “carne fresca” e additivi: cosa guardare davvero prima di mettere un sacco nel carrello."
-cover: "/assets/evento-etichette-4-zampe.jpg"
 coverAlt: "Locandina Etichette a 4 Zampe"
 ---
 

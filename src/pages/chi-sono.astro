@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
-import andrea2 from '../assets/andrea-selfie-inverno.jpg';
-import andrea3 from '../assets/andrea-due-cani-maglioni.jpg';
+import chiSonoPhoto from '../assets/chi-sono.jpg';
+import consulenzaPhoto from '../assets/consulenza.jpg';
 ---
 <Base
   active="chi-sono"
@@ -12,7 +12,7 @@ import andrea3 from '../assets/andrea-due-cani-maglioni.jpg';
   description="Mi chiamo Andrea Bellettati, esperto in comportamento e nutrizione per cani e gatti. Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia e il mio percorso."
   ogTitle="Chi sono — Andrea Bellettati"
   ogDescription="Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia, dal primo sacco di crocchette a un metodo condiviso."
-  ogImage="/assets/andrea-due-cani-maglioni.jpg"
+  ogImage="/assets/consulenza.jpg"
   ogImageAlt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
   ogImageWidth={1440}
   ogImageHeight={1440}
@@ -38,7 +38,7 @@ import andrea3 from '../assets/andrea-due-cani-maglioni.jpg';
         </div>
         <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
           <CoverImage
-            src={andrea3}
+            src={consulenzaPhoto}
             alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
           />
         </div>
@@ -52,7 +52,7 @@ import andrea3 from '../assets/andrea-due-cani-maglioni.jpg';
       <div class="split flip">
         <div class="split-media parallax-cover photo-tape" data-reveal style="aspect-ratio:4/5;">
           <CoverImage
-            src={andrea2}
+            src={chiSonoPhoto}
             alt="Andrea Bellettati guancia a guancia con il suo segugio, in inverno"
           />
         </div>
