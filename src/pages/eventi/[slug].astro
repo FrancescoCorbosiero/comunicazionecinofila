@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
 import { waLink, IG_URL, SITE } from '../../config';
 import { eventDay, eventMonthTime } from '../../lib/dates';
+import { autoCover } from '../../lib/images';
 import '../../styles/content.css';
 
 export const getStaticPaths = (async () => {
@@ -18,6 +19,8 @@ export const getStaticPaths = (async () => {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
+// Cover dal frontmatter, oppure auto-rilevata (evento-<slug>.* in public/assets).
+const cover = autoCover('evento', entry.id, d.cover);
 
 const reserve = d.reserveWaText
   ? waLink(d.reserveWaText)
@@ -31,7 +34,7 @@ const eventLd = {
   eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
   location: { '@type': 'VirtualLocation', url: IG_URL },
-  ...(d.cover ? { image: new URL(d.cover, SITE).href } : {}),
+  ...(cover ? { image: new URL(cover, SITE).href } : {}),
   isAccessibleForFree: d.free,
   organizer: { '@type': 'Person', name: 'Andrea Bellettati' },
 };
@@ -48,7 +51,7 @@ const crumbs = [
   description={d.excerpt}
   ogTitle={d.title}
   ogDescription={d.excerpt}
-  ogImage={d.cover ?? '/assets/evento-etichette-4-zampe.jpg'}
+  ogImage={cover ?? '/assets/evento-etichette-4-zampe.jpg'}
   ogImageAlt={d.coverAlt ?? d.title}
   breadcrumbs={crumbs}
   jsonLd={eventLd}
@@ -62,8 +65,8 @@ const crumbs = [
             <span class="event-status"><span class="pill pill-peach">{d.statusLabel}</span></span>
           )}
           {
-            d.cover ? (
-              <img src={d.cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
+            cover ? (
+              <img src={cover} alt={d.coverAlt ?? d.title} loading="eager" decoding="async" data-parallax data-parallax-cover />
             ) : (
               <div class="placeholder" style="position:absolute; inset:0;">
                 {d.placeholderLabel ?? 'EVENTO'}

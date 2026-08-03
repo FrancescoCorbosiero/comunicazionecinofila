@@ -207,7 +207,9 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
 ## Da completare
 
 - **Dominio** definitivo (placeholder attuale: `www.andreabellettati.it` — vedi i TODO in `src/config.ts`, `astro.config.mjs`, `public/robots.txt`).
-- **Foto reali**: hero della home (`public/assets/hero.jpg`, oggi assente), placeholder team/formazione.
+- **Foto reali**: i nomi da usare sono già decisi e auto-rilevati — vedi
+  [`public/assets/README.md`](./public/assets/README.md) (cover articoli/eventi,
+  foto team/formazione, `og-home.jpg` 1200×630). Basta caricare il file.
 - **Testi articoli/blog** on-site (12 stub `coming-soon` + bozze marcate nel Markdown).
 - **Form**: dopo il primo deploy, attivare le notifiche email in Site → Forms
   (i form si registrano da soli). Quando arriva **AWS SES**: function che

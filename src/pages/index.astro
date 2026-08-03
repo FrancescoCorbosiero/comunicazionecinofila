@@ -9,6 +9,7 @@ import CoverImage from '../components/CoverImage.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import andrea1 from '../assets/andrea-cane-fiume.jpg';
 import andrea2 from '../assets/andrea-selfie-inverno.jpg';
+import { autoCover } from '../lib/images';
 
 // I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
 const articoli = await getCollection('articoli');
@@ -64,6 +65,7 @@ const pathIcons: Record<string, string> = {
 const eventi = await getCollection('eventi');
 const featuredEvent = eventi.find((e) => e.data.featured) ?? eventi[0];
 const ev = featuredEvent?.data;
+const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.cover) : undefined;
 ---
 <Base
   active="home"
@@ -228,8 +230,8 @@ const ev = featuredEvent?.data;
               </div>
             </div>
             <div class="split-media parallax-cover" data-reveal data-delay="1" style="order:-1;">
-              {ev.cover ? (
-                <img src={ev.cover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
+              {evCover ? (
+                <img src={evCover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
               ) : (
                 <CoverImage src={andrea2} alt="Andrea Bellettati con il suo cane" />
               )}

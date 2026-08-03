@@ -1,12 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import ArrowIcon from './ArrowIcon.astro';
+import { autoCover } from '../lib/images';
 
 interface Props {
   entry: CollectionEntry<'articoli'>;
 }
 const { entry } = Astro.props;
 const d = entry.data;
+// Cover dal frontmatter, oppure auto-rilevata (articolo-<slug>.* in public/assets).
+const cover = autoCover('articolo', entry.id, d.cover);
 const comingSoon = d.status === 'coming-soon';
 const external = Boolean(d.externalUrl);
 const href = d.externalUrl ?? (comingSoon ? null : `/articoli/${entry.id}`);
@@ -29,12 +32,12 @@ const searchIndex = [d.title, d.excerpt, d.category]
   {...external ? { target: '_blank', rel: 'noopener' } : {}}
 >
   {
-    d.cover ? (
+    cover ? (
       <div
         class="card-media"
         transition:name={comingSoon || external ? undefined : `art-img-${entry.id}`}
       >
-        <img src={d.cover} alt={d.coverAlt ?? d.title} loading="lazy" decoding="async" />
+        <img src={cover} alt={d.coverAlt ?? d.title} loading="lazy" decoding="async" />
       </div>
     ) : (
       <div class="card-media placeholder" style="flex-direction:column; gap:6px;">
