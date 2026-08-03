@@ -10,7 +10,7 @@ export const DEFAULT_DESCRIPTION =
   'Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale.';
 /** Carica og-home.jpg (1200×630) in public/assets per un'anteprima social
     dedicata; finché manca si usa il logo. */
-export const DEFAULT_OG_IMAGE = publicImage('og-home') ?? '/assets/logo-andrea.jpg';
+export const DEFAULT_OG_IMAGE = publicImage('og-home') ?? '/assets/logo.jpg';
 export const LOCALE = 'it_IT';
 export const DEFAULT_ROBOTS = 'index, follow';
 export const THEME_COLOR = '#7c9474';
@@ -41,7 +41,7 @@ export function siteGraph(): Record<string, unknown>[] {
       name: 'Andrea Bellettati',
       jobTitle: 'Consulente in comportamento e nutrizione per cani e gatti',
       url: SITE,
-      image: absoluteUrl('/assets/logo-andrea.jpg'),
+      image: absoluteUrl('/assets/logo.jpg'),
       sameAs: [IG_URL],
     },
     {
@@ -49,7 +49,7 @@ export function siteGraph(): Record<string, unknown>[] {
       '@id': `${SITE}/#business`,
       name: SITE_NAME,
       description: DEFAULT_DESCRIPTION,
-      image: absoluteUrl('/assets/logo-andrea.jpg'),
+      image: absoluteUrl('/assets/logo.jpg'),
       url: SITE,
       email: EMAIL,
       telephone: PHONE,

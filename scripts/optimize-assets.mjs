@@ -5,7 +5,7 @@
  *
  * Due compiti, entrambi idempotenti:
  * 1. Rigenera le favicon (ICO + PNG + apple-touch) e le icone del
- *    manifest a partire da public/assets/logo-andrea.jpg.
+ *    manifest a partire da public/assets/logo.jpg.
  * 2. Ricomprime le foto JPG di public/assets (mozjpeg, progressive,
  *    max 1600px): sono servite così come sono — niente pipeline Astro —
  *    e finiscono anche nelle anteprime social. WhatsApp ignora le
@@ -21,7 +21,7 @@ import sharp from 'sharp';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const ASSETS = path.join(ROOT, 'public/assets');
-const LOGO = path.join(ASSETS, 'logo-andrea.jpg');
+const LOGO = path.join(ASSETS, 'logo.jpg');
 
 const CREAM = { r: 236, g: 228, b: 210 }; // --bg-cream
 

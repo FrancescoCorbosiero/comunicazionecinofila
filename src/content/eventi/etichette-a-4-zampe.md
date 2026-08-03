@@ -4,7 +4,6 @@ subtitle: "Sai davvero cosa stai acquistando per il tuo cane?"
 excerpt: "Un webinar live per imparare a leggere le etichette del cibo e fare scelte consapevoli per il benessere del tuo animale. Parliamo di carne fresca, grain free e additivi — senza slogan, con metodo."
 date: 2026-02-11T21:00:00+01:00
 category: "Webinar Live"
-cover: "/assets/evento-etichette-4-zampe.jpg"
 coverAlt: "Locandina del webinar Etichette a 4 Zampe con Virginia Dallara, Team Branco"
 featured: true
 status: "upcoming"
