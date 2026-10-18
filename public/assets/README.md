@@ -16,8 +16,13 @@ commit e deploy.
 | `consulenza.jpg` | Pagina Consulenza gratuita, seconda foto di Chi sono | verticale 4:5, ≥ 1200px |
 | `alimentazione.jpg` | Blocco "Alimentazione Naturale" in Servizi | 4:3 o quadrata, ≥ 1200px |
 | `team-formazione.jpg` | Blocco "Opportunità Lavorative" in Servizi *(oggi placeholder: appare appena la carichi)* | 4:3 o quadrata, ≥ 1200px |
+| `og-lavora-con-noi.jpg` | Anteprima social di "Lavora con noi" (lo striscione TeamNutrizione su fondo 1200×630) | orizzontale **1200×630** |
 | `og-home.jpg` | Anteprima social del sito (WhatsApp, Instagram…) *(oggi si usa il logo: appare appena la carichi)* | orizzontale **1200×630** |
 
+> La **cover di "Lavora con noi"** (lo striscione TeamNutrizione) vive solo
+> in `src/assets/lavora-con-noi.jpg`: orizzontale ~3:1, ≥ 1600px di
+> larghezza. Se la cambi, rigenera anche `og-lavora-con-noi.jpg`.
+>
 > `hero`, `chi-sono`, `consulenza` e `alimentazione` esistono **anche in
 > `src/assets/`** con lo stesso nome: sostituiscile in **entrambe** le
 > cartelle (una è la versione ottimizzata dei layout, l'altra serve per le

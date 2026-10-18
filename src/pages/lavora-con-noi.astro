@@ -1,7 +1,15 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import LeafIcon from '../components/LeafIcon.astro';
+import coverPhoto from '../assets/lavora-con-noi.jpg';
+
+// La lente sul branco (motion.ts, data-lens) ingrandisce la stessa foto:
+// le serve una versione a piena risoluzione.
+const lensImage = await getImage({ src: coverPhoto, width: 1778, format: 'webp', quality: 72 });
+const coverAlt =
+  'TeamNutrizione — Al tuo fianco per il benessere del tuo pet: cani e gatti di tante razze in fila';
 const profili = [
   'Educatori e istruttori cinofili',
   'Naturopati e operatori del benessere animale',
@@ -24,6 +32,18 @@ const ambiti = [
 ];
 
 const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', 'Non lo so ancora'];
+
+// Nastro sotto l'hero: le stesse persone di "A chi è rivolto", in breve.
+const nastro = [
+  'Educatori cinofili',
+  'Naturopati',
+  'Toelettatori',
+  'Allevatori',
+  'Pet sitter',
+  'Dog sitter',
+  'Professionisti del pet',
+  'Appassionati di benessere naturale',
+];
 ---
 <Base
   active="lavora"
@@ -31,24 +51,82 @@ const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', '
   description="Il benessere animale può diventare anche il tuo lavoro. TeamNutrizione: formazione, affiancamento e un modello di lavoro dichiarato con trasparenza. Raccontami chi sei."
   ogTitle="Lavora con noi — TeamNutrizione"
   ogDescription="Non una rete di venditori: un Team di persone e professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere animale."
+  ogImage="/assets/og-lavora-con-noi.jpg"
+  ogImageAlt={coverAlt}
+  ogImageWidth={1200}
+  ogImageHeight={630}
 >
+  <!-- COVER: lo striscione TeamNutrizione. Si srotola all'arrivo (motion.css),
+       con il mouse diventa una lente sul branco (motion.ts, data-lens). -->
+  <section class="tn-cover">
+    <div class="tn-cover-frame" data-lens={lensImage.src} data-hero-away="12" data-hero-fade="0.85">
+      <Image
+        src={coverPhoto}
+        alt={coverAlt}
+        widths={[640, 1024, 1440, 1778]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        quality={78}
+        class="tn-cover-img"
+      />
+      <span class="lens-hint" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2.2"></circle>
+          <path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
+        Passa sopra: conosci il branco
+      </span>
+    </div>
+  </section>
+
   <!-- HERO -->
-  <section class="section bg-deep paper-bg-deep">
+  <section class="section bg-deep paper-bg-deep tn-hero" data-paw-trail>
     <div class="container">
-      <div class="head-block" data-reveal style="max-width:820px;">
-        <span class="eyebrow kicker-rule">Lavora con noi · TeamNutrizione</span>
-        <h1 class="display-xl">Il benessere animale<br />può diventare anche<br />il tuo lavoro.</h1>
-        <p class="lead">
+      <div class="head-block" style="max-width:820px;">
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.3s;">Lavora con noi · TeamNutrizione</span>
+        <h1 class="display-xl intro-lines" style="--intro-base:0.45s;">
+          <span class="line"><span>Il benessere animale</span></span>
+          <span class="line"><span>può diventare anche</span></span>
+          <span class="line"><span>il tuo <span class="hl">lavoro.</span></span></span>
+        </h1>
+        <p class="lead" data-intro style="--intro-d:0.95s;">
           Non stiamo costruendo una rete di venditori. Stiamo creando un Team di persone e
           professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere
           animale.
         </p>
-        <div class="hero-cta-row">
+        <div class="hero-cta-row" data-intro style="--intro-d:1.1s;">
           <a class="btn btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- NASTRO: chi c'è nel Team (decorativo: la lista vera è in "A chi è rivolto") -->
+  <div class="marquee-band" aria-hidden="true">
+  <div class="paw-marquee" data-marquee>
+    <div class="marquee-track">
+      {
+        [0, 1].map(() => (
+          <div class="marquee-group">
+            {nastro.map((n) => (
+              <span class="marquee-item">
+                {n}
+                <svg viewBox="0 0 50 44" fill="currentColor">
+                  <ellipse cx="12" cy="15" rx="4.3" ry="5.8" />
+                  <ellipse cx="21" cy="10" rx="4.3" ry="6" />
+                  <ellipse cx="30" cy="11" rx="4.3" ry="6" />
+                  <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6" />
+                  <ellipse cx="25" cy="29" rx="9.5" ry="8" />
+                </svg>
+              </span>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  </div>
 
   <!-- NON CERCHIAMO VENDITORI -->
   <section class="section">
@@ -98,8 +176,8 @@ const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', '
             formarsi.
           </p>
         </div>
-        <div class="split-body" data-reveal data-delay="1">
-          <ul class="svc-includes">
+        <div class="split-body">
+          <ul class="svc-includes stagger" data-reveal>
             {profili.map((p) => <li>{p}</li>)}
           </ul>
         </div>
@@ -138,7 +216,7 @@ const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', '
       <div class="booking-card" data-reveal>
         <span class="eyebrow kicker-rule" style="color:var(--peach);">Trasparenza, prima di tutto</span>
         <h2 class="display-md">Il nostro modello<br />di lavoro.</h2>
-        <p>
+        <p data-scrub>
           TeamNutrizione lavora con un modello di <strong style="color:var(--cream-ink);">Multi
           Level Marketing</strong> applicato al benessere animale — e preferiamo dirlo subito, con
           trasparenza. È un'attività indipendente, costruita sulla consulenza e sulla relazione con

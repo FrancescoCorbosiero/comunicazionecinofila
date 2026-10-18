@@ -33,7 +33,8 @@ src/
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
   components/            # Header, Footer, CallModal, CoverImage, card/row, icone
-  scripts/site.ts        # nav, reveal, step-form→WhatsApp, form→Netlify, ricerca blog, modale, parallax
+  scripts/site.ts        # nav, step-form→WhatsApp, form→Netlify, ricerca blog, modale
+  scripts/motion.ts      # ⭐ animazioni GSAP + Lenis (API ad attributi: vedi l'intestazione del file)
   scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
   pages/                 # index, approccio, chi-sono, consulenza-gratuita, lavora-con-noi,
                          # servizi, eventi, articoli (Blog), 404
@@ -42,7 +43,8 @@ src/
   data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
   _archive/catalogo.astro # pagina Catalogo archiviata: fuori dal build, riattivabile
   content.config.ts      # schema delle Content Collections
-  styles/                # brand.css (invariato), site.css (base), content/catalog/effects.css
+  styles/                # brand.css (invariato), site.css (base), content/catalog/effects.css,
+                         # motion.css (intro above-the-fold + stili degli effetti)
   assets/                # foto ottimizzate da astro:assets (webp responsive)
 public/assets/           # favicon + immagini per OG e cover delle collection
 ```
@@ -170,7 +172,16 @@ mostra il fallback, ed è il comportamento atteso.
   `scripts/optimize-assets.mjs`.
 - **Stampa**: le pagine articolo hanno uno stile print dedicato (via il guscio
   interattivo, testo nero su bianco, URL dei link esterni in chiaro).
-- **Parallax** accessibile su hero e cover (off con `prefers-reduced-motion`).
+- **Animazioni GSAP** (`src/scripts/motion.ts` + `src/styles/motion.css`), stessa
+  architettura del sito Alpacode ma con un tono più giocoso, da social: scroll
+  morbido (Lenis), titoli che entrano a righe/parole/lettere, blocchi a cascata
+  con rimbalzo, foto che si aprono, parallax, scia di zampe dietro al mouse
+  negli hero, carte con tilt 3D, pulsanti magnetici, numeri che contano,
+  nastro di testo che segue lo scroll, lente sul banner TeamNutrizione,
+  coriandoli di zampe/cuori/ossa all'invio dei form. Si aggiungono via
+  attributi (`data-reveal`, `data-paw-trail`, `data-tilt`, `data-count`…).
+  Senza JavaScript la pagina è statica e completa; con
+  `prefers-reduced-motion` tutto è spento.
 - **JSON-LD** WebSite/Person/LocalBusiness ovunque, Article (con wordCount e
   tempo di lettura)/Event/ItemList/Breadcrumb dove pertinente; `sitemap.xml`,
   `robots.txt`, header di cache (`netlify.toml`, `_headers`).
