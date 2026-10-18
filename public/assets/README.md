@@ -28,6 +28,14 @@ commit e deploy.
 > cartelle (una è la versione ottimizzata dei layout, l'altra serve per le
 > anteprime social).
 
+## Sticker (foto scontornate)
+
+Le foto di Andrea e dei cani usate come sticker (hero della home, consulenza,
+lavora con noi, footer) **non** stanno qui: sono in `src/assets/stickers/` e si
+rigenerano con `python scripts/make-stickers.py` (istruzioni nel README
+principale), partendo dalle foto originali in
+`design_handoff_sito_andrea/reference/assets/`.
+
 ## Cover di articoli ed eventi
 
 Regola unica: `articolo-<nome-file-md>.jpg` e `evento-<nome-file-md>.jpg`.

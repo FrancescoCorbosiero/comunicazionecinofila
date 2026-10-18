@@ -1,11 +1,21 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import InstagramIcon from '../components/InstagramIcon.astro';
-import CoverImage from '../components/CoverImage.astro';
+import Sticker from '../components/Sticker.astro';
+import Ticker from '../components/Ticker.astro';
 import consulenzaPhoto from '../assets/consulenza.jpg';
+import stkSegugio from '../assets/stickers/segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
 import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+
+// Il percorso dopo la call: le tappe del monitoraggio (dal testo di Andrea).
+const monitoraggio = ['Adattamento', 'Appetito', 'Feci', 'Digestione', 'Abitudini'];
+
+const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano di lavoro firmato'];
 ---
 <Base
   active="consulenza"
@@ -18,214 +28,343 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- HERO CONTENUTO: pitch + questionario in un solo schermo -->
-  <section class="consulto-hero section-tight bg-paws" data-paw-trail>
-    <div class="container">
-      <div class="consulto-grid">
-        <div class="consulto-intro">
-          <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.02s;">Consulenza gratuita</span>
-          <h1 class="display-lg intro-lines">
-            <span class="line"><span>Parliamo del</span></span>
-            <span class="line"><span>tuo animale.</span></span>
-          </h1>
-          <p class="lead" data-intro style="--intro-d:0.45s;">
-            45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
-          </p>
-          <ol class="consulto-steps" data-intro style="--intro-d:0.6s;">
-            <li><b>1</b><span>Compili il questionario<small>Due minuti, tre domande.</small></span></li>
-            <li><b>2</b><span>Ti richiamo io<small>Al numero che lasci, quando preferisci.</small></span></li>
-            <li><b>3</b><span>Piano di lavoro firmato<small>Concreto e su misura, al termine della call.</small></span></li>
-          </ol>
-          <p class="consulto-note" data-intro style="--intro-d:1.2s;">Cane &amp; gatto · gratuita e senza impegno</p>
-        </div>
+  <!-- HERO: pitch + questionario in un solo schermo -->
+  <section class="c-hero" data-paw-trail data-sticky-from>
+    <div class="container c-hero-grid">
+      <div class="c-intro">
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.02s;">Consulenza gratuita · 45'</span>
+        <h1 class="c-title intro-lines">
+          <span class="line"><span>Parliamo</span></span>
+          <span class="line"><span>del tuo</span></span>
+          <span class="line"><span class="c-title-hl">animale.</span></span>
+        </h1>
+        <p class="lead" data-intro style="--intro-d:0.55s;">
+          45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
+        </p>
+        <ol class="c-steps" data-intro style="--intro-d:0.7s;">
+          <li><b>1</b><span>Compili il questionario<small>Due minuti, tre domande.</small></span></li>
+          <li><b>2</b><span>Ti richiamo io<small>Al numero che lasci, quando preferisci.</small></span></li>
+          <li><b>3</b><span>Piano di lavoro firmato<small>Concreto e su misura, al termine della call.</small></span></li>
+        </ol>
+        <Sticker src={stkSegugio} width={230} rotate={-4} eager class="c-hero-dog" data-float />
+      </div>
 
-        <div class="form-card consulto-card" data-intro="card" style="--intro-d:0.35s;">
-        <!-- Netlify Forms come rete di sicurezza: oltre ad aprire WhatsApp,
-             ogni questionario completato viene salvato nella dashboard Netlify.
-             Così il contatto non va perso se la persona non invia il messaggio. -->
-        <form
-          data-stepform
-          novalidate
-          name="consulenza-gratuita"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-        >
-          <input type="hidden" name="form-name" value="consulenza-gratuita" />
-          <p class="hp-field" aria-hidden="true">
-            <label>Non compilare questo campo: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-          </p>
-          <input type="hidden" name="profilo" value="Una famiglia" />
-          <div class="steps-head">
-            <span class="step-dot"></span>
-            <span class="step-dot"></span>
-            <span class="step-dot"></span>
-          </div>
-
-          <!-- STEP 1 -->
-          <div class="step-panel active">
-            <span class="step-label">Passo 1 di 3</span>
-            <h3 class="step-q">Come ti chiami?</h3>
-            <div class="field">
-              <label for="f-nome">Nome e cognome</label>
-              <input id="f-nome" name="nome" type="text" placeholder="Es. Giulia Bianchi" required />
-              <span class="field-error">Scrivi il tuo nome per continuare.</span>
-            </div>
-            <div class="step-nav">
-              <span></span>
-              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
-            </div>
-          </div>
-
-          <!-- STEP 2 -->
-          <div class="step-panel">
-            <span class="step-label">Passo 2 di 3</span>
-            <h3 class="step-q">Parlami del tuo animale.</h3>
-            <div class="field">
-              <label for="f-animale">Chi è e qual è la situazione</label>
-              <textarea
-                id="f-animale"
-                name="animale"
-                rows="4"
-                placeholder="Cane o gatto? Razza, età, nome. Cosa vorresti migliorare: alimentazione, prurito, peso, comportamento…"
-                required></textarea>
-              <span class="field-error">Due righe bastano: mi aiutano a prepararmi.</span>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
-              <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
-            </div>
-          </div>
-
-          <!-- STEP 3 -->
-          <div class="step-panel">
-            <span class="step-label">Passo 3 di 3</span>
-            <h3 class="step-q">Come ti ricontatto?</h3>
-            <div class="field">
-              <label for="f-tel">Telefono</label>
-              <input id="f-tel" name="telefono" type="tel" placeholder="+39 3xx xxx xxxx" required />
-              <span class="field-error">Serve un recapito per richiamarti.</span>
-            </div>
-            <div class="field">
-              <label for="f-msg">
-                Vuoi aggiungere altro?
-                <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--ink-mute);"
-                  >(facoltativo)</span
-                >
-              </label>
-              <textarea
-                id="f-msg"
-                name="messaggio"
-                rows="2"
-                placeholder="Orari migliori per essere chiamato, dubbi specifici…"></textarea>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
-              <button type="submit" class="btn">Invia su WhatsApp <WhatsAppIcon size={16} /></button>
-            </div>
-            <p class="field-hint">
-              Si apre WhatsApp con il messaggio già compilato. Preferisci l'email? Te lo preparo lo
-              stesso.
+      <div class="c-form-wrap" id="questionario" data-intro="card" style="--intro-d:0.35s;">
+        <Sticker src={stkBassotto} width={112} rotate={6} eager class="c-form-dog" />
+        <span class="c-form-note" aria-hidden="true">due minuti, tre domande ↓</span>
+        <div class="form-card">
+          <!-- Netlify Forms come rete di sicurezza: oltre ad aprire WhatsApp,
+               ogni questionario completato viene salvato nella dashboard Netlify.
+               Così il contatto non va perso se la persona non invia il messaggio. -->
+          <form
+            data-stepform
+            novalidate
+            name="consulenza-gratuita"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="consulenza-gratuita" />
+            <p class="hp-field" aria-hidden="true">
+              <label>Non compilare questo campo: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
             </p>
-            <div class="call-opt">
-              <span>Preferisci scegliere subito uno slot per sentirci?</span>
-              <button type="button" class="btn btn-ghost btn-sm" data-open-call>
-                Richiedi la tua consulenza gratuita <ArrowIcon size={14} />
-              </button>
+            <input type="hidden" name="profilo" value="Una famiglia" />
+            <div class="steps-head">
+              <span class="step-dot"></span>
+              <span class="step-dot"></span>
+              <span class="step-dot"></span>
             </div>
-          </div>
 
-          <!-- SUCCESS -->
-          <div class="form-success" role="status" tabindex="-1">
-            <span class="success-check">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </span>
-            <h3 class="display-md">Ci siamo!</h3>
-            <p style="max-width:420px;">
-              Si è aperto WhatsApp con il tuo messaggio. Se non è successo, usa i pulsanti qui sotto —
-              ti ricontatto al più presto.
-            </p>
-            <div class="hero-cta-row" style="justify-content:center;">
-              <a class="btn" data-wa-out href="#" target="_blank" rel="noopener">Apri WhatsApp</a>
-              <a class="btn btn-ghost" data-mail-out href="#">Invia per email</a>
+            <!-- STEP 1 -->
+            <div class="step-panel active">
+              <span class="step-label">Passo 1 di 3</span>
+              <h2 class="step-q">Come ti chiami?</h2>
+              <div class="field">
+                <label for="f-nome">Nome e cognome</label>
+                <input id="f-nome" name="nome" type="text" placeholder="Es. Giulia Bianchi" required />
+                <span class="field-error">Scrivi il tuo nome per continuare.</span>
+              </div>
+              <div class="step-nav">
+                <span></span>
+                <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+              </div>
             </div>
-          </div>
-        </form>
+
+            <!-- STEP 2 -->
+            <div class="step-panel">
+              <span class="step-label">Passo 2 di 3</span>
+              <h2 class="step-q">Parlami del tuo animale.</h2>
+              <div class="field">
+                <label for="f-animale">Chi è e qual è la situazione</label>
+                <textarea
+                  id="f-animale"
+                  name="animale"
+                  rows="4"
+                  placeholder="Cane o gatto? Razza, età, nome. Cosa vorresti migliorare: alimentazione, prurito, peso, comportamento…"
+                  required></textarea>
+                <span class="field-error">Due righe bastano: mi aiutano a prepararmi.</span>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+                <button type="button" class="btn" data-next>Continua <ArrowIcon size={15} /></button>
+              </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="step-panel">
+              <span class="step-label">Passo 3 di 3</span>
+              <h2 class="step-q">Come ti ricontatto?</h2>
+              <div class="field">
+                <label for="f-tel">Telefono</label>
+                <input id="f-tel" name="telefono" type="tel" placeholder="+39 3xx xxx xxxx" required />
+                <span class="field-error">Serve un recapito per richiamarti.</span>
+              </div>
+              <div class="field">
+                <label for="f-msg">
+                  Vuoi aggiungere altro?
+                  <span style="font-weight:400; color:var(--ink-mute);">(facoltativo)</span>
+                </label>
+                <textarea
+                  id="f-msg"
+                  name="messaggio"
+                  rows="2"
+                  placeholder="Orari migliori per essere chiamato, dubbi specifici…"></textarea>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
+                <button type="submit" class="btn">Invia su WhatsApp <WhatsAppIcon size={16} /></button>
+              </div>
+              <p class="field-hint">
+                Si apre WhatsApp con il messaggio già compilato. Preferisci l'email? Te lo preparo lo
+                stesso.
+              </p>
+              <div class="call-opt">
+                <span>Preferisci scegliere subito uno slot per sentirci?</span>
+                <button type="button" class="btn btn-ghost btn-sm" data-open-call>
+                  Richiedi la tua consulenza gratuita <ArrowIcon size={14} />
+                </button>
+              </div>
+            </div>
+
+            <!-- SUCCESS -->
+            <div class="form-success" role="status" tabindex="-1">
+              <span class="success-check">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              <h3 class="display-md">Ci siamo!</h3>
+              <p style="max-width:420px;">
+                Si è aperto WhatsApp con il tuo messaggio. Se non è successo, usa i pulsanti qui sotto —
+                ti ricontatto al più presto.
+              </p>
+              <div class="hero-cta-row" style="justify-content:center;">
+                <a class="btn" data-wa-out href="#" target="_blank" rel="noopener">Apri WhatsApp</a>
+                <a class="btn btn-ghost" data-mail-out href="#">Invia per email</a>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- NON FINISCE QUI -->
-  <section class="section bg-deep paper-bg-deep edge-wave">
-    <div class="container container-narrow">
-      <div class="head-block" data-reveal>
+  <Ticker items={ticker} tone="ink" tilt={1.2} direction="right" />
+
+  <!-- MIRROR: scrivi il nome del tuo animale, la scheda si personalizza -->
+  <section class="section c-mirror" data-mirror>
+    <div class="container c-mirror-grid">
+      <div class="c-mirror-ask">
+        <span class="eyebrow kicker-rule">Facciamo conoscenza</span>
+        <h2 class="display-lg" id="mirror-title">Come si chiama il tuo <span class="script">animale?</span></h2>
+        <label class="c-name-field">
+          <span class="visually-hidden">Il nome del tuo cane o gatto</span>
+          <input
+            type="text"
+            maxlength="18"
+            autocomplete="off"
+            autocapitalize="words"
+            spellcheck="false"
+            placeholder="Birba"
+            data-mirror-input
+          />
+          <span class="c-name-hint" aria-hidden="true">scrivilo qui ↑</span>
+        </label>
+      </div>
+
+      <div class="c-mirror-out">
+        <div class="pet-tag" data-pet-tag aria-hidden="true">
+          <span class="pet-tag-ring"></span>
+          <span class="pet-tag-name" data-pet-name>Birba</span>
+          <svg class="pet-tag-paw" viewBox="0 0 50 44" fill="currentColor">
+            <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
+            <ellipse cx="21" cy="10" rx="4.3" ry="6"></ellipse>
+            <ellipse cx="30" cy="11" rx="4.3" ry="6"></ellipse>
+            <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"></ellipse>
+            <ellipse cx="25" cy="29" rx="9.5" ry="8"></ellipse>
+          </svg>
+        </div>
+        <div class="plan-card">
+          <span class="plan-kicker">In 45 minuti guardiamo insieme</span>
+          <ul class="plan-list">
+            <li>cosa mangia <b data-pet-name>Birba</b></li>
+            <li>come si comporta <b data-pet-name>Birba</b></li>
+            <li>abitudini e stile di vita di <b data-pet-name>Birba</b></li>
+          </ul>
+          <p class="plan-end">
+            Alla fine: un <strong>piano di lavoro firmato</strong>, su misura per
+            <b data-pet-name>Birba</b>.
+          </p>
+          <a class="btn btn-lg" href="#questionario" data-mirror-cta data-no-roll>
+            <span>Prenota la consulenza per <span data-pet-name>Birba</span></span>
+            <ArrowIcon size={16} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COME FUNZIONA: le stories, guidate dallo scroll -->
+  <section class="c-stories" data-stories aria-labelledby="stories-title">
+    <div class="container c-stories-grid">
+      <div class="c-stories-copy">
+        <span class="eyebrow kicker-rule">Come funziona</span>
+        <h2 class="display-lg" id="stories-title">Dal questionario al piano, in <span class="script">tre passi.</span></h2>
+        <p class="lead">Gratuita e senza impegno, per cane e gatto. Scorri: te lo racconto come una storia.</p>
+        <a class="btn btn-ghost" href="#questionario">Inizia dal questionario <ArrowIcon size={15} /></a>
+      </div>
+
+      <div class="story-phone" data-story-phone>
+        <div class="story-bars" aria-hidden="true">
+          <span><i data-story-bar></i></span>
+          <span><i data-story-bar></i></span>
+          <span><i data-story-bar></i></span>
+        </div>
+        <div class="story-head" aria-hidden="true">
+          <img src="/assets/logo.jpg" alt="" width="34" height="34" loading="lazy" />
+          <b>comunicazionecinofila</b>
+          <span>Consulenza gratuita</span>
+        </div>
+        <ol class="story-slides">
+          <li class="story-slide tone-peach" data-story-slide>
+            <span class="ss-n" data-story-piece>1</span>
+            <h3 data-story-piece>Compili il questionario</h3>
+            <p data-story-piece>Due minuti, tre domande.</p>
+            <div class="ss-form" data-story-piece aria-hidden="true">
+              <span></span><span></span><span class="ss-btn"></span>
+            </div>
+          </li>
+          <li class="story-slide tone-sage" data-story-slide>
+            <span class="ss-n" data-story-piece>2</span>
+            <h3 data-story-piece>Ti richiamo io</h3>
+            <p data-story-piece>Al numero che lasci, quando preferisci.</p>
+            <svg class="ss-phone" data-story-piece viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5V18a2 2 0 01-2 2A14 14 0 014 6a2 2 0 011-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </li>
+          <li class="story-slide tone-ink" data-story-slide>
+            <span class="ss-n" data-story-piece>3</span>
+            <h3 data-story-piece>Piano di lavoro firmato</h3>
+            <p data-story-piece>Concreto e su misura, al termine della call.</p>
+            <span class="ss-sign" data-story-piece aria-hidden="true">Andrea</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOPO IL PRIMO INCONTRO: il binario del monitoraggio -->
+  <section class="section bg-deep c-after">
+    <div class="container">
+      <div class="head-block">
         <span class="eyebrow kicker-rule">Dopo il primo incontro</span>
-        <h2 class="display-lg">La consulenza non finisce<br />con un consiglio alimentare.</h2>
+        <h2 class="display-lg">La consulenza non finisce con un consiglio <span class="script">alimentare.</span></h2>
       </div>
-      <div data-reveal data-delay="1">
-        <p class="lead" data-scrub>
-          Il mio lavoro parte dal primo confronto, ma continua nel tempo. Seguo personalmente ogni
-          percorso, monitorando adattamento, appetito, feci, digestione e cambiamenti nelle
-          abitudini dell'animale. Dietro ogni consulenza c'è inoltre il confronto con un Team di
-          professionisti e consulenti che condividono un metodo di lavoro comune.
+      <p class="lead c-after-lead">
+        Il mio lavoro parte dal primo confronto, ma continua nel tempo. Seguo personalmente ogni
+        percorso, monitorando:
+      </p>
+      <div class="rail" data-rail>
+        <span class="rail-line" aria-hidden="true"><span class="rail-fill"></span></span>
+        <ol class="rail-steps">
+          {
+            monitoraggio.map((m, i) => (
+              <li class="rail-step" data-rail-step>
+                <span class="rail-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <b>{m}</b>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="c-after-foot" data-reveal>
+        <p>
+          Dietro ogni consulenza c'è inoltre il confronto con un Team di professionisti e consulenti
+          che condividono un metodo di lavoro comune. Quel Team ha un nome: TeamNutrizione.
         </p>
-        <p style="color:var(--sage-soft);">
-          Quel Team ha un nome: TeamNutrizione. Se il benessere animale ti interessa anche come
-          professione, <a class="text-link" href="/lavora-con-noi">scopri come lavorare con noi</a>.
-        </p>
+        <a class="btn btn-cream" href="/lavora-con-noi">Scopri come lavorare con noi <ArrowIcon size={15} /></a>
       </div>
     </div>
   </section>
 
-  <!-- CHANNELS -->
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div class="split-body" data-reveal>
+  <!-- CANALI -->
+  <section class="section c-channels" data-sticky-until>
+    <div class="container c-channels-grid">
+      <div class="c-channels-body">
+        <div class="head-block">
           <span class="eyebrow kicker-rule">Tutti i modi per scrivermi</span>
-          <h2 class="display-md">O semplicemente,<br />contattami.</h2>
-          <p>
+          <h2 class="display-lg">O semplicemente, <span class="script">contattami.</span></h2>
+          <p class="lead">
             Preferisci saltare il questionario? Scegli il canale che ti è più comodo. Rispondo entro
             24–48 ore.
           </p>
-          <div class="channel-list stagger" data-reveal style="margin-top:8px;">
-            <a class="channel" href={WA_LINK} target="_blank" rel="noopener">
-              <span class="channel-icon"><WhatsAppIcon size={22} /></span>
-              <span class="channel-text"><b>WhatsApp</b><span>{PHONE_DISPLAY}</span></span>
-            </a>
-            <a class="channel" href={`mailto:${EMAIL}`}>
-              <span class="channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6"></path>
-                  <path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-                </svg>
-              </span>
-              <span class="channel-text"><b>Email</b><span>{EMAIL}</span></span>
-            </a>
-            <a class="channel" href={IG_URL} target="_blank" rel="noopener">
-              <span class="channel-icon"><InstagramIcon size={22} /></span>
-              <span class="channel-text"><b>Instagram</b><span>{IG_HANDLE}</span></span>
-            </a>
-            <a class="channel" href={`tel:${PHONE}`}>
-              <span class="channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5V18a2 2 0 01-2 2A14 14 0 014 6a2 2 0 011-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-                </svg>
-              </span>
-              <span class="channel-text"><b>Telefono</b><span>{PHONE_DISPLAY}</span></span>
-            </a>
-          </div>
         </div>
-        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
-          <CoverImage
-            src={consulenzaPhoto}
-            alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
-          />
+        <div class="channel-list stagger" data-reveal>
+          <a class="channel" href={WA_LINK} target="_blank" rel="noopener">
+            <span class="channel-icon"><WhatsAppIcon size={22} /></span>
+            <span class="channel-text"><b>WhatsApp</b><span>{PHONE_DISPLAY}</span></span>
+          </a>
+          <a class="channel" href={`mailto:${EMAIL}`}>
+            <span class="channel-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6"></path>
+                <path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <span class="channel-text"><b>Email</b><span>{EMAIL}</span></span>
+          </a>
+          <a class="channel" href={IG_URL} target="_blank" rel="noopener">
+            <span class="channel-icon"><InstagramIcon size={22} /></span>
+            <span class="channel-text"><b>Instagram</b><span>{IG_HANDLE}</span></span>
+          </a>
+          <a class="channel" href={`tel:${PHONE}`}>
+            <span class="channel-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5V18a2 2 0 01-2 2A14 14 0 014 6a2 2 0 011-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <span class="channel-text"><b>Telefono</b><span>{PHONE_DISPLAY}</span></span>
+          </a>
         </div>
       </div>
+      <figure class="polaroid c-polaroid" data-speed="0.15">
+        <Image
+          src={consulenzaPhoto}
+          alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
+          widths={[360, 720]}
+          sizes="(min-width: 900px) 380px, 80vw"
+          loading="lazy"
+        />
+        <figcaption>il segugio &amp; il bassotto</figcaption>
+      </figure>
     </div>
+    <Sticker src={stkAndreaSegugio} width={260} class="c-channels-peek" data-peek />
   </section>
+
+  <!-- CTA fissa: compare dopo l'hero, sparisce quando torni al questionario -->
+  <a class="sticky-cta" href="#questionario" data-sticky-cta data-no-roll>
+    <span class="sticky-cta-dot" aria-hidden="true"></span>
+    Compila il questionario gratuito
+    <ArrowIcon size={16} />
+  </a>
 </Base>

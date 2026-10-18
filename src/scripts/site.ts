@@ -7,7 +7,7 @@
    ===================================================================== */
 import { WA_NUMBER, EMAIL, FORM_ENDPOINT } from '../config';
 import { initCatalog } from './catalog';
-import { lockScroll, scrollToTarget, stepEnter, stepProgress, nudge, successBurst } from './motion';
+import { lockScroll, scrollToTarget, stepEnter, stepProgress, nudge, successBurst, swing, celebrate } from './motion';
 // Quando attiverai cal.com, importa anche CAL_LINK da '../config'.
 
 function waLink(text: string): string {
@@ -46,6 +46,8 @@ function setNavOpen(nav: HTMLElement, toggle: HTMLElement, open: boolean): void 
   nav.classList.toggle('open', open);
   toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   toggle.setAttribute('aria-label', open ? 'Chiudi menu' : 'Apri menu');
+  // Il menu mobile è un foglio a tutto schermo: la pagina sotto sta ferma.
+  lockScroll(open);
 }
 /* Chiusura da listener globali (Escape / click fuori): interroga il DOM
    corrente, così funziona anche dopo gli swap delle View Transitions. */
@@ -318,15 +320,92 @@ function initWorkForm(): void {
   });
 }
 
-/* ── Spotlight delle carte-scelta (home): segue il puntatore ── */
-function initPathGlow(): void {
-  document.querySelectorAll<HTMLElement>('.path-choice').forEach((card) => {
-    card.addEventListener('pointermove', (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
-      card.style.setProperty('--my', `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+/* ── "Come si chiama il tuo animale?" (consulenza) ───────────────
+   Il nome scritto compare sulla medaglietta e nella scheda; il pulsante
+   porta al questionario e precompila lo step 2 con il nome. */
+function initMirror(): void {
+  const root = document.querySelector<HTMLElement>('[data-mirror]');
+  if (!root) return;
+  const input = root.querySelector<HTMLInputElement>('[data-mirror-input]');
+  const tag = root.querySelector<HTMLElement>('[data-pet-tag]');
+  const fallback = input?.placeholder || 'Birba';
+  const name = (): string => (input?.value ?? '').trim().replace(/\s+/g, ' ');
+  const update = (): void => {
+    const typed = name();
+    root.querySelectorAll<HTMLElement>('[data-pet-name]').forEach((el) => {
+      el.textContent = typed || fallback;
+      el.classList.toggle('is-placeholder', !typed);
     });
+  };
+  input?.addEventListener('input', () => {
+    update();
+    if (tag) swing(tag);
   });
+  root.querySelector('[data-mirror-cta]')?.addEventListener('click', () => {
+    const typed = name();
+    const story = document.querySelector<HTMLTextAreaElement>('#f-animale');
+    if (typed && story && !story.value.trim()) story.value = `Si chiama ${typed}. `;
+  });
+  update();
+}
+
+/* ── "Ti riconosci?" (lavora con noi) ────────────────────────────
+   Ogni profilo è uno sticker: toccarlo lo segna e preseleziona l'ambito
+   nel modulo di candidatura, con un invito a raggiungerlo. */
+function initProfileWall(): void {
+  const wall = document.querySelector<HTMLElement>('[data-profile-wall]');
+  if (!wall) return;
+  const select = document.querySelector<HTMLSelectElement>('#w-ambito');
+  const hint = document.querySelector<HTMLElement>('[data-wall-hint]');
+  const text = hint?.querySelector<HTMLElement>('[data-wall-text]');
+  wall.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ambito]');
+    if (!btn) return;
+    const on = btn.getAttribute('aria-pressed') !== 'true';
+    wall.querySelectorAll<HTMLButtonElement>('button[data-ambito]').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b === btn && on));
+    });
+    const ambito = btn.dataset.ambito ?? '';
+    if (select && (on || select.value === ambito)) {
+      select.value = on ? ambito : '';
+      // Toglie l'eventuale errore di validazione rimasto sul campo.
+      select.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    if (hint && text) {
+      hint.hidden = !on;
+      text.textContent = on
+        ? `Ti riconosci in «${(btn.textContent ?? '').trim()}»: nel modulo ho già scelto l'ambito «${ambito}».`
+        : '';
+    }
+    if (on) celebrate(btn, { count: 10, spread: 0.55 });
+  });
+}
+
+/* ── CTA fissa delle landing ─────────────────────────────────────
+   Compare quando l'hero ([data-sticky-from]) è uscito dallo schermo e
+   sparisce sopra la sezione finale ([data-sticky-until]). */
+let stickyObserver: IntersectionObserver | null = null;
+function initStickyCta(): void {
+  stickyObserver?.disconnect();
+  stickyObserver = null;
+  const cta = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const from = document.querySelector<HTMLElement>('[data-sticky-from]');
+  if (!cta || !from || !('IntersectionObserver' in window)) return;
+  const until = document.querySelector<HTMLElement>('[data-sticky-until]');
+  const seen = new Map<Element, boolean>([[from, true]]);
+  const apply = (): void => {
+    const show = !seen.get(from) && !(until && seen.get(until));
+    cta.classList.toggle('is-visible', show);
+  };
+  stickyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => seen.set(e.target, e.isIntersecting));
+      apply();
+    },
+    { rootMargin: '0px 0px -12% 0px' }
+  );
+  stickyObserver.observe(from);
+  if (until) stickyObserver.observe(until);
 }
 
 /* ── Blog: filtro per categoria + ricerca live ───────────────────
@@ -615,10 +694,12 @@ function initGlobals(): void {
 /* ── Per pagina (anche dopo ogni view transition) ───────────── */
 function onPageLoad(): void {
   initNav();
+  initMirror();
+  initProfileWall();
+  initStickyCta();
   initStepForm();
   initWorkForm();
   initBlogFilter();
-  initPathGlow();
   initPathSelector();
   initBookings();
   initCatalog();

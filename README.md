@@ -6,9 +6,12 @@ nutrizione per cani e gatti. Due pubblici, un'unica identità: i proprietari
 **TeamNutrizione** (imbuto "Lavora con noi"). Costruito con **Astro**
 (TypeScript), static-first, mobile-first.
 
-> Il design system e le specifiche complete sono in
-> [`design_handoff_sito_andrea/`](./design_handoff_sito_andrea) (handoff +
-> prototipi di riferimento). `brand.css` è riusato invariato come design system.
+> Il design di partenza è in [`design_handoff_sito_andrea/`](./design_handoff_sito_andrea)
+> (handoff + prototipi di riferimento). Da lì il sito è passato al **Brand
+> System v3 "Branco"** (`src/styles/brand.css`): stessi colori del logo e del
+> feed, ma via il crema caldo, le micro-etichette in monospace e i titoli
+> poster tutti maiuscoli — al loro posto Bricolage Grotesque in minuscolo,
+> sticker, bordi d'inchiostro, ombre piene e le foto vere dei cani scontornate.
 
 ## Comandi
 
@@ -22,6 +25,7 @@ npm run build      # build statica in dist/
 npm run preview    # anteprima della build
 npm run check      # type-check (astro check)
 npm run assets     # rigenera favicon + comprime le foto di public/assets
+python scripts/make-stickers.py   # rigenera gli sticker fustellati (vedi sotto)
 ```
 
 ## Struttura
@@ -32,7 +36,7 @@ src/
   lib/seo.ts             # default SEO + JSON-LD (Person/LocalBusiness/breadcrumb)
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
-  components/            # Header, Footer, CallModal, CoverImage, card/row, icone
+  components/            # Header, Footer, CallModal, CoverImage, Sticker, Ticker, card/row, icone
   scripts/site.ts        # nav, step-form→WhatsApp, form→Netlify, ricerca blog, modale
   scripts/motion.ts      # ⭐ animazioni GSAP + Lenis (API ad attributi: vedi l'intestazione del file)
   scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
@@ -43,8 +47,10 @@ src/
   data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
   _archive/catalogo.astro # pagina Catalogo archiviata: fuori dal build, riattivabile
   content.config.ts      # schema delle Content Collections
-  styles/                # brand.css (invariato), site.css (base), content/catalog/effects.css,
-                         # motion.css (intro above-the-fold + stili degli effetti)
+  styles/                # brand.css (design system v3), site.css (base), content/catalog/effects.css,
+                         # motion.css (intro above-the-fold + stati degli effetti),
+                         # sections.css (le sezioni delle landing: hero, stories, stack…)
+  assets/stickers/       # foto scontornate col bordo bianco (scripts/make-stickers.py)
   assets/                # foto ottimizzate da astro:assets (webp responsive)
 public/assets/           # favicon + immagini per OG e cover delle collection
 ```
@@ -159,7 +165,8 @@ mostra il fallback, ed è il comportamento atteso.
   latin vivono in `src/assets/fonts/` e vengono serviti da `/_astro` con cache
   immutabile. Zero richieste a Google Fonts dal browser (privacy/GDPR), build
   deterministica, fallback con metriche adattate contro il layout shift.
-  Preload solo dei font above-the-fold (Anton + Inter 400).
+  Tre famiglie: **Bricolage Grotesque** (variabile: titoli e testo, l'unica
+  in preload), **Anton** (nastri e numeri) e **Caveat** (note scritte a mano).
 - **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
   interni e **Speculation Rules** per navigazione più rapida. Le cover degli
   articoli fanno **morph** dalla card alla pagina di dettaglio.
@@ -172,20 +179,42 @@ mostra il fallback, ed è il comportamento atteso.
   `scripts/optimize-assets.mjs`.
 - **Stampa**: le pagine articolo hanno uno stile print dedicato (via il guscio
   interattivo, testo nero su bianco, URL dei link esterni in chiaro).
-- **Animazioni GSAP** (`src/scripts/motion.ts` + `src/styles/motion.css`), stessa
-  architettura del sito Alpacode ma con un tono più giocoso, da social: scroll
-  morbido (Lenis), titoli che entrano a righe/parole/lettere, blocchi a cascata
-  con rimbalzo, foto che si aprono, parallax, scia di zampe dietro al mouse
-  negli hero, carte con tilt 3D, pulsanti magnetici, numeri che contano,
-  nastro di testo che segue lo scroll, lente sul banner TeamNutrizione,
-  coriandoli di zampe/cuori/ossa all'invio dei form. Si aggiungono via
-  attributi (`data-reveal`, `data-paw-trail`, `data-tilt`, `data-count`…).
-  Senza JavaScript la pagina è statica e completa; con
-  `prefers-reduced-motion` tutto è spento.
+- **Animazioni GSAP** (`src/scripts/motion.ts`), stessa architettura del sito
+  Alpacode ma con un tono più giocoso, da social. Scroll morbido (Lenis) e
+  **sezioni raccontate dallo scroll**: in home la foto nella "ciotola" si
+  allarga a tutto schermo, il blog scorre in orizzontale, i cani spuntano dal
+  fondo della CTA; in Consulenza il "come funziona" è una serie di stories che
+  si sfogliano scrollando e il monitoraggio è un binario che si riempie; in
+  Lavora con noi "una rete di venditori" viene barrata a mano e diventa "un
+  Team", i principi sono card che si impilano, i profili sono sticker che
+  cadono e, toccati, preselezionano l'ambito nel modulo. In più: titoli a
+  righe/parole/lettere, frasi che si accendono parola per parola, nastri che
+  seguono lo scroll, scia di zampe dietro al mouse, tilt 3D, evidenziatore,
+  coriandoli di zampe/cuori/ossa all'invio dei form, wordmark del footer che
+  sale. Tutto via attributi (`data-reveal`, `data-stack`, `data-stories`,
+  `data-strike`…: elenco completo in testa a `motion.ts`). Senza JavaScript
+  ogni sezione mostra il suo stato finale; con `prefers-reduced-motion` è
+  tutto fermo.
 - **JSON-LD** WebSite/Person/LocalBusiness ovunque, Article (con wordCount e
   tempo di lettura)/Event/ItemList/Breadcrumb dove pertinente; `sitemap.xml`,
   `robots.txt`, header di cache (`netlify.toml`, `_headers`).
 - Verifica Search Console e handle social: compila i campi in `src/lib/seo.ts`.
+
+## Sticker dei cani (foto scontornate)
+
+Gli sticker in `src/assets/stickers/` sono le foto vere di Andrea e dei suoi
+cani, scontornate e con il bordo bianco fustellato. Si rigenerano con:
+
+```bash
+pip install "rembg[cpu]" scipy
+python scripts/make-stickers.py
+```
+
+Lo script scontorna le foto originali del design handoff
+(`design_handoff_sito_andrea/reference/assets/`) con il modello BiRefNet,
+pulisce la maschera e aggiunge il bordo. Per cambiare uno sticker basta
+sostituire la foto sorgente con lo stesso nome e rilanciarlo. Nelle pagine si
+usano con `<Sticker src={...} width={240} rotate={-4} />`.
 
 ## Integrazione cal.com ("Richiedi la tua consulenza gratuita")
 

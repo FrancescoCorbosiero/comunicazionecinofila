@@ -3,6 +3,7 @@ import '../styles/brand.css';
 import '../styles/site.css';
 import '../styles/effects.css';
 import '../styles/motion.css';
+import '../styles/sections.css';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
@@ -119,12 +120,11 @@ const speculationRules = JSON.stringify({
     {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
 
     <!-- Font self-hosted (Fonts API, vedi astro.config.mjs): zero richieste a Google.
-         Preload solo dei font above-the-fold: display (Anton) e body regular (Inter 400). -->
-    <Font cssVariable="--font-anton" preload />
-    <Font cssVariable="--font-inter" preload={[{ weight: 400 }]} />
+         Preload solo di Bricolage (titoli + testo, un solo file variabile);
+         Anton (nastri, numeri) e Caveat (note a mano) arrivano subito dopo. -->
+    <Font cssVariable="--font-bricolage" preload />
+    <Font cssVariable="--font-anton" />
     <Font cssVariable="--font-caveat" />
-    <Font cssVariable="--font-cormorant" />
-    <Font cssVariable="--font-jetbrains-mono" />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
     <script type="speculationrules" is:inline set:html={speculationRules} />

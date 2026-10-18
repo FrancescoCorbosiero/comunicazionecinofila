@@ -9,7 +9,7 @@ export default defineConfig({
   site: 'https://www.andreabellettati.it',
   integrations: [sitemap()],
   // Font self-hosted (Fonts API, provider locale): i .woff2 (subset latin,
-  // scaricati una tantum da Google Fonts) vivono in src/assets/fonts e vengono
+  // scaricati una tantum da Google Fonts / Fontsource) vivono in src/assets/fonts e vengono
   // serviti da /_astro con hash immutabile. Vantaggi:
   // · zero richieste a Google dal browser dei visitatori (privacy/GDPR);
   // · build deterministica, nessuna dipendenza di rete al deploy;
@@ -27,16 +27,19 @@ export default defineConfig({
       },
     },
     {
+      // Display e testo: una sola famiglia variabile (peso 200–800 + optical
+      // size), così i titoli giganti e il corpo hanno lo stesso carattere.
       provider: fontProviders.local(),
-      name: 'Inter',
-      cssVariable: '--font-inter',
+      name: 'Bricolage Grotesque',
+      cssVariable: '--font-bricolage',
       fallbacks: ['Arial', 'sans-serif'],
       options: {
         variants: [
-          { src: ['./src/assets/fonts/inter-400.woff2'], weight: 400, style: 'normal' },
-          { src: ['./src/assets/fonts/inter-500.woff2'], weight: 500, style: 'normal' },
-          { src: ['./src/assets/fonts/inter-600.woff2'], weight: 600, style: 'normal' },
-          { src: ['./src/assets/fonts/inter-700.woff2'], weight: 700, style: 'normal' },
+          {
+            src: ['./src/assets/fonts/bricolage-grotesque-latin-opsz.woff2'],
+            weight: '200 800',
+            style: 'normal',
+          },
         ],
       },
     },
@@ -48,37 +51,6 @@ export default defineConfig({
       options: {
         variants: [
           { src: ['./src/assets/fonts/caveat-600.woff2'], weight: 600, style: 'normal' },
-        ],
-      },
-    },
-    {
-      provider: fontProviders.local(),
-      name: 'Cormorant Garamond',
-      cssVariable: '--font-cormorant',
-      fallbacks: ['Georgia', 'serif'],
-      options: {
-        variants: [
-          {
-            src: ['./src/assets/fonts/cormorant-garamond-500-italic.woff2'],
-            weight: 500,
-            style: 'italic',
-          },
-          {
-            src: ['./src/assets/fonts/cormorant-garamond-600-italic.woff2'],
-            weight: 600,
-            style: 'italic',
-          },
-        ],
-      },
-    },
-    {
-      provider: fontProviders.local(),
-      name: 'JetBrains Mono',
-      cssVariable: '--font-jetbrains-mono',
-      fallbacks: ['Courier New', 'monospace'],
-      options: {
-        variants: [
-          { src: ['./src/assets/fonts/jetbrains-mono-400.woff2'], weight: 400, style: 'normal' },
         ],
       },
     },

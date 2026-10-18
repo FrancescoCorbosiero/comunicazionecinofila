@@ -36,9 +36,10 @@ const nav = [
       </span>
     </a>
     <nav class="site-nav" data-nav aria-label="Navigazione principale">
-      {nav.map((item) => (
+      {nav.map((item, i) => (
         <a
           href={item.href}
+          style={`--i:${i}`}
           class={
             [item.work ? 'nav-work' : null, active === item.key ? 'active' : null]
               .filter(Boolean)

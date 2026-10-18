@@ -1,25 +1,34 @@
 ---
-import LeafIcon from './LeafIcon.astro';
+import { Image } from 'astro:assets';
 import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import bassotto from '../assets/stickers/bassotto.webp';
 
 const year = new Date().getFullYear();
+
+// Il wordmark gigante in fondo: ogni lettera nella sua maschera, così
+// motion.ts le fa salire una dopo l'altra (senza script resta fermo).
+const wordmark = ['comunicazione', 'cinofila'];
 ---
-<footer class="site-footer paper-bg-deep">
+<footer class="site-footer">
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
         <a class="footer-lockup" href="/">
           <span class="pp">
-            <img src="/assets/logo.jpg" alt="Andrea Bellettati" width="48" height="48" />
+            <img src="/assets/logo.jpg" alt="Andrea Bellettati" width="52" height="52" loading="lazy" />
           </span>
           <span class="n">Andrea Bellettati</span>
         </a>
         <p>
           Consulenza in comportamento e alimentazione naturale per cani e gatti.
         </p>
-        <span class="section-mark" style="justify-content:flex-start;" aria-hidden="true">
-          <LeafIcon size={30} stroke="var(--sage-soft)" />
-        </span>
+        <div class="footer-ctas">
+          <a class="btn btn-cream btn-sm" href="/consulenza-gratuita">Consulenza gratuita</a>
+          <a class="btn btn-ghost-cream btn-sm" href={WA_LINK} target="_blank" rel="noopener">
+            <WhatsAppIcon size={15} /> WhatsApp
+          </a>
+        </div>
       </div>
       <div class="footer-cols">
         <div class="footer-col">
@@ -50,9 +59,23 @@ const year = new Date().getFullYear();
         </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© {year} Andrea Bellettati · Comunicazione Cinofila</span>
-      <span>Comportamento &amp; Nutrizione · Cane e Gatto</span>
-    </div>
+  </div>
+  <div class="foot-wordmark" aria-hidden="true" data-wordmark>
+    <span class="foot-dog" data-foot-dog>
+      <Image src={bassotto} alt="" widths={[160, 320]} sizes="150px" loading="lazy" />
+    </span>
+    {
+      wordmark.map((word) => (
+        <span class="foot-row">
+          {word.split('').map((ch) => (
+            <span class="foot-char">{ch}</span>
+          ))}
+        </span>
+      ))
+    }
+  </div>
+  <div class="container footer-bottom">
+    <span>© {year} Andrea Bellettati · Comunicazione Cinofila</span>
+    <span>Comportamento &amp; Nutrizione · Cane e Gatto</span>
   </div>
 </footer>

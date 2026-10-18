@@ -1,0 +1,38 @@
+---
+// Nastro di parole giganti, inclinato come un nastro adesivo: scorre da
+// solo, accelera con lo scroll e ne segue il verso (motion.ts,
+// data-marquee). Decorativo: le stesse informazioni stanno nella pagina.
+interface Props {
+  items: string[];
+  tone?: 'peach' | 'ink' | 'sage' | 'paper';
+  /** Inclinazione del nastro in gradi. */
+  tilt?: number;
+  /** Verso di scorrimento a riposo. */
+  direction?: 'left' | 'right';
+}
+const { items, tone = 'peach', tilt = -1.6, direction = 'left' } = Astro.props;
+---
+<div class:list={['ticker-band', `tone-${tone}`]} aria-hidden="true" style={`--tilt:${tilt}deg`}>
+  <div class="ticker-strip" data-marquee={direction}>
+    <div class="marquee-track">
+      {
+        [0, 1].map(() => (
+          <div class="marquee-group">
+            {items.map((t) => (
+              <span class="marquee-item">
+                {t}
+                <svg viewBox="0 0 50 44" fill="currentColor">
+                  <ellipse cx="12" cy="15" rx="4.3" ry="5.8" />
+                  <ellipse cx="21" cy="10" rx="4.3" ry="6" />
+                  <ellipse cx="30" cy="11" rx="4.3" ry="6" />
+                  <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6" />
+                  <ellipse cx="25" cy="29" rx="9.5" ry="8" />
+                </svg>
+              </span>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

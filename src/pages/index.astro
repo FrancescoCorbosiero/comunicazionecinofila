@@ -2,25 +2,30 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CalendarIcon from '../components/CalendarIcon.astro';
-import CoverImage from '../components/CoverImage.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import Sticker from '../components/Sticker.astro';
+import Ticker from '../components/Ticker.astro';
 import heroPhoto from '../assets/hero.jpg';
 import chiSonoPhoto from '../assets/chi-sono.jpg';
+import stkCani from '../assets/stickers/cani.webp';
+import stkSegugio from '../assets/stickers/segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
 import { autoCover } from '../lib/images';
 
-// I 3 articoli più recenti pubblicati (con pagina di dettaglio) per l'anteprima blog.
+// Gli articoli più recenti con pagina di dettaglio: scorrono in orizzontale.
 const articoli = await getCollection('articoli');
 const latestArticoli = articoli
   .filter((a) => a.data.status === 'published' && !a.data.externalUrl)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
+  .slice(0, 6);
 const nArticoli = articoli.filter((a) => a.data.status === 'published').length;
 
 // Home-smistatore: due pubblici diversi (famiglie e futuri collaboratori)
-// più il blog, serviti da un'unica identità. È IL bivio di conversione.
+// più il blog, serviti da un'unica identità. È IL bivio di conversione:
+// un indice editoriale, ogni riga con la sua foto che segue il puntatore.
 const paths = [
   {
     num: '01',
@@ -29,8 +34,8 @@ const paths = [
     title: "Voglio migliorare l'alimentazione del mio animale",
     body: 'Analizziamo insieme alimentazione, abitudini e stile di vita del tuo cane o gatto.',
     cta: 'Consulenza gratuita',
-    icon: 'paw',
-    tone: 'sage',
+    tone: 'peach',
+    thumb: { kind: 'sticker' as const, src: stkCani },
   },
   {
     num: '02',
@@ -39,8 +44,8 @@ const paths = [
     title: 'Voglio lavorare nel benessere animale',
     body: 'Un Team di persone e professionisti che crescono con un metodo condiviso — non una rete di venditori.',
     cta: 'Lavora con noi',
-    icon: 'leaf',
-    tone: 'peach',
+    tone: 'sage',
+    thumb: { kind: 'sticker' as const, src: stkAndreaSegugio },
   },
   {
     num: '03',
@@ -49,17 +54,19 @@ const paths = [
     title: 'Voglio approfondire',
     body: 'Alimentazione, comportamento, intestino, integrazione naturale e vita quotidiana con cani e gatti.',
     cta: 'Leggi il blog',
-    icon: 'book',
-    tone: 'olive',
+    tone: 'ink',
+    thumb: { kind: 'post' as const, src: '/assets/articolo-antistaminico-naturale-per-cani.jpg' },
   },
 ];
 
-// Icone line-art delle tre scelte (stroke/fill currentColor, tinte dal tono).
-const pathIcons: Record<string, string> = {
-  paw: `<svg viewBox="0 0 50 44" width="27" height="24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="15" rx="4.3" ry="5.8"/><ellipse cx="21" cy="10" rx="4.3" ry="6"/><ellipse cx="30" cy="11" rx="4.3" ry="6"/><ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"/><ellipse cx="25" cy="29" rx="9.5" ry="8"/></svg>`,
-  leaf: `<svg viewBox="0 0 32 32" width="26" height="26" fill="none" aria-hidden="true"><path d="M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`,
-  book: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true"><path d="M12 6c-2-1.6-5-1.6-8-.5V20c3-1.1 6-1.1 8 .5 2-1.6 5-1.6 8-.5V5.5c-3-1.1-6-1.1-8 .5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 6v14.5" stroke="currentColor" stroke-width="1.7"/></svg>`,
-};
+const ticker = [
+  'Alimentazione naturale',
+  'Comportamento',
+  'Cane & gatto',
+  'Consulenza gratuita · 45 minuti',
+  'Piano di lavoro firmato',
+  'Nel Team dal 2021',
+];
 
 // Evento in evidenza per il rimando alla pagina Eventi.
 const eventi = await getCollection('eventi');
@@ -78,221 +85,301 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- HERO -->
-  <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);" data-paw-trail>
-    <div class="hero-bg" data-parallax="70" aria-hidden="true">
-      <Image
-        src={heroPhoto}
-        alt=""
-        widths={[768, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        quality={60}
-        class="hero-bg-img"
-      />
-    </div>
-    <div class="container">
-      <div class="hero-center-inner" data-hero-away>
-        <span class="hero-portrait-xl" data-parallax="40" data-pet>
-          <img src="/assets/logo.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
+  <!-- HERO — la ciotola. La foto sta in un cerchio pesca (la ciotola vista
+       dall'alto); scrollando, su desktop, la sezione resta ferma e il
+       cerchio si allarga finché la foto riempie lo schermo (motion.ts). -->
+  <section class="h-hero" aria-labelledby="h-title">
+    <div class="h-stage" data-hero-zoom data-paw-trail>
+      <div class="h-photo" data-zoom-photo data-focal="0.6 0.45">
+        <Image
+          src={heroPhoto}
+          alt="Andrea Bellettati con il suo bassotto lungo un fiume di montagna"
+          widths={[640, 960, 1440]}
+          sizes="(min-width: 900px) 100vw, 86vw"
+          loading="eager"
+          fetchpriority="high"
+          quality={70}
+        />
+      </div>
+      <span class="h-ring" data-zoom-ring aria-hidden="true"></span>
+
+      <div class="container h-copy" data-zoom-out>
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">
+          Comportamento &amp; Nutrizione · Cane e Gatto
         </span>
-        <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
-        <h1 class="hero-title-center">
-          <span class="line"><span>Il benessere parte</span></span>
-          <span class="line"><span>dalla <span class="hl">ciotola.</span></span></span>
+        <h1 class="h-title intro-lines" id="h-title">
+          <span class="line"><span>Il benessere</span></span>
+          <span class="line"><span>parte dalla</span></span>
+          <span class="line">
+            <span class="h-word"
+              >ciotola.<svg class="h-circle" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"
+                ><path
+                  d="M150 12C78 8 16 30 12 62c-4 34 66 50 148 48 82-2 132-22 128-54C284 24 214 6 128 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  pathLength="1"></path></svg
+              ></span
+            >
+          </span>
         </h1>
-        <p class="hero-lead-c">
-          Studio la relazione tra <strong style="color:var(--cream-ink); font-weight:700;"
-            >comportamento e alimentazione</strong
-          >: non esiste benessere animale senza tenerli insieme. Da qui parte ogni mia consulenza.
+        <p class="h-lead" data-intro style="--intro-d:0.7s;">
+          Studio la relazione tra <strong>comportamento e alimentazione</strong>: non esiste
+          benessere animale senza tenerli insieme. Da qui parte ogni mia consulenza.
         </p>
-        <div class="hero-cta-row center">
+        <div class="h-ctas" data-intro style="--intro-d:0.85s;">
           <a class="btn btn-lg" href="/consulenza-gratuita">Scopri la consulenza gratuita <ArrowIcon size={16} /></a>
-          <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
+          <button type="button" class="btn btn-ghost btn-lg" data-open-call>
             Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
           </button>
         </div>
-        <span class="hero-note">Primo confronto gratuito · cane e gatto</span>
+        <span class="h-note" data-intro style="--intro-d:1s;">Primo confronto gratuito · cane e gatto</span>
       </div>
+
+      <span class="h-tag" data-zoom-fly aria-hidden="true">
+        io e il mio bassotto
+        <svg viewBox="0 0 80 60" aria-hidden="true"
+          ><path d="M6 8c30-6 56 6 62 38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          ></path><path d="M56 38l12 10 6-15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          ></path></svg
+        >
+      </span>
+      <Sticker src={stkCani} width={250} rotate={-7} eager class="h-stk" data-zoom-fly />
+      <p class="h-caption" data-zoom-caption aria-hidden="true">
+        <span>Il benessere parte dalla ciotola.</span>
+        <span class="script">Andrea &amp; il suo bassotto</span>
+      </p>
     </div>
   </section>
 
+  <Ticker items={ticker} tone="peach" tilt={-1.4} />
+
   <!-- SMISTATORE: da dove vuoi iniziare? — IL bivio di conversione -->
-  <section class="section bg-paws">
-    <div class="container" style="position:relative;">
-      <svg class="path-doodle" viewBox="0 0 120 100" aria-hidden="true" data-draw>
-        <path d="M14 8 C64 4, 98 26, 88 74" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
-        <path d="M72 62 L88 78 L100 58" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-      </svg>
-      <div class="head-block" data-reveal>
-        <span class="eyebrow kicker-rule">Da dove vuoi iniziare?</span>
-        <h2 class="display-lg">Dimmi perché<br />sei qui.</h2>
-        <p class="lead">
+  <section class="section h-paths">
+    <div class="container">
+      <div class="h-paths-head">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Da dove vuoi iniziare?</span>
+          <h2 class="display-lg" data-split="chars">Dimmi perché <span class="script">sei qui.</span></h2>
+        </div>
+        <p class="lead" data-reveal>
           Due percorsi diversi, un'unica identità: il benessere degli animali. E un blog per
           approfondire con calma.
         </p>
       </div>
-      <div class="path-cards" data-deal>
+      <ol class="path-index">
         {
           paths.map((p) => (
-            <a class={`path-choice tone-${p.tone}`} href={p.href}>
-              <span class="pc-glow" aria-hidden="true" />
-              <span class="pc-num" aria-hidden="true">{p.num}</span>
-              <span class="pc-top">
-                <span class="pc-ico" set:html={pathIcons[p.icon]} />
-                <span class="pc-badge">{p.badge}</span>
-              </span>
-              <h3>{p.title}</h3>
-              <p>{p.body}</p>
-              <span class="pc-cta">
-                {p.cta} <ArrowIcon size={15} />
-              </span>
-            </a>
+            <li data-reveal>
+              <a class={`path-row tone-${p.tone}`} href={p.href} data-path-row>
+                <span class="pr-num">{p.num}</span>
+                <span class="pr-main">
+                  <span class="pr-title">{p.title}</span>
+                  <span class="pr-body">{p.body}</span>
+                </span>
+                <span class="pr-side">
+                  <span class="pr-badge">{p.badge}</span>
+                  <span class="pr-cta">
+                    {p.cta} <ArrowIcon size={18} />
+                  </span>
+                </span>
+                <span class={`pr-thumb pr-thumb--${p.thumb.kind}`} data-path-thumb aria-hidden="true">
+                  {p.thumb.kind === 'sticker' ? (
+                    <Image src={p.thumb.src} alt="" widths={[260, 520]} sizes="260px" loading="lazy" />
+                  ) : (
+                    <img src={p.thumb.src} alt="" width="260" height="260" loading="lazy" decoding="async" />
+                  )}
+                </span>
+              </a>
+            </li>
           ))
         }
-      </div>
+      </ol>
     </div>
   </section>
 
-  <!-- APPROACH TEASER -->
-  <section class="section bg-sage paper-bg edge-tear" style="background-color:var(--sage);">
+  <!-- L'APPROCCIO — la frase si accende parola per parola con lo scroll -->
+  <section class="statement-band" aria-labelledby="st-title">
+    <Sticker src={stkSegugio} width={230} rotate={8} class="st-stk st-stk--a" data-speed="0.5" />
+    <Sticker src={stkBassotto} width={130} rotate={-10} class="st-stk st-stk--b" data-float />
     <div class="container">
-      <div class="split">
-        <div class="split-media parallax-cover photo-tape" data-reveal>
-          <CoverImage src={heroPhoto} alt="Andrea con il suo bassotto lungo un fiume di montagna" />
-        </div>
-        <div class="split-body" data-reveal data-delay="1">
-          <span class="eyebrow kicker-rule">L'approccio</span>
-          <h2 class="display-md">Non parto dal prodotto.<br />Parto dall'animale.</h2>
+      <span class="eyebrow kicker-rule">L'approccio</span>
+      <h2 class="statement" id="st-title" data-scrub>
+        Non parto dal prodotto. Parto dall'animale. Alimentazione, comportamento e stile di vita
+        fanno parte dello stesso equilibrio.
+      </h2>
+      <div class="statement-foot">
+        <figure class="polaroid" data-speed="-0.25">
+          <Image
+            src={chiSonoPhoto}
+            alt="Andrea Bellettati guancia a guancia con il suo segugio, in inverno"
+            widths={[320, 640]}
+            sizes="300px"
+            loading="lazy"
+          />
+          <figcaption>guancia a guancia</figcaption>
+        </figure>
+        <div class="statement-copy" data-reveal>
           <p>
-            Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
-            lavoro è osservare il soggetto nella sua globalità e costruire un percorso sostenibile
-            per lui e per la sua famiglia.
+            Il mio lavoro è osservare il soggetto nella sua globalità e costruire un percorso
+            sostenibile per lui e per la sua famiglia.
           </p>
           <p>
             Dal 2021 collaboro con un team di professionisti uniti per portare consapevolezza su un
             tema troppo spesso sottovalutato.
           </p>
-          <div class="hero-cta-row" style="margin-top:6px;">
-            <a class="text-link" href="/chi-sono">Conosci la mia storia <ArrowIcon size={14} /></a>
-            <a class="text-link" href="/servizi">Scopri i servizi <ArrowIcon size={14} /></a>
+          <div class="statement-links">
+            <a class="btn btn-cream" href="/chi-sono">Conosci la mia storia <ArrowIcon size={15} /></a>
+            <a class="btn btn-ghost-cream" href="/servizi">Scopri i servizi</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BLOG PREVIEW -->
+  <!-- BLOG — su desktop la sezione resta ferma e gli articoli scorrono di
+       lato; su mobile è un carosello a swipe. -->
   {
     latestArticoli.length > 0 && (
-      <section class="section deco-leaf">
-        <div class="container">
-          <div class="section-head-row" data-reveal>
-            <div class="head-block" style="margin-bottom:0;">
-              <span class="eyebrow kicker-rule">Dal blog</span>
-              <h2 class="display-lg">Senza slogan.<br />Con metodo.</h2>
-            </div>
-            <a class="btn btn-ghost" href="/articoli">
-              Tutti gli articoli <ArrowIcon size={15} />
+      <section class="h-blog" data-hscroll aria-labelledby="blog-title">
+        <div class="container h-blog-head">
+          <div class="head-block">
+            <span class="eyebrow kicker-rule">Dal blog</span>
+            <h2 class="display-lg" id="blog-title">
+              Senza slogan.
+              <br />
+              Con <span class="script">metodo.</span>
+            </h2>
+          </div>
+          <a class="btn btn-ghost" href="/articoli">
+            Tutti gli articoli <ArrowIcon size={15} />
+          </a>
+        </div>
+        <div class="hs-viewport">
+          <div class="hs-track" data-hscroll-track>
+            {latestArticoli.map((entry) => (
+              <div class="hs-item">
+                <ArticleCard entry={entry} />
+              </div>
+            ))}
+            <a class="hs-item hs-more" href="/articoli">
+              <span class="hs-more-n">{nArticoli}</span>
+              <span class="hs-more-t">articoli per nutrire bene cane e gatto</span>
+              <span class="hs-more-cta">
+                Vai al blog <ArrowIcon size={18} />
+              </span>
             </a>
           </div>
-          <div class="card-grid cols-3 stagger" data-reveal data-delay="1">
-            {latestArticoli.map((entry) => (
-              <ArticleCard entry={entry} />
-            ))}
+        </div>
+        <div class="container">
+          <div class="hs-bar" data-hscroll-bar aria-hidden="true">
+            <span />
           </div>
         </div>
       </section>
     )
   }
 
-  <!-- EVENTI TEASER -->
+  <!-- EVENTI — un biglietto, con il timbro -->
   {
     ev && (
-      <section class="section bg-deep paper-bg-deep edge-wave">
+      <section class="section h-event">
         <div class="container">
-          <div class="split">
-            <div class="split-body" data-reveal>
+          <article class="ticket" data-reveal>
+            <div class="ticket-main">
               <span class="eyebrow kicker-rule">Eventi &amp; webinar</span>
-              <h2 class="display-md">Impariamo insieme,<br />dal vivo.</h2>
+              <h2 class="display-md">
+                Impariamo insieme, <span class="script">dal vivo.</span>
+              </h2>
               <p>
                 Incontri gratuiti per imparare a leggere le etichette e nutrire meglio cane e gatto,
                 online e in presenza. Come “{ev.title}”: pratici, concreti, senza fronzoli.
               </p>
-              {ev.statusLabel && (
-                <span class="pill pill-peach" style="align-self:flex-start;">{ev.statusLabel}</span>
-              )}
-              <div class="hero-cta-row" style="margin-top:8px;">
-                <a class="btn btn-cream" href="/eventi">
+              <div class="ticket-row">
+                {ev.statusLabel && <span class="pill pill-peach">{ev.statusLabel}</span>}
+                <a class="btn" href="/eventi">
                   Vedi il calendario <ArrowIcon size={15} />
                 </a>
               </div>
             </div>
-            <div class="split-media parallax-cover" data-reveal data-delay="1" style="order:-1;">
+            <div class="ticket-stub">
               {evCover ? (
-                <img src={evCover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" data-parallax data-parallax-cover />
+                <img src={evCover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" />
               ) : (
-                <CoverImage src={chiSonoPhoto} alt="Andrea Bellettati con il suo cane" />
+                <Image src={chiSonoPhoto} alt="Andrea Bellettati con il suo cane" widths={[400, 800]} sizes="360px" loading="lazy" />
               )}
             </div>
-          </div>
+            {ev.free && (
+              <span class="ticket-stamp" data-stamp aria-hidden="true">
+                Gratis
+              </span>
+            )}
+          </article>
         </div>
       </section>
     )
   }
 
-  <!-- PROOF -->
-  <section class="section-tight">
+  <!-- NUMERI — un muro di sticker -->
+  <section class="section-tight h-proof" aria-label="In breve">
     <div class="container">
-      <div class="proof paper-bg-deep stagger" data-reveal>
-        <div class="proof-item"><div class="pn" data-count="2021" data-count-from="2000">2021</div><div class="pl">Nel team dal</div></div>
-        <div class="proof-item"><div class="pn" data-count="45">45'</div><div class="pl">Consulenza gratuita</div></div>
-        <div class="proof-item">
-          <div class="pn">
-            <svg
-              viewBox="0 0 50 44"
-              width="48"
-              height="42"
-              fill="var(--peach)"
-              aria-hidden="true"
-              data-pop
-              style="display:inline-block;vertical-align:middle;"
-            >
+      <ul class="proof-wall stagger" data-reveal>
+        <li class="pw tone-peach">
+          <span class="pw-n" data-count="2021" data-count-from="2000">2021</span>
+          <span class="pw-l">Nel team dal</span>
+        </li>
+        <li class="pw tone-sage">
+          <span class="pw-n" data-count="45">45'</span>
+          <span class="pw-l">Consulenza gratuita</span>
+        </li>
+        <li class="pw tone-paper">
+          <span class="pw-n">
+            <svg viewBox="0 0 50 44" width="88" height="78" fill="currentColor" aria-hidden="true" data-pop>
               <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
               <ellipse cx="21" cy="10" rx="4.3" ry="6"></ellipse>
               <ellipse cx="30" cy="11" rx="4.3" ry="6"></ellipse>
               <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"></ellipse>
               <ellipse cx="25" cy="29" rx="9.5" ry="8"></ellipse>
             </svg>
-          </div>
-          <div class="pl">Cane &amp; Gatto</div>
-        </div>
-        <div class="proof-item"><div class="pn">Team</div><div class="pl">Metodo condiviso</div></div>
-      </div>
+          </span>
+          <span class="pw-l">Cane &amp; Gatto</span>
+        </li>
+        <li class="pw tone-ink">
+          <span class="pw-n">Team</span>
+          <span class="pw-l">Metodo condiviso</span>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <!-- CTA BAND -->
-  <section class="section bg-deep paper-bg-deep">
-    <div class="container container-narrow">
-      <div class="cta-band">
-        <span class="section-mark" aria-hidden="true" data-pop>
-          <LeafIcon size={40} stroke="var(--peach)" />
-        </span>
-        <span class="eyebrow">Il primo passo è gratuito</span>
-        <h2 class="display-lg">Parliamo del tuo<br />animale, <span class="script">davvero.</span></h2>
-        <p class="lead">
-          45 minuti insieme per analizzare alimentazione e comportamento. Al termine ricevi un piano
-          di lavoro firmato. Senza impegno.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-lg" href="/consulenza-gratuita">Compila il questionario</a>
-          <button type="button" class="btn btn-ghost-cream btn-lg" data-open-call>
-            Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
-          </button>
-        </div>
+  <!-- CTA — foglio pesca, badge che gira, i cani che spuntano dal fondo -->
+  <section class="h-cta" aria-labelledby="cta-title">
+    <div class="container h-cta-inner">
+      <span class="eyebrow">Il primo passo è gratuito</span>
+      <h2 class="h-cta-title" id="cta-title" data-split="pop">
+        Parliamo del tuo animale, <span class="script">davvero.</span>
+      </h2>
+      <p class="lead">
+        45 minuti insieme per analizzare alimentazione e comportamento. Al termine ricevi un piano
+        di lavoro firmato. Senza impegno.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-lg btn-dark" href="/consulenza-gratuita">Compila il questionario</a>
+        <button type="button" class="btn btn-ghost btn-lg" data-open-call>
+          Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
+        </button>
       </div>
+      <a class="spin-badge" href="/consulenza-gratuita" data-magnetic aria-label="Consulenza gratuita: 45 minuti, senza impegno">
+        <svg class="spin-ring" viewBox="0 0 200 200" aria-hidden="true" data-spin>
+          <defs><path id="spin-path" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"></path></defs>
+          <text><textPath href="#spin-path" textLength="486" lengthAdjust="spacing">consulenza gratuita · 45 minuti · senza impegno ·</textPath></text>
+        </svg>
+        <span class="spin-core" aria-hidden="true"><ArrowIcon size={30} /></span>
+      </a>
+    </div>
+    <div class="h-cta-peek" data-peek data-pet aria-hidden="true">
+      <Image src={stkCani} alt="" widths={[420, 840]} sizes="(min-width: 900px) 420px, 60vw" loading="lazy" />
     </div>
   </section>
 </Base>

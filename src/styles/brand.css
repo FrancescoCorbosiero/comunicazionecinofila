@@ -1,56 +1,66 @@
-/* Andrea Bellettati — Mini Brand System v2
-   Riscritto sulla base del feed reale.
-   Riferimento: post "Antistaminico Naturale" + locandina Etichette.
+/* Andrea Bellettati — Brand System v3 ("Branco")
+
+   La v2 (handoff) era nata dal feed reale ma parlava la lingua dei
+   prototipi generati: crema caldo + grana carta, titoli poster tutti
+   maiuscoli, micro-etichette in monospace 11px con tracking largo. Belle,
+   ma "da template". La v3 tiene i colori campionati dal logo e dal feed
+   (salvia delle cover, pesca, verde notte) e cambia tutto il resto:
+
+   · neutri: un bianco appena salvia al posto del crema, inchiostro
+     verde-nero, bordi pieni d'inchiostro invece dei filetti al 14%;
+   · tipografia: Bricolage Grotesque, nero e stretto, in minuscolo —
+     ha la voce di una persona, non di un manifesto. Anton resta, ma solo
+     per nastri e numeri (richiama le cover di Instagram). Caveat per le
+     note scritte a mano, come si fa sulle stories;
+   · forme: sticker, bordi da 2px, ombre piene "stampate", rotazioni
+     leggere. Niente texture finte: colore pieno e foto vere.
 */
 
 :root {
-  /* ── PALETTE ───────────────────────────────────────────
-     Verdi salvia desaturati (campionati dal feed reale),
-     crema avorio per testo, accento caldo pesca/corallo.
-  */
-  --bg-cream:        #ece4d2;   /* sfondo principale carta riciclata */
-  --bg-paper:        #f5efe1;   /* superficie chiara */
-  --bg-deep:         #2a3120;   /* verde notte (footer / hero invertito) */
+  /* ── PALETTE ─────────────────────────────────────────── */
+  --bg-cream:        #f3f4ee;   /* fondo pagina: bianco salvia (non più crema) */
+  --bg-paper:        #ffffff;   /* superfici, card, sticker */
+  --bg-deep:         #1f2818;   /* verde notte: bande scure, footer */
 
   --sage:            #7c9474;   /* VERDE PRIMARIO — il verde delle cover */
-  --sage-soft:       #a4b59c;   /* salvia chiara */
-  --sage-mist:       #d5dcc4;   /* salvia pallida pannelli secondari */
-  --olive-deep:      #3f4a2e;   /* oliva profondo headline / badge */
-  --olive-darkest:   #1f2515;   /* quasi nero, footer */
+  --sage-soft:       #a4b59c;
+  --sage-mist:       #dfe5d6;
+  --olive-deep:      #34402a;
+  --olive-darkest:   #151b0f;
 
-  /* Accento caldo — pesca/corallo */
-  --peach:           #f4a98a;   /* CTA, hover, badge attivi */
-  --peach-soft:      #f8c9b1;
-  --peach-deep:      #d97a55;   /* hover/active scuro */
-  --ochre:           #c9a96a;   /* uso parco — dettagli */
+  --peach:           #f4a98a;   /* accento del logo: CTA, sticker, evidenze */
+  --peach-soft:      #f9d0bd;
+  --peach-deep:      #d0673f;   /* testo/accenti grandi su chiaro */
+  --ochre:           #c9a96a;
 
-  /* Inchiostri */
-  --ink:             #1a1c14;
-  --ink-soft:        #3d4533;
-  --ink-mute:        #6a7163;
-  --cream-ink:       #efe8d8;   /* testo crema su verde */
+  --ink:             #15190f;
+  --ink-soft:        #363f2c;
+  --ink-mute:        #626b58;
+  --cream-ink:       #f1f2ea;   /* testo chiaro su verde */
 
-  --rule:            rgba(26,28,20,0.14);
-  --rule-soft:       rgba(26,28,20,0.07);
-  --rule-cream:      rgba(239,232,216,0.22);
+  --rule:            rgba(21, 25, 15, 0.16);
+  --rule-soft:       rgba(21, 25, 15, 0.08);
+  --rule-cream:      rgba(241, 242, 234, 0.22);
 
-  /* ── TIPOGRAFIA ────────────────────────────────────────
-     Display: Anton — sans condensed pesante, all-caps, da poster.
-     Body: Inter — pulito, neutro.
-     Script accent: Caveat — solo per parole singole decorative.
-     Le var(--font-*) arrivano dalla Fonts API (astro.config.mjs):
-     font self-hosted + fallback locali con metriche adattate.
-  */
-  --display: var(--font-anton, 'Anton', 'Bebas Neue', 'Oswald', sans-serif);
-  --sans:    var(--font-inter, 'Inter', -apple-system, system-ui, sans-serif);
-  --serif:   var(--font-cormorant, 'Cormorant Garamond', Georgia, serif);
+  /* Ombre "stampate": piene, senza sfocatura, come uno sticker sollevato. */
+  --line:            2px solid var(--ink);
+  --shadow-s:        3px 3px 0 var(--ink);
+  --shadow-m:        5px 5px 0 var(--ink);
+  --shadow-l:        8px 8px 0 var(--ink);
+
+  /* ── TIPOGRAFIA ──────────────────────────────────────── */
+  --display: var(--font-bricolage, 'Bricolage Grotesque', 'Arial Black', sans-serif);
+  --sans:    var(--font-bricolage, 'Bricolage Grotesque', -apple-system, system-ui, sans-serif);
+  --poster:  var(--font-anton, 'Anton', 'Bebas Neue', 'Oswald', sans-serif);
   --script:  var(--font-caveat, 'Caveat', 'Brush Script MT', cursive);
-  --mono:    var(--font-jetbrains-mono, 'JetBrains Mono', ui-monospace, monospace);
+  /* Alias storici: niente più serif corsivo né monospace. */
+  --serif:   var(--sans);
+  --mono:    var(--sans);
 
-  /* Radii — angoli quasi vivi, leggermente smussati come la grafica reale */
-  --r-1: 2px;
-  --r-2: 6px;
-  --r-3: 12px;
+  /* ── FORME ───────────────────────────────────────────── */
+  --r-1: 4px;
+  --r-2: 12px;
+  --r-3: 22px;
   --r-pill: 999px;
 }
 
@@ -59,32 +69,48 @@
   color: var(--ink);
   background: var(--bg-cream);
   -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
 }
 
-/* DISPLAY — sempre uppercase, condensed, letter-spacing leggero */
+/* DISPLAY — nero, stretto, in minuscolo: si legge come una frase detta. */
 .brand h1, .brand h2, .brand h3, .brand .display {
   font-family: var(--display);
-  font-weight: 400;            /* Anton ha solo 400; il peso viene dal carattere stesso */
-  text-transform: uppercase;
-  letter-spacing: 0.005em;
-  line-height: 0.95;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: -0.03em;
+  line-height: 0.94;
+  text-wrap: balance;
 }
+.brand h3 { letter-spacing: -0.02em; line-height: 1.02; }
 
+/* Etichetta = sticker: pillola bordata, leggermente storta, ombra piena. */
 .brand .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
   font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--olive-deep);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background: var(--bg-paper);
+  border: var(--line);
+  border-radius: var(--r-pill);
+  padding: 7px 14px 8px;
+  box-shadow: var(--shadow-s);
+  transform: rotate(-2deg);
 }
 
 .brand .lead {
   font-family: var(--sans);
-  font-size: 18px;
-  line-height: 1.5;
+  font-size: 19px;
+  line-height: 1.45;
   font-weight: 400;
   color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
 .brand .script {
@@ -94,128 +120,107 @@
   text-transform: none;
 }
 
-/* Texture carta — sfondo discreto */
-.paper-bg {
-  background-color: var(--bg-cream);
-  background-image:
-    radial-gradient(rgba(63,74,46,0.04) 1px, transparent 1px),
-    radial-gradient(rgba(63,74,46,0.025) 1px, transparent 1px);
-  background-size: 32px 32px, 17px 17px;
-  background-position: 0 0, 8px 8px;
-}
+/* Colore pieno: le vecchie texture carta sono state ritirate. */
+.paper-bg { background-color: var(--bg-cream); }
+.paper-bg-deep { background-color: var(--bg-deep); }
 
-.paper-bg-deep {
-  background-color: var(--bg-deep);
-  background-image:
-    radial-gradient(rgba(239,232,216,0.025) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* Placeholder per immagini */
+/* Placeholder per immagini mancanti */
 .placeholder {
   background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(124,148,116,0.18) 0 8px,
-      rgba(124,148,116,0.06) 8px 16px
-    ),
+    repeating-linear-gradient(135deg, rgba(124, 148, 116, 0.22) 0 10px, rgba(124, 148, 116, 0.08) 10px 20px),
     var(--sage-mist);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--mono);
-  font-size: 10px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
   color: var(--olive-deep);
-  letter-spacing: 0.1em;
 }
 
-/* Buttons — pesca pieno + ghost verde */
+/* Bottoni — sticker premibili: bordo d'inchiostro, ombra piena che si
+   allunga al passaggio e sparisce alla pressione. */
 .brand .btn {
+  --btn-shadow: var(--ink);
   font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
   padding: 14px 24px;
-  border: none;
+  border: var(--line);
   background: var(--peach);
-  color: var(--olive-darkest);
+  color: var(--ink);
   cursor: pointer;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   border-radius: var(--r-pill);
+  box-shadow: 4px 4px 0 var(--btn-shadow);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.25s ease, color 0.25s ease;
 }
 .brand .btn:hover {
-  background: var(--peach-deep);
-  color: var(--cream-ink);
+  background: var(--peach);
+  color: var(--ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--btn-shadow);
 }
-.brand .btn-dark {
-  background: var(--olive-deep);
-  color: var(--cream-ink);
+.brand .btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--btn-shadow);
 }
-.brand .btn-dark:hover {
-  background: var(--olive-darkest);
-}
-.brand .btn-ghost {
-  background: transparent;
-  color: var(--olive-deep);
-  border: 1.5px solid var(--olive-deep);
-}
-.brand .btn-ghost:hover {
-  background: var(--olive-deep);
-  color: var(--cream-ink);
-}
+.brand .btn-dark { background: var(--olive-deep); color: var(--cream-ink); }
+.brand .btn-dark:hover { background: var(--ink); color: var(--cream-ink); }
+.brand .btn-ghost { background: var(--bg-paper); color: var(--ink); border: var(--line); }
+.brand .btn-ghost:hover { background: var(--sage-mist); color: var(--ink); }
 
 /* Pill / tag */
 .brand .pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 6px 13px;
   border-radius: var(--r-pill);
   background: var(--sage-mist);
-  color: var(--olive-deep);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0;
 }
-.brand .pill-peach {
-  background: var(--peach);
-  color: var(--olive-darkest);
-}
-.brand .pill-dark {
-  background: var(--olive-deep);
-  color: var(--cream-ink);
-}
+.brand .pill-peach { background: var(--peach); color: var(--ink); }
+.brand .pill-dark { background: var(--ink); color: var(--cream-ink); }
 
-/* Form — bordo morbido invece di underline */
+/* Form — campi morbidi, bordo che diventa inchiostro al focus */
 .brand .field {
   display: block;
   margin-bottom: 16px;
 }
 .brand .field label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--ink-soft);
-  font-weight: 600;
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  font-weight: 650;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
 .brand input, .brand textarea, .brand select {
   font-family: var(--sans);
-  font-size: 15px;
-  background: var(--bg-paper);
-  border: 1.5px solid var(--rule);
+  font-size: 16px;
+  background: var(--bg-cream);
+  border: 2px solid var(--rule);
   border-radius: var(--r-2);
-  padding: 12px 14px;
+  padding: 13px 15px;
   width: 100%;
   color: var(--ink);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   box-sizing: border-box;
 }
 .brand input:focus, .brand textarea:focus, .brand select:focus {
-  border-color: var(--olive-deep);
+  border-color: var(--ink);
+  background: var(--bg-paper);
+  box-shadow: 3px 3px 0 var(--peach);
 }
