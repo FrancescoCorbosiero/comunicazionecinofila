@@ -149,7 +149,10 @@
   color: var(--ink); font-size: 13.5px; font-weight: 700; transform: rotate(-3deg); white-space: nowrap; }
 .pr-cta { display: inline-flex; align-items: center; gap: 8px; font-weight: 750; font-size: 16px; white-space: nowrap; }
 .pr-cta svg { transition: transform 0.4s cubic-bezier(0.34, 1.6, 0.64, 1); }
-.pr-thumb { position: absolute; left: 0; top: 0; z-index: 3; width: 250px; pointer-events: none; display: none; }
+/* La foto che segue il puntatore passa dietro al testo e sopra al colore di
+   riempimento della riga: si vede, ma non copre mai il titolo. */
+.pr-num, .pr-main, .pr-side { position: relative; z-index: 1; }
+.pr-thumb { position: absolute; left: 0; top: 0; z-index: 0; width: 250px; pointer-events: none; display: none; }
 .pr-thumb img { display: block; width: 100%; height: auto; }
 .pr-thumb--sticker img { filter: drop-shadow(0 14px 18px rgba(21, 25, 15, 0.3)); }
 .pr-thumb--post img { aspect-ratio: 1; object-fit: cover; border: var(--line); border-radius: 18px; box-shadow: var(--shadow-l); }
