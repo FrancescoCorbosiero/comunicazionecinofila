@@ -1,0 +1,37 @@
+---
+// Sticker fustellato (foto scontornata con bordo bianco, vedi
+// src/assets/stickers e scripts/make-stickers.py). Larghezza di
+// visualizzazione in px: da lì nascono le varianti responsive.
+// Gli attributi extra (data-float, data-speed, data-peek, data-pet…)
+// passano al contenitore, così il motore delle animazioni li vede.
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt?: string;
+  /** Larghezza di visualizzazione in px (desktop). */
+  width?: number;
+  /** Rotazione di riposo in gradi. */
+  rotate?: number;
+  eager?: boolean;
+  class?: string;
+  [attr: string]: unknown;
+}
+const { src, alt = '', width = 240, rotate = 0, eager = false, class: className, ...rest } = Astro.props;
+const widths = [width, width * 2].map((w) => Math.min(Math.round(w), src.width));
+---
+<span
+  class:list={['stk', className]}
+  style={`--rot:${rotate}deg; --w:${width}px;`}
+  aria-hidden={alt ? undefined : 'true'}
+  {...rest}
+>
+  <Image
+    src={src}
+    alt={alt}
+    widths={[...new Set(widths)]}
+    sizes={`${width}px`}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+</span>

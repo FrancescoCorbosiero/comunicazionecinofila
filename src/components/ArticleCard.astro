@@ -11,6 +11,16 @@ const d = entry.data;
 // Cover dal frontmatter, oppure auto-rilevata (articolo-<slug>.* in public/assets).
 const cover = autoCover('articolo', entry.id, d.cover);
 const comingSoon = d.status === 'coming-soon';
+// Senza foto, la card diventa un blocco colorato con la categoria: ogni
+// categoria ha il suo colore, così nel blog si riconoscono a colpo d'occhio.
+const TONE_BY_CATEGORY: Record<string, 'peach' | 'sage' | 'mist' | 'ink'> = {
+  Alimentazione: 'peach',
+  Comportamento: 'sage',
+  Osservazione: 'ink',
+  Gatto: 'mist',
+  Benessere: 'mist',
+};
+const tone = TONE_BY_CATEGORY[d.category] ?? 'mist';
 const external = Boolean(d.externalUrl);
 const href = d.externalUrl ?? (comingSoon ? null : `/articoli/${entry.id}`);
 const Tag = href ? 'a' : 'div';
@@ -40,8 +50,15 @@ const searchIndex = [d.title, d.excerpt, d.category]
         <img src={cover} alt={d.coverAlt ?? d.title} loading="lazy" decoding="async" />
       </div>
     ) : (
-      <div class="card-media placeholder" style="flex-direction:column; gap:6px;">
-        <span>{d.placeholderLabel ?? 'FOTO'}</span>
+      <div class={`card-media card-media--tone tone-${tone}`} aria-hidden="true">
+        <span class="cm-word">{d.category}</span>
+        <svg class="cm-paw" viewBox="0 0 50 44" fill="currentColor">
+          <ellipse cx="12" cy="15" rx="4.3" ry="5.8" />
+          <ellipse cx="21" cy="10" rx="4.3" ry="6" />
+          <ellipse cx="30" cy="11" rx="4.3" ry="6" />
+          <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6" />
+          <ellipse cx="25" cy="29" rx="9.5" ry="8" />
+        </svg>
       </div>
     )
   }
@@ -57,10 +74,10 @@ const searchIndex = [d.title, d.excerpt, d.category]
         <Fragment>{` · ${minutes} min`}</Fragment>
       )}
     </div>
-    <h3 style="font-size:21px;" transition:name={comingSoon ? undefined : `art-${entry.id}`}>
+    <h3 style="font-size:23px;" transition:name={comingSoon ? undefined : `art-${entry.id}`}>
       {d.title}
     </h3>
-    <p style="font-size:14.5px; margin:0;">{d.excerpt}</p>
+    <p style="font-size:15.5px; margin:0;">{d.excerpt}</p>
     {
       comingSoon ? (
         <span class="text-link" style="margin-top:auto; opacity:0.55; cursor:default;">
