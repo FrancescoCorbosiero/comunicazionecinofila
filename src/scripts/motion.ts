@@ -701,9 +701,11 @@ function storiesScroll(media: gsap.MatchMedia): void {
       });
       slides.forEach((slide, i) => {
         tl.to(bars[i], { scaleX: 1, duration: 1 }, i);
+        // I pezzi di ogni slide entrano mentre la slide scorre dentro
+        // (la slide i arriva tra i-1+0.75 e i-1+1.05), non dopo.
         const pieces = slide.querySelectorAll('[data-story-piece]');
         if (i > 0 && pieces.length) {
-          tl.from(pieces, { y: 40, opacity: 0, stagger: 0.06, duration: 0.25, ease: 'power2.out' }, i + 0.02);
+          tl.from(pieces, { y: 40, opacity: 0, stagger: 0.05, duration: 0.25, ease: 'power2.out' }, i - 1 + 0.82);
         }
         const next = slides[i + 1];
         if (next) {
