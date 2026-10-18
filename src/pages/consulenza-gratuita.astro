@@ -19,24 +19,27 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
   ogImageHeight={1440}
 >
   <!-- HERO CONTENUTO: pitch + questionario in un solo schermo -->
-  <section class="consulto-hero section-tight bg-paws">
+  <section class="consulto-hero section-tight bg-paws" data-paw-trail>
     <div class="container">
       <div class="consulto-grid">
-        <div class="consulto-intro" data-reveal>
-          <span class="eyebrow kicker-rule">Consulenza gratuita</span>
-          <h1 class="display-lg">Parliamo del<br />tuo animale.</h1>
-          <p class="lead">
+        <div class="consulto-intro">
+          <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.02s;">Consulenza gratuita</span>
+          <h1 class="display-lg intro-lines">
+            <span class="line"><span>Parliamo del</span></span>
+            <span class="line"><span>tuo animale.</span></span>
+          </h1>
+          <p class="lead" data-intro style="--intro-d:0.45s;">
             45 minuti insieme per analizzare alimentazione e comportamento. Senza impegno.
           </p>
-          <ol class="consulto-steps">
+          <ol class="consulto-steps" data-intro style="--intro-d:0.6s;">
             <li><b>1</b><span>Compili il questionario<small>Due minuti, tre domande.</small></span></li>
             <li><b>2</b><span>Ti richiamo io<small>Al numero che lasci, quando preferisci.</small></span></li>
             <li><b>3</b><span>Piano di lavoro firmato<small>Concreto e su misura, al termine della call.</small></span></li>
           </ol>
-          <p class="consulto-note">Cane &amp; gatto · gratuita e senza impegno</p>
+          <p class="consulto-note" data-intro style="--intro-d:1.2s;">Cane &amp; gatto · gratuita e senza impegno</p>
         </div>
 
-        <div class="form-card consulto-card" data-reveal data-delay="1">
+        <div class="form-card consulto-card" data-intro="card" style="--intro-d:0.35s;">
         <!-- Netlify Forms come rete di sicurezza: oltre ad aprire WhatsApp,
              ogni questionario completato viene salvato nella dashboard Netlify.
              Così il contatto non va perso se la persona non invia il messaggio. -->
@@ -163,7 +166,7 @@ import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../conf
         <h2 class="display-lg">La consulenza non finisce<br />con un consiglio alimentare.</h2>
       </div>
       <div data-reveal data-delay="1">
-        <p class="lead">
+        <p class="lead" data-scrub>
           Il mio lavoro parte dal primo confronto, ma continua nel tempo. Seguo personalmente ogni
           percorso, monitorando adattamento, appetito, feci, digestione e cambiamenti nelle
           abitudini dell'animale. Dietro ogni consulenza c'è inoltre il confronto con un Team di

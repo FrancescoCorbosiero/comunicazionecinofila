@@ -7,13 +7,12 @@
    ===================================================================== */
 import { WA_NUMBER, EMAIL, FORM_ENDPOINT } from '../config';
 import { initCatalog } from './catalog';
+import { lockScroll, scrollToTarget, stepEnter, stepProgress, nudge, successBurst } from './motion';
 // Quando attiverai cal.com, importa anche CAL_LINK da '../config'.
 
 function waLink(text: string): string {
   return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
 }
-const prefersReduced = () =>
-  window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ── Invio form ──────────────────────────────────────────────────
    Un solo punto di uscita per entrambi i form, endpoint configurabile:
@@ -69,34 +68,6 @@ function initNav(): void {
   });
 }
 
-/* ── Scroll reveal ───────────────────────────────────────────── */
-function initReveal(): void {
-  const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
-  if (!els.length) return;
-  if (prefersReduced() || !('IntersectionObserver' in window)) return; // il CSS base li lascia visibili
-  document.documentElement.classList.add('js');
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          (e.target as HTMLElement).classList.add('in');
-          io.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
-  );
-  const vh = window.innerHeight || document.documentElement.clientHeight;
-  els.forEach((el) => {
-    if (el.getBoundingClientRect().top < vh * 0.95) {
-      el.style.transition = 'none';
-      el.classList.add('in');
-    } else {
-      io.observe(el);
-    }
-  });
-}
-
 /* ── Validazione campo ───────────────────────────────────────── */
 function validateField(field: Element): boolean {
   const input = field.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
@@ -135,12 +106,17 @@ function setupSteps(form: HTMLFormElement): StepController {
   let current = 0;
 
   function show(i: number, focusFirst = false): void {
+    const dir = i >= current ? 1 : -1;
+    const changed = i !== current;
     current = i;
     panels.forEach((p, idx) => p.classList.toggle('active', idx === i));
     dots.forEach((d, idx) => {
       d.classList.toggle('done', idx < i);
       d.classList.toggle('current', idx === i);
     });
+    // Animazioni (motion.ts) solo sulle navigazioni dell'utente.
+    stepProgress(form, i, focusFirst && changed);
+    if (focusFirst && changed) stepEnter(panels[i], dir);
     // Il focus solo sulle navigazioni dell'utente: all'init ruberebbe
     // focus e scroll alla pagina appena caricata.
     if (!focusFirst) return;
@@ -148,11 +124,9 @@ function setupSteps(form: HTMLFormElement): StepController {
     if (firstInput) setTimeout(() => firstInput.focus(), 120);
   }
   function validatePanel(i: number): boolean {
-    let ok = true;
-    panels[i].querySelectorAll('.field').forEach((f) => {
-      if (!validateField(f)) ok = false;
-    });
-    return ok;
+    const invalid = Array.from(panels[i].querySelectorAll('.field')).filter((f) => !validateField(f));
+    nudge(invalid);
+    return invalid.length === 0;
   }
   // Al submit vanno controllati TUTTI gli step: l'implicit form submission
   // (Enter in un input) può arrivare da uno step intermedio.
@@ -173,6 +147,7 @@ function setupSteps(form: HTMLFormElement): StepController {
     if (success) {
       success.classList.add('show');
       success.focus(); // il markup ha tabindex="-1" + role="status"
+      successBurst(success);
     }
   }
 
@@ -496,6 +471,7 @@ function openCall(): void {
   lastCallTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   ov.hidden = false;
   document.documentElement.style.overflow = 'hidden';
+  lockScroll(true);
   const f = ov.querySelector<HTMLElement>('.cal-slot');
   if (f) setTimeout(() => f.focus(), 60);
 }
@@ -504,6 +480,7 @@ function closeCall(): void {
   if (!ov || ov.hidden) return;
   ov.hidden = true;
   document.documentElement.style.overflow = '';
+  lockScroll(false);
   // Il focus torna al pulsante che ha aperto il modale.
   if (lastCallTrigger && document.contains(lastCallTrigger)) lastCallTrigger.focus();
   lastCallTrigger = null;
@@ -525,32 +502,6 @@ function trapCallFocus(e: KeyboardEvent): void {
   } else if (!e.shiftKey && (active === last || !ov.contains(active))) {
     e.preventDefault();
     first.focus();
-  }
-}
-
-/* ── Parallax ────────────────────────────────────────────────── */
-let parallaxItems: HTMLElement[] = [];
-function collectParallax(): void {
-  parallaxItems = prefersReduced() ? [] : Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
-}
-function updateParallax(): void {
-  if (!parallaxItems.length) return;
-  const vh = window.innerHeight || document.documentElement.clientHeight;
-  for (const el of parallaxItems) {
-    const rect = el.getBoundingClientRect();
-    if (rect.bottom < -120 || rect.top > vh + 120) continue;
-    const center = rect.top + rect.height / 2;
-    const progress = (center - vh / 2) / (vh / 2 + rect.height / 2);
-    const clamped = Math.max(-1, Math.min(1, progress));
-    if (el.hasAttribute('data-parallax-cover')) {
-      // Escursione più ampia (0.10·h): l'immagine è pre-scalata a 1.24 in
-      // effects.css, quindi c'è margine sufficiente a non scoprire i bordi.
-      const shift = rect.height * 0.1 * -clamped;
-      el.style.transform = `translate3d(0, ${shift.toFixed(2)}px, 0) scale(1.24)`;
-    } else {
-      const speed = parseFloat(el.getAttribute('data-parallax') || '') || 40;
-      el.style.transform = `translate3d(0, ${(-clamped * (speed / 1.3)).toFixed(2)}px, 0)`;
-    }
   }
 }
 
@@ -614,53 +565,6 @@ function updateToTop(): void {
   }
 }
 
-/* ── Smistatore: le tre strade si sfogliano dal mazzo ─────────────
-   Animazione guidata dallo scroll (scrubbed): le card partono
-   impilate e ruotate come un mazzo di carte e si distribuiscono
-   nelle loro posizioni man mano che la sezione entra in viewport.
-   A fine corsa gli stili inline vengono rimossi, così gli hover
-   CSS riprendono il controllo. Off con prefers-reduced-motion. */
-let dealCards: HTMLElement[] = [];
-let dealHost: HTMLElement | null = null;
-
-function collectDeal(): void {
-  dealHost = prefersReduced() ? null : document.querySelector<HTMLElement>('[data-deal]');
-  dealCards = dealHost ? (Array.from(dealHost.children) as HTMLElement[]) : [];
-}
-
-function easeOutCubic(t: number): number {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-function updateDeal(): void {
-  if (!dealHost || !dealCards.length) return;
-  const vh = window.innerHeight || document.documentElement.clientHeight;
-  const rect = dealHost.getBoundingClientRect();
-  // 0 quando il bordo alto della sezione tocca il fondo del viewport,
-  // 1 quando ha risalito il 75% dell'altezza dello schermo: la corsa
-  // più lunga rende la distribuzione lenta ed elegante.
-  const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
-
-  dealCards.forEach((card, i) => {
-    // Ogni carta ha la sua finestra di progresso, sfalsata: la prima
-    // parte subito, le altre seguono come una mano che le distribuisce.
-    const local = Math.max(0, Math.min(1, progress * 1.3 - i * 0.28));
-    if (local >= 1) {
-      card.style.transform = '';
-      card.style.opacity = '';
-      return;
-    }
-    const e = easeOutCubic(local);
-    const fan = i - 1; // -1 · 0 · 1 → direzione del ventaglio
-    const x = (1 - e) * fan * -60;
-    const y = (1 - e) * 46;
-    const rot = (1 - e) * fan * 6;
-    const scale = 0.92 + e * 0.08;
-    card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-    card.style.opacity = (0.2 + e * 0.8).toFixed(2);
-  });
-}
-
 /* ── Listener globali (una sola volta) ───────────────────────── */
 let globalsReady = false;
 function initGlobals(): void {
@@ -673,10 +577,8 @@ function initGlobals(): void {
     if (!ticking) {
       ticking = true;
       requestAnimationFrame(() => {
-        updateParallax();
         updateReadProgress();
         updateToTop();
-        updateDeal();
         ticking = false;
       });
     }
@@ -693,7 +595,7 @@ function initGlobals(): void {
     } else if (t.closest('[data-close-call]')) {
       closeCall();
     } else if (t.closest('[data-to-top]')) {
-      window.scrollTo({ top: 0, behavior: prefersReduced() ? 'auto' : 'smooth' });
+      scrollToTarget(0);
     } else if (t.closest('[data-copy-url]')) {
       const btn = t.closest<HTMLElement>('[data-copy-url]');
       if (btn) copyPageUrl(btn);
@@ -713,7 +615,6 @@ function initGlobals(): void {
 /* ── Per pagina (anche dopo ogni view transition) ───────────── */
 function onPageLoad(): void {
   initNav();
-  initReveal();
   initStepForm();
   initWorkForm();
   initBlogFilter();
@@ -721,13 +622,9 @@ function onPageLoad(): void {
   initPathSelector();
   initBookings();
   initCatalog();
-  collectParallax();
-  collectDeal();
-  updateParallax();
   updateHeader();
   updateReadProgress();
   updateToTop();
-  updateDeal();
 }
 
 initGlobals();

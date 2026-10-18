@@ -79,7 +79,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   ogImageHeight={1440}
 >
   <!-- HERO -->
-  <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);">
+  <section class="hero-center bg-sage paper-bg has-bg" style="background-color:var(--sage);" data-paw-trail>
     <div class="hero-bg" data-parallax="70" aria-hidden="true">
       <Image
         src={heroPhoto}
@@ -93,8 +93,8 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
       />
     </div>
     <div class="container">
-      <div class="hero-center-inner">
-        <span class="hero-portrait-xl" data-parallax="40">
+      <div class="hero-center-inner" data-hero-away>
+        <span class="hero-portrait-xl" data-parallax="40" data-pet>
           <img src="/assets/logo.jpg" alt="Andrea Bellettati con il suo bassotto" width="130" height="130" />
         </span>
         <span class="hero-eyebrow">Comportamento &amp; Nutrizione · Cane e Gatto</span>
@@ -121,7 +121,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   <!-- SMISTATORE: da dove vuoi iniziare? — IL bivio di conversione -->
   <section class="section bg-paws">
     <div class="container" style="position:relative;">
-      <svg class="path-doodle" viewBox="0 0 120 100" aria-hidden="true">
+      <svg class="path-doodle" viewBox="0 0 120 100" aria-hidden="true" data-draw>
         <path d="M14 8 C64 4, 98 26, 88 74" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
         <path d="M72 62 L88 78 L100 58" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
@@ -246,8 +246,8 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   <section class="section-tight">
     <div class="container">
       <div class="proof paper-bg-deep stagger" data-reveal>
-        <div class="proof-item"><div class="pn">2021</div><div class="pl">Nel team dal</div></div>
-        <div class="proof-item"><div class="pn">45'</div><div class="pl">Consulenza gratuita</div></div>
+        <div class="proof-item"><div class="pn" data-count="2021" data-count-from="2000">2021</div><div class="pl">Nel team dal</div></div>
+        <div class="proof-item"><div class="pn" data-count="45">45'</div><div class="pl">Consulenza gratuita</div></div>
         <div class="proof-item">
           <div class="pn">
             <svg
@@ -256,6 +256,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
               height="42"
               fill="var(--peach)"
               aria-hidden="true"
+              data-pop
               style="display:inline-block;vertical-align:middle;"
             >
               <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
@@ -276,7 +277,7 @@ const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.c
   <section class="section bg-deep paper-bg-deep">
     <div class="container container-narrow">
       <div class="cta-band">
-        <span class="section-mark" aria-hidden="true">
+        <span class="section-mark" aria-hidden="true" data-pop>
           <LeafIcon size={40} stroke="var(--peach)" />
         </span>
         <span class="eyebrow">Il primo passo è gratuito</span>
