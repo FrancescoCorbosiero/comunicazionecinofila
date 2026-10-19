@@ -1,9 +1,43 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import CoverImage from '../components/CoverImage.astro';
-import heroPhoto from '../assets/hero.jpg';
+import Sticker from '../components/Sticker.astro';
+import Ticker from '../components/Ticker.astro';
+import stkAndreaFiume from '../assets/stickers/andrea-fiume.webp';
+import stkSegugio from '../assets/stickers/segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+
+const nastro = [
+  "Prima l'animale",
+  'Cibo & comportamento',
+  'La scienza prima delle mode',
+  'Un piano per la vita vera',
+  'Seguito nel tempo',
+];
+
+// I tre principi: ognuno riceve il suo timbro "Non negoziabile" (data-stamp,
+// il valore è il ritardo: sulla stessa riga arrivano uno dopo l'altro).
+const principi = [
+  {
+    n: '01',
+    title: 'Cibo e comportamento sono la stessa storia',
+    body: 'Un cane irrequieto, un gatto che si gratta, una digestione difficile: spesso la risposta è nella ciotola tanto quanto nelle abitudini. Li guardo insieme, mai separati.',
+    tone: 'paper',
+  },
+  {
+    n: '02',
+    title: 'La scienza prima delle mode',
+    body: 'Niente slogan, niente “grain free” perché fa tendenza. Parto dalla letteratura, leggo le etichette riga per riga e spiego il perché di ogni scelta.',
+    tone: 'peach',
+  },
+  {
+    n: '03',
+    title: 'Il piano deve entrare nella vita vera',
+    body: "La dieta perfetta sulla carta non serve a niente se la famiglia non riesce a seguirla. Costruisco qualcosa di sostenibile, per l'animale e per chi se ne prende cura.",
+    tone: 'ink',
+  },
+];
 ---
 <Base
   active="approccio"
@@ -17,80 +51,105 @@ import heroPhoto from '../assets/hero.jpg';
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- PAGE HERO -->
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div class="split-body" data-reveal>
-          <span class="eyebrow kicker-rule">Il mio approccio</span>
-          <h1 class="display-lg">
-            Non parto<br />dal prodotto.<br /><span style="color:var(--peach-deep);"
-              >Parto<br />dall'animale.</span
+  <!-- HERO — il disco dell'equilibrio: le tre parole del metodo ci girano
+       intorno (data-spin) e Andrea col bassotto ne esce dal bordo. -->
+  <section class="a-hero" data-paw-trail aria-labelledby="a-title">
+    <div class="container a-hero-grid">
+      <div class="a-hero-copy">
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Il mio approccio</span>
+        <h1 class="a-title intro-lines" id="a-title">
+          <span class="line"><span>Non parto</span></span>
+          <span class="line"><span class="a-title-dim">dal prodotto.</span></span>
+          <span class="line"><span>Parto</span></span>
+          <span class="line">
+            <span class="a-title-hl"
+              >dall'animale.<svg class="a-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"
+                ><path d="M4 15c46-9 92-12 142-8s96 6 150-3" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" pathLength="1"
+                ></path></svg
+              ></span
             >
-          </h1>
-          <p class="lead">
-            Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
-            lavoro è osservare il soggetto nella sua globalità e costruire un percorso sostenibile
-            per lui e per la sua famiglia.
-          </p>
+          </span>
+        </h1>
+        <p class="lead" data-intro style="--intro-d:0.75s;">
+          Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
+          lavoro è osservare il soggetto nella sua globalità e costruire un percorso sostenibile
+          per lui e per la sua famiglia.
+        </p>
+        <div data-intro style="--intro-d:0.9s;">
           <a class="btn btn-lg" href="/consulenza-gratuita">
             Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
           </a>
         </div>
-        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
-          <CoverImage
-            src={heroPhoto}
-            alt="Andrea Bellettati seduto su una roccia con il suo bassotto, lungo un fiume di montagna"
-          />
+      </div>
+
+      <div class="a-hero-visual" aria-hidden="true">
+        <!-- Il parallax (data-speed) sta sui contenitori: le intro CSS animano
+             scale/rotate/translate dei figli e GSAP non deve leggerle. -->
+        <div class="a-disc-wrap" data-speed="0.1">
+          <div class="a-disc">
+            <svg class="a-disc-ring" viewBox="0 0 200 200" data-spin>
+              <defs><path id="a-ring-path" d="M100 100m-84 0a84 84 0 1 1 168 0a84 84 0 1 1-168 0"></path></defs>
+              <circle cx="100" cy="100" r="71"></circle>
+              <text><textPath href="#a-ring-path" textLength="524" lengthAdjust="spacing">alimentazione · comportamento · stile di vita ·</textPath></text>
+            </svg>
+          </div>
         </div>
+        <div class="a-stk-wrap" data-speed="-0.08">
+          <Sticker src={stkAndreaFiume} width={580} rotate={-3} eager class="a-hero-stk" />
+        </div>
+        <span class="a-hero-note">lui, per esempio</span>
+        <!-- Due frecce: lunga dall'alto su desktop, corta dal basso su mobile. -->
+        <svg class="a-hero-arrow a-hero-arrow--up" viewBox="0 0 60 50"
+          ><path d="M54 46C50 24 34 10 10 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" pathLength="1"
+          ></path><path d="M22 0 8 6l10 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"
+          ></path></svg
+        >
+        <svg class="a-hero-arrow a-hero-arrow--down" viewBox="0 0 110 200"
+          ><path d="M8 4c4 62 30 128 88 178" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" pathLength="1"
+          ></path><path d="M74 176l24 8-4-25" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"
+          ></path></svg
+        >
       </div>
     </div>
   </section>
 
-  <!-- MANIFESTO / METODO -->
-  <section class="section bg-deep paper-bg-deep deco-leaf">
+  <Ticker items={nastro} tone="peach" tilt={-1.4} />
+
+  <!-- IL METODO — tre principi, tre timbri -->
+  <section class="section bg-sage a-rules" aria-labelledby="rules-title">
     <div class="container">
-      <div class="head-block" data-reveal>
+      <div class="head-block">
         <span class="eyebrow kicker-rule">Il metodo</span>
-        <h2 class="display-lg">Tre principi<br />che non negozio.</h2>
+        <h2 class="display-lg" id="rules-title">Tre principi che <span class="script">non negozio.</span></h2>
       </div>
-      <div class="principi stagger" data-reveal data-delay="1">
-        <div class="principio">
-          <span class="pno">01</span>
-          <h3>Cibo e comportamento<br />sono la stessa storia</h3>
-          <p>
-            Un cane irrequieto, un gatto che si gratta, una digestione difficile: spesso la risposta
-            è nella ciotola tanto quanto nelle abitudini. Li guardo insieme, mai separati.
-          </p>
-        </div>
-        <div class="principio">
-          <span class="pno">02</span>
-          <h3>La scienza prima<br />delle mode</h3>
-          <p>
-            Niente slogan, niente “grain free” perché fa tendenza. Parto dalla letteratura, leggo le
-            etichette riga per riga e spiego il perché di ogni scelta.
-          </p>
-        </div>
-        <div class="principio">
-          <span class="pno">03</span>
-          <h3>Il piano deve entrare<br />nella vita vera</h3>
-          <p>
-            La dieta perfetta sulla carta non serve a niente se la famiglia non riesce a seguirla.
-            Costruisco qualcosa di sostenibile, per l'animale e per chi se ne prende cura.
-          </p>
-        </div>
-      </div>
+      <ol class="rules stagger" data-reveal>
+        {
+          principi.map((p, i) => (
+            <li class="rule-item">
+              <article class={`rule tone-${p.tone}`}>
+                <span class="rule-n" aria-hidden="true">{p.n}</span>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+                <span class="rule-stamp" data-stamp={String(i * 0.28)} aria-hidden="true">
+                  Non negoziabile
+                </span>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 
-  <!-- COME LAVORO -->
-  <section class="section">
-    <div class="container container-narrow">
-      <div class="head-block" data-reveal>
-        <span class="eyebrow kicker-rule">Come lavoro</span>
-        <h2 class="display-lg">Tre fonti,<br />una direzione.</h2>
-      </div>
-      <div data-reveal data-delay="1">
+  <!-- COME LAVORO — tre fonti che convergono: su desktop la sezione resta
+       ferma mentre i cerchi si sovrappongono (data-venn). -->
+  <section class="a-sources" data-venn aria-labelledby="sources-title">
+    <div class="container a-sources-grid">
+      <div class="a-sources-copy">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Come lavoro</span>
+          <h2 class="display-lg" id="sources-title">Tre fonti, <span class="script">una direzione.</span></h2>
+        </div>
         <p class="lead">
           Lavoro sull'equilibrio interno dell'animale mettendo insieme tre cose: ciò che la
           letteratura scientifica dice, ciò che osservo nel singolo soggetto, e il contesto reale
@@ -103,36 +162,55 @@ import heroPhoto from '../assets/hero.jpg';
           condivido un metodo di lavoro comune.
         </p>
       </div>
-    </div>
-  </section>
-
-  <!-- PULL QUOTE -->
-  <section class="section bg-sage paper-bg edge-tear" style="background-color:var(--sage);">
-    <div class="container">
-      <div class="pullquote" data-reveal>
-        <span class="section-mark" aria-hidden="true">
-          <LeafIcon size={38} stroke="var(--cream-ink)" />
-        </span>
-        <q>
-          Se l'alimentazione è sbagliata la medicina è inutile; se l'alimentazione è corretta la
-          medicina non è necessaria.
-        </q>
-        <cite>Proverbio ayurvedico · il cuore del mio lavoro</cite>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section-tight bg-deep paper-bg-deep">
-    <div class="container container-narrow">
-      <div class="cta-band">
-        <h2 class="display-md">Raccontami il tuo animale.</h2>
-        <p class="lead">Il primo passo è gratuito e senza impegno.</p>
-        <div class="cta-row">
-          <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
-          <a class="btn btn-ghost-cream btn-lg" href="/chi-sono">Conosci la mia storia</a>
+      <div class="venn" data-venn-stage aria-hidden="true">
+        <div class="venn-c venn-c--a" data-venn-circle data-from="-62 -34">
+          <span class="venn-label"><b>La scienza</b>ciò che dice la letteratura</span>
         </div>
+        <div class="venn-c venn-c--b" data-venn-circle data-from="62 -34">
+          <span class="venn-label"><b>L'animale</b>ciò che osservo in lui</span>
+        </div>
+        <div class="venn-c venn-c--c" data-venn-circle data-from="0 64">
+          <span class="venn-label"><b>La famiglia</b>la vita di tutti i giorni</span>
+        </div>
+        <div class="venn-core" data-venn-core>una<br />direzione</div>
       </div>
+    </div>
+  </section>
+
+  <!-- IL PROVERBIO — le parole si accendono con lo scroll (data-scrub);
+       "sbagliata" si prende la sottolineatura del correttore, "corretta"
+       l'evidenziatore, al passo con le parole (data-hl="scrub"). -->
+  <section class="a-proverb" aria-labelledby="pv-kicker">
+    <div class="container">
+      <span class="eyebrow kicker-rule" id="pv-kicker">Il cuore del mio lavoro</span>
+      <blockquote class="pv">
+        <p class="pv-text" data-scrub>
+          Se l'alimentazione è <mark class="pv-bad" data-hl="scrub">sbagliata</mark><br />
+          la medicina è inutile;<br />
+          se l'alimentazione è <mark class="pv-good" data-hl="scrub">corretta</mark><br />
+          la medicina non è necessaria.
+        </p>
+        <footer class="pv-cite">— Proverbio ayurvedico</footer>
+      </blockquote>
+    </div>
+    <Sticker src={stkBassotto} width={168} rotate={-6} class="pv-dog" data-float />
+  </section>
+
+  <!-- CTA — il segugio spunta dal bordo del footer; si accarezza (data-pet) -->
+  <section class="a-cta" aria-labelledby="a-cta-title">
+    <div class="container a-cta-inner">
+      <span class="eyebrow">Consulenza gratuita · 45 minuti</span>
+      <h2 class="a-cta-title" id="a-cta-title" data-split="pop">
+        Raccontami il <span class="script">tuo animale.</span>
+      </h2>
+      <p class="lead">Il primo passo è gratuito e senza impegno.</p>
+      <div class="cta-row">
+        <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+        <a class="btn btn-ghost-cream btn-lg" href="/chi-sono">Conosci la mia storia</a>
+      </div>
+    </div>
+    <div class="a-cta-peek" data-peek data-pet aria-hidden="true">
+      <Image src={stkSegugio} alt="" widths={[420, 840]} sizes="(min-width: 900px) 420px, 64vw" loading="lazy" />
     </div>
   </section>
 </Base>

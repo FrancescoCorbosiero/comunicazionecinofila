@@ -1,9 +1,62 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import CoverImage from '../components/CoverImage.astro';
+import Sticker from '../components/Sticker.astro';
+import { IG_HANDLE, IG_URL, SITE_TAGLINE } from '../config';
 import chiSonoPhoto from '../assets/chi-sono.jpg';
 import consulenzaPhoto from '../assets/consulenza.jpg';
+import heroPhoto from '../assets/hero.jpg';
+import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+
+// Le polaroid del ventaglio (data-fan): l'ultima sta in cima alla pila.
+const polaroid = [
+  { src: consulenzaPhoto, alt: 'Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto', caption: 'maglioni a quadri' },
+  { src: heroPhoto, alt: 'Andrea Bellettati seduto su una roccia con il suo bassotto, lungo un fiume di montagna', caption: 'pausa al fiume' },
+  { src: chiSonoPhoto, alt: 'Andrea Bellettati guancia a guancia con il suo segugio, in inverno', caption: 'guancia a guancia' },
+];
+
+// Il percorso: un sentiero di impronte unisce le tappe (data-trail).
+// NOTE: date/tappe da confermare con Andrea — struttura pronta, testi modificabili.
+const tappe = [
+  {
+    when: "L'inizio",
+    title: 'Dalla convivenza allo studio',
+    body: 'La curiosità per ciò che metto nella ciotola del mio cane diventa studio serio: etichette, ingredienti, letteratura scientifica. Capisco quanto poco se ne parli davvero.',
+    tone: 'paper',
+  },
+  {
+    when: '2021',
+    title: 'Entro in un team multidisciplinare',
+    body: 'Mi unisco a un gruppo di professionisti nato per portare consapevolezza su un argomento troppo spesso sottovalutato: il Team che oggi chiamiamo TeamNutrizione. Formazione continua, confronto e metodo condiviso.',
+    tone: 'mist',
+  },
+  {
+    when: 'Oggi',
+    title: 'Consulenze e divulgazione',
+    body: "Consulenze 1:1 per famiglie, webinar e contenuti come “Etichette a 4 Zampe” e l'antistaminico naturale. Sempre con lo stesso obiettivo: scelte consapevoli.",
+    tone: 'blush',
+  },
+  {
+    when: 'Con te',
+    title: 'Il prossimo passo',
+    body: 'Una consulenza gratuita di 45 minuti per analizzare alimentazione e comportamento del tuo animale, e un piano di lavoro firmato su misura.',
+    tone: 'peach',
+    link: { href: '/consulenza-gratuita', label: 'Richiedi la tua consulenza gratuita' },
+  },
+];
+
+const PAW_D = [
+  { cx: 12, cy: 15, rx: 4.3, ry: 5.8 },
+  { cx: 21, cy: 10, rx: 4.3, ry: 6 },
+  { cx: 30, cy: 11, rx: 4.3, ry: 6 },
+  { cx: 38.5, cy: 16, rx: 4.3, ry: 5.6 },
+  { cx: 25, cy: 29, rx: 9.5, ry: 8 },
+];
+
+// La scheda Instagram: avatar, bio e un'anteprima di post che porta al profilo.
+const igHandle = IG_HANDLE.replace(/^@/, '');
 ---
 <Base
   active="chi-sono"
@@ -17,48 +70,60 @@ import consulenzaPhoto from '../assets/consulenza.jpg';
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- PAGE HERO -->
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div class="split-body" data-reveal>
-          <span class="eyebrow kicker-rule">Chi sono</span>
-          <h1 class="display-lg">Mi chiamo<br />Andrea<br />Bellettati.</h1>
-          <p class="lead">
-            Sono un esperto in comportamento e nutrizione per cani e gatti. Studio da anni la
-            relazione che intercorre tra questi due mondi: non si può parlare di benessere animale
-            senza tenerli insieme.
-          </p>
-          <div class="hero-cta-row">
-            <a class="btn btn-lg" href="/consulenza-gratuita">
-              Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
-            </a>
-            <a class="btn btn-ghost btn-lg" href="/approccio">Il mio approccio</a>
-          </div>
+  <!-- HERO — il titolo è un cartellino "Ciao! mi chiamo": arriva come uno
+       sticker sbattuto sul foglio e il nome si scrive a pennarello. -->
+  <section class="cs-hero" data-paw-trail aria-labelledby="cs-title">
+    <div class="container cs-hero-grid">
+      <div class="cs-hero-copy">
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Chi sono</span>
+        <h1 class="nametag" id="cs-title">
+          <span class="nametag-top"><b>Ciao!</b> mi chiamo</span>
+          <span class="nametag-name">Andrea Bellettati</span>
+        </h1>
+        <p class="lead" data-intro style="--intro-d:1.05s;">
+          Sono un esperto in comportamento e nutrizione per cani e gatti. Studio da anni la relazione
+          che intercorre tra questi due mondi: non si può parlare di benessere animale senza tenerli
+          insieme.
+        </p>
+        <div class="cs-ctas" data-intro style="--intro-d:1.2s;">
+          <a class="btn btn-lg" href="/consulenza-gratuita">
+            Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
+          </a>
+          <a class="btn btn-ghost btn-lg" href="/approccio">Il mio approccio</a>
         </div>
-        <div class="split-media parallax-cover" data-reveal data-delay="1" style="aspect-ratio:4/5;">
-          <CoverImage
-            src={consulenzaPhoto}
-            alt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
-          />
-        </div>
+      </div>
+      <div class="cs-hero-media">
+        <Sticker
+          src={stkAndreaSegugio}
+          alt="Andrea Bellettati guancia a guancia con il suo segugio"
+          width={470}
+          rotate={4}
+          eager
+          class="cs-hero-stk"
+          data-pet
+          data-speed="0.12"
+        />
+        <span class="cs-hero-note" aria-hidden="true">
+          io e il mio segugio
+          <svg viewBox="0 0 110 96"
+            ><path d="M104 4c2 38-28 72-88 86" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" pathLength="1"
+            ></path><path d="M34 76 16 90l20 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"
+            ></path></svg
+          >
+        </span>
       </div>
     </div>
   </section>
 
-  <!-- BIO / IL BASSOTTO -->
-  <section class="section bg-sage paper-bg edge-wave" style="background-color:var(--sage);">
+  <!-- BIO — le polaroid partono impilate e si aprono a ventaglio (data-fan) -->
+  <section class="section cs-bio" aria-labelledby="bio-title">
     <div class="container">
-      <div class="split flip">
-        <div class="split-media parallax-cover photo-tape" data-reveal style="aspect-ratio:4/5;">
-          <CoverImage
-            src={chiSonoPhoto}
-            alt="Andrea Bellettati guancia a guancia con il suo segugio, in inverno"
-          />
-        </div>
-        <div class="split-body" data-reveal data-delay="1">
+      <div class="cs-bio-head">
+        <div class="head-block">
           <span class="eyebrow kicker-rule">Vivo con un bassotto</span>
-          <h2 class="display-md">La teoria la verifico<br />ogni giorno, <span class="script">a casa.</span></h2>
+          <h2 class="display-lg" id="bio-title">La teoria la verifico ogni giorno, <span class="script">a casa.</span></h2>
+        </div>
+        <div class="cs-bio-text" data-reveal>
           <p>
             Convivo con un bassotto: ogni cosa che studio passa prima dalla nostra quotidianità. Le
             passeggiate, i pasti, le piccole intolleranze, gli inverni in montagna. È lì che la
@@ -68,75 +133,112 @@ import consulenzaPhoto from '../assets/consulenza.jpg';
             Questo è anche il modo in cui lavoro con te: con la pazienza e l'onestà di chi sa che
             dall'altra parte c'è un compagno di vita, non un “caso”.
           </p>
-          <blockquote style="border-left:3px solid var(--peach); padding-left:18px; margin:6px 0 0;">
-            <p style="font-family:var(--serif); font-style:italic; font-size:21px; color:var(--cream-ink);">
-              «Alimentare correttamente il proprio amico a quattro zampe è, insieme alla sua
-              educazione, la più grande forma di amore.»
-            </p>
-          </blockquote>
         </div>
       </div>
+      <div class="cs-fan" data-fan>
+        {
+          polaroid.map((p, i) => (
+            <figure class={`cs-pol cs-pol--${i + 1}`} data-fan-item>
+              <Image src={p.src} alt={p.alt} widths={[360, 720]} sizes="(min-width: 900px) 340px, 50vw" loading="lazy" />
+              <figcaption>{p.caption}</figcaption>
+            </figure>
+          ))
+        }
+        <Sticker src={stkBassotto} width={128} rotate={-8} class="cs-fan-dog" data-float />
+      </div>
+      <blockquote class="cs-note" data-reveal>
+        <p>
+          «Alimentare correttamente il proprio amico a quattro zampe è, insieme alla sua educazione,
+          la più grande forma di amore.»
+        </p>
+      </blockquote>
     </div>
   </section>
 
-  <!-- TIMELINE -->
-  <!-- NOTE: date/tappe da confermare con Andrea — struttura pronta, testi modificabili -->
-  <section class="section deco-leaf">
-    <div class="container container-narrow">
-      <div class="head-block" data-reveal>
+  <!-- IL PERCORSO — le impronte percorrono il sentiero al passo con lo
+       scroll e accendono le tappe (data-trail). -->
+  <section class="section bg-deep cs-path" aria-labelledby="path-title">
+    <div class="container">
+      <div class="head-block">
         <span class="eyebrow kicker-rule">Il percorso</span>
-        <h2 class="display-lg">Da una passione<br />a un metodo.</h2>
+        <h2 class="display-lg" id="path-title">Da una passione <span class="script">a un metodo.</span></h2>
       </div>
-      <div class="timeline stagger" data-reveal data-delay="1">
-        <div class="tl-item">
-          <div class="tl-year">L'inizio</div>
-          <h4>Dalla convivenza allo studio</h4>
-          <p>
-            La curiosità per ciò che metto nella ciotola del mio cane diventa studio serio:
-            etichette, ingredienti, letteratura scientifica. Capisco quanto poco se ne parli
-            davvero.
-          </p>
-        </div>
-        <div class="tl-item">
-          <div class="tl-year">2021</div>
-          <h4>Entro in un team multidisciplinare</h4>
-          <p>
-            Mi unisco a un gruppo di professionisti nato per portare consapevolezza su un argomento
-            troppo spesso sottovalutato: il Team che oggi chiamiamo TeamNutrizione. Formazione
-            continua, confronto e metodo condiviso.
-          </p>
-        </div>
-        <div class="tl-item">
-          <div class="tl-year">Oggi</div>
-          <h4>Consulenze e divulgazione</h4>
-          <p>
-            Consulenze 1:1 per famiglie, webinar e contenuti come “Etichette a 4 Zampe” e
-            l'antistaminico naturale. Sempre con lo stesso obiettivo: scelte consapevoli.
-          </p>
-        </div>
-        <div class="tl-item is-now">
-          <div class="tl-year">Con te</div>
-          <h4>Il prossimo passo</h4>
-          <p>
-            Una consulenza gratuita di 45 minuti per analizzare alimentazione e comportamento del
-            tuo animale, e un piano di lavoro firmato su misura.
-          </p>
-        </div>
+      <div class="trail" data-trail>
+        <svg class="trail-svg" data-trail-svg aria-hidden="true"><path data-trail-path></path></svg>
+        <div class="trail-paws" data-trail-paws aria-hidden="true"></div>
+        <ol class="trail-steps">
+          {
+            tappe.map((t, i) => (
+              <li class="trail-step" data-trail-step>
+                <span class="trail-dot" data-trail-stop aria-hidden="true">
+                  {i === tappe.length - 1 ? (
+                    <svg viewBox="0 0 24 22" fill="currentColor">
+                      <path d="M12 21.5S1.5 15 1.5 7.6C1.5 4 4.2 1.5 7.3 1.5c2 0 3.7 1 4.7 2.6 1-1.6 2.7-2.6 4.7-2.6 3.1 0 5.8 2.5 5.8 6.1C22.5 15 12 21.5 12 21.5Z" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 50 44" fill="currentColor">
+                      {PAW_D.map((e) => (
+                        <ellipse cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} />
+                      ))}
+                    </svg>
+                  )}
+                </span>
+                <div class={`trail-card tone-${t.tone}`}>
+                  <span class="trail-when">{t.when}</span>
+                  <h3>{t.title}</h3>
+                  <p>{t.body}</p>
+                  {t.link && (
+                    <a class="text-link" href={t.link.href}>
+                      {t.link.label} <ArrowIcon size={14} />
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="section-tight bg-deep paper-bg-deep">
-    <div class="container container-narrow">
-      <div class="cta-band">
-        <h2 class="display-md">Raccontami il tuo animale.</h2>
-        <p class="lead">Il primo passo è gratuito e senza impegno.</p>
+  <!-- CTA — foglio pesca e la scheda del profilo Instagram -->
+  <section class="cs-cta" aria-labelledby="cs-cta-title">
+    <div class="container cs-cta-grid">
+      <div class="cs-cta-copy">
+        <span class="eyebrow">Consulenza gratuita · 45 minuti</span>
+        <h2 class="cs-cta-title" id="cs-cta-title" data-split="pop">
+          Raccontami il <span class="script">tuo animale.</span>
+        </h2>
+        <p class="lead">
+          Il primo passo è gratuito e senza impegno. Nel frattempo, ci vediamo su Instagram.
+        </p>
         <div class="cta-row">
-          <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
-          <a class="btn btn-ghost-cream btn-lg" href="/lavora-con-noi">Lavora con noi</a>
+          <a class="btn btn-lg btn-dark" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+          <a class="btn btn-ghost btn-lg" href="/lavora-con-noi">Lavora con noi</a>
         </div>
       </div>
+      <aside class="ig-card" data-tilt aria-label="Il profilo Instagram di Andrea">
+        <span class="cs-cta-note" aria-hidden="true">seguimi!</span>
+        <div class="ig-head">
+          <span class="ig-avatar"><img src="/assets/logo.jpg" alt="" width="52" height="52" loading="lazy" decoding="async" /></span>
+          <span class="ig-id"><b>{igHandle}</b><small>Andrea Bellettati</small></span>
+          <a class="btn btn-sm ig-follow" href={IG_URL} target="_blank" rel="noopener">Segui</a>
+        </div>
+        <p class="ig-bio">{SITE_TAGLINE}</p>
+        <a class="ig-grid" href={IG_URL} target="_blank" rel="noopener" aria-label={`Apri il profilo Instagram ${IG_HANDLE}`}>
+          <img src="/assets/articolo-antistaminico-naturale-per-cani.jpg" alt="" width="128" height="128" loading="lazy" decoding="async" />
+          <Image src={heroPhoto} alt="" widths={[160, 320]} sizes="128px" loading="lazy" />
+          <Image src={consulenzaPhoto} alt="" widths={[160, 320]} sizes="128px" loading="lazy" />
+        </a>
+        <div class="ig-foot">
+          <button type="button" class="ig-like" data-pet aria-label="Mi piace">
+            <svg viewBox="0 0 24 22" fill="currentColor" aria-hidden="true">
+              <path d="M12 21.5S1.5 15 1.5 7.6C1.5 4 4.2 1.5 7.3 1.5c2 0 3.7 1 4.7 2.6 1-1.6 2.7-2.6 4.7-2.6 3.1 0 5.8 2.5 5.8 6.1C22.5 15 12 21.5 12 21.5Z"></path>
+            </svg>
+          </button>
+          <span>Alimentazione, comportamento e vita quotidiana con cani e gatti.</span>
+        </div>
+      </aside>
     </div>
   </section>
 </Base>

@@ -187,12 +187,18 @@ mostra il fallback, ed è il comportamento atteso.
   si sfogliano scrollando e il monitoraggio è un binario che si riempie; in
   Lavora con noi "una rete di venditori" viene barrata a mano e diventa "un
   Team", i principi sono card che si impilano, i profili sono sticker che
-  cadono e, toccati, preselezionano l'ambito nel modulo. In più: titoli a
+  cadono e, toccati, preselezionano l'ambito nel modulo; in Approccio ogni
+  principio riceve il suo timbro "Non negoziabile" e le tre fonti del metodo
+  sono cerchi che convergono (Venn) mentre la sezione resta ferma; in Chi
+  sono il titolo è un cartellino "Ciao! mi chiamo", le polaroid si aprono a
+  ventaglio e le impronte percorrono il sentiero delle tappe al passo con lo
+  scroll. In più: titoli a
   righe/parole/lettere, frasi che si accendono parola per parola, nastri che
   seguono lo scroll, scia di zampe dietro al mouse, tilt 3D, evidenziatore,
   coriandoli di zampe/cuori/ossa all'invio dei form, wordmark del footer che
   sale. Tutto via attributi (`data-reveal`, `data-stack`, `data-stories`,
-  `data-strike`…: elenco completo in testa a `motion.ts`). Senza JavaScript
+  `data-strike`, `data-venn`, `data-trail`, `data-fan`…: elenco completo in
+  testa a `motion.ts`). Senza JavaScript
   ogni sezione mostra il suo stato finale; con `prefers-reduced-motion` è
   tutto fermo.
 - **JSON-LD** WebSite/Person/LocalBusiness ovunque, Article (con wordCount e
