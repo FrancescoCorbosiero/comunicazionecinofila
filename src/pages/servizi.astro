@@ -3,9 +3,12 @@ import Base from '../layouts/Base.astro';
 import LeafIcon from '../components/LeafIcon.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import CoverImage from '../components/CoverImage.astro';
-import alimentazionePhoto from '../assets/alimentazione.jpg';
 import chiSonoPhoto from '../assets/chi-sono.jpg';
-import { publicImage } from '../lib/images';
+import { assetImage, publicImage } from '../lib/images';
+
+// Foto del blocco "Alimentazione Naturale" (src/assets/alimentazione.jpg):
+// rilevata per nome, se manca compare il placeholder invece di un errore.
+const alimentazionePhoto = assetImage('alimentazione');
 
 // Foto del blocco "Opportunità Lavorative": appare da sola appena carichi
 // team-formazione.jpg in public/assets (vedi public/assets/README.md).
@@ -41,12 +44,24 @@ const teamPhoto = publicImage('team-formazione');
   <section class="section-tight" id="alimentazione">
     <div class="container">
       <div class="svc-block" data-reveal>
-        <div class="svc-block-media parallax-cover">
-          <CoverImage
-            src={alimentazionePhoto}
-            alt="Locandina del webinar Etichette a 4 Zampe sulla lettura delle etichette del cibo per cani"
-          />
-        </div>
+        {
+          alimentazionePhoto ? (
+            <div class="svc-block-media parallax-cover">
+              <CoverImage
+                src={alimentazionePhoto}
+                alt="Locandina del webinar Etichette a 4 Zampe sulla lettura delle etichette del cibo per cani"
+              />
+            </div>
+          ) : (
+            <div
+              class="svc-block-media placeholder"
+              style="min-height:280px; flex-direction:column; gap:8px; text-align:center; padding:24px;"
+            >
+              <LeafIcon size={40} stroke="var(--olive-deep)" />
+              <span>FOTO ALIMENTAZIONE</span>
+            </div>
+          )
+        }
         <div class="svc-block-body">
           <span class="svc-num">Servizio 01</span>
           <h3>Alimentazione Naturale</h3>

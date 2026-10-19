@@ -31,3 +31,20 @@ export function autoCover(
 ): string | undefined {
   return explicit ?? publicImage(`${prefix}-${id}`);
 }
+
+/* Foto ottimizzate di src/assets (astro:assets): rilevate per nome, così una
+   foto mancante non blocca la pagina — al suo posto compare il placeholder.
+   Un `import foto from '../assets/x.jpg'` diretto, invece, fa fallire build e
+   dev server ("ImageNotFound") se il file non c'è. */
+const ASSET_PHOTOS = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+
+/** La foto src/assets/<name>.* se esiste, altrimenti undefined. */
+export function assetImage(name: string): ImageMetadata | undefined {
+  for (const ext of EXTS) {
+    const mod = ASSET_PHOTOS[`../assets/${name}.${ext}`];
+    if (mod) return mod.default;
+  }
+  return undefined;
+}
