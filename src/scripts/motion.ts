@@ -20,9 +20,11 @@
      data-split[="var"]     titolo — righe, parole, lettere… (lines, pop,
                             wipe, chars, blur; default: a turno)
      data-scrub             paragrafo — le parole si accendono con lo scroll
-     data-hl                <mark> — l'evidenziatore passa quando entra
+     data-hl[="scrub"]      <mark> — l'evidenziatore passa quando entra
+                            (scrub: al passo con lo scroll)
      data-pop               icona — entra con un timbro elastico
-     data-stamp             timbro — sbatte sul biglietto quando entra
+     data-stamp[="0.2"]     timbro — sbatte sul foglio quando entra (valore:
+                            ritardo in secondi, per più timbri in fila)
      data-draw              svg — i tracciati si disegnano da soli
      data-count="2021"      numero — conta fino al valore (data-count-from)
    ─ Sezioni guidate dallo scroll
@@ -37,6 +39,14 @@
                             ([data-hscroll-track], [data-hscroll-bar])
      data-rail              binario che si riempie, tappe che si accendono
                             ([data-rail-step])
+     data-venn              tre cerchi ([data-venn-circle], data-from="x y"
+                            in % della loro misura) che convergono; il centro
+                            ([data-venn-core]) compare alla fine. Pinnato su desktop
+     data-trail             sentiero tra le tappe ([data-trail-step] con il
+                            loro [data-trail-stop]): le impronte lo percorrono
+                            al passo con lo scroll e accendono le tappe
+     data-fan               foto impilate ([data-fan-item]) che si aprono a
+                            ventaglio mentre la sezione entra
      data-marquee           nastro che segue velocità e verso dello scroll
      data-peek              sticker che spunta dal fondo della sezione
      data-spin              badge che gira con lo scroll
@@ -772,10 +782,180 @@ function strikes(): void {
   });
 }
 
-/* Evidenziatore che passa sulle parole importanti. */
+/* ── Venn: tre fonti che convergono in una direzione ────────────────
+   I cerchi partono lontani e scorrono fino a sovrapporsi; al centro
+   compare il punto d'incontro. Su desktop la sezione resta ferma mentre
+   succede, su mobile accade mentre la sezione attraversa lo schermo.
+   Senza script il diagramma è già composto. */
+function venns(media: gsap.MatchMedia): void {
+  gsap.utils.toArray<HTMLElement>('[data-venn]').forEach((sec) => {
+    const circles = gsap.utils.toArray<HTMLElement>(sec.querySelectorAll('[data-venn-circle]'));
+    const core = sec.querySelector<HTMLElement>('[data-venn-core]');
+    const stage = sec.querySelector<HTMLElement>('[data-venn-stage]') ?? sec;
+    if (circles.length < 2) return;
+    const build = (pinned: boolean): void => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: pinned
+          ? { trigger: sec, start: 'top top', end: '+=95%', pin: true, scrub: 0.6 }
+          : { trigger: stage, start: 'top 88%', end: 'center 45%', scrub: 0.6 },
+      });
+      circles.forEach((c) => {
+        const [fx, fy] = (c.dataset.from ?? '0 0').split(' ').map(Number);
+        tl.fromTo(
+          c,
+          { xPercent: fx, yPercent: fy, scale: 0.78, rotation: fx / 6 },
+          { xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 1, ease: 'power2.inOut' },
+          0
+        );
+      });
+      if (core) {
+        // GSAP assorbe la rotazione CSS di riposo (rotate): si torna a quella.
+        const rest = Number(gsap.getProperty(core, 'rotation')) || 0;
+        tl.fromTo(
+          core,
+          { scale: 0, rotation: rest - 25, opacity: 0 },
+          { scale: 1, rotation: rest, opacity: 1, duration: 0.3, ease: 'back.out(2.4)' },
+          0.86
+        );
+      }
+      tl.to({}, { duration: 0.25 });
+    };
+    media.add(DESKTOP, () => build(true));
+    media.add(MOBILE, () => build(false));
+  });
+}
+
+/* ── Il sentiero (chi sono) ──────────────────────────────────────────
+   Un sentiero tratteggiato passa per i pallini delle tappe; scrollando,
+   le impronte lo percorrono tenendo il passo con chi legge (la punta resta
+   al 62% dello schermo) e ogni tappa raggiunta si accende. Le impronte si
+   alternano destra/sinistra e guardano nel verso del cammino. La
+   geometria si ricalcola a ogni refresh (resize, font, immagini). */
+function trails(): void {
+  gsap.utils.toArray<HTMLElement>('[data-trail]').forEach((root) => {
+    const svg = root.querySelector<SVGSVGElement>('[data-trail-svg]');
+    const path = root.querySelector<SVGPathElement>('[data-trail-path]');
+    const layer = root.querySelector<HTMLElement>('[data-trail-paws]');
+    const steps = gsap.utils.toArray<HTMLElement>(root.querySelectorAll('[data-trail-step]'));
+    const stops = steps.map((s) => s.querySelector<HTMLElement>('[data-trail-stop]') ?? s);
+    if (!svg || !path || !layer || stops.length < 2) return;
+    // Con lo script i pallini si sfalsano (sinistra/destra): il sentiero serpeggia.
+    root.classList.add('has-trail');
+    // Centro di un elemento nel sistema di root, trasformazioni escluse.
+    const center = (el: HTMLElement): { x: number; y: number } => {
+      let x = el.offsetWidth / 2;
+      let y = el.offsetHeight / 2;
+      for (let n: HTMLElement | null = el; n && n !== root; n = n.offsetParent as HTMLElement | null) {
+        x += n.offsetLeft;
+        y += n.offsetTop;
+      }
+      return { x, y };
+    };
+    let stopY: number[] = [];
+    let prints: { el: HTMLElement; y: number }[] = [];
+    const build = (): void => {
+      const pts = stops.map(center);
+      stopY = pts.map((p) => p.y);
+      svg.setAttribute('viewBox', `0 0 ${root.clientWidth} ${root.clientHeight}`);
+      // Curve con tangenti verticali: il sentiero scende sempre, mai indietro.
+      let d = `M${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1];
+        const b = pts[i];
+        const my = (b.y - a.y) / 2;
+        d += ` C${a.x.toFixed(1)} ${(a.y + my).toFixed(1)} ${b.x.toFixed(1)} ${(b.y - my).toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+      }
+      path.setAttribute('d', d);
+      const len = path.getTotalLength();
+      const n = Math.max(2, Math.round(len / (window.innerWidth < 900 ? 44 : 56)));
+      const frag = document.createDocumentFragment();
+      prints = [];
+      for (let i = 1; i < n; i++) {
+        const at = (len * i) / n;
+        const p = path.getPointAtLength(at);
+        const q = path.getPointAtLength(Math.min(len, at + 1));
+        const ang = Math.atan2(q.y - p.y, q.x - p.x);
+        const off = i % 2 ? 9 : -9;
+        const el = document.createElement('span');
+        el.className = 'trail-paw';
+        el.innerHTML = PAW;
+        el.style.left = `${(p.x + Math.cos(ang + Math.PI / 2) * off).toFixed(1)}px`;
+        el.style.top = `${(p.y + Math.sin(ang + Math.PI / 2) * off).toFixed(1)}px`;
+        // Le dita guardano avanti: l'SVG punta in alto, quindi +90°.
+        el.style.setProperty('--a', `${((ang * 180) / Math.PI + 90).toFixed(1)}deg`);
+        frag.appendChild(el);
+        prints.push({ el, y: p.y });
+      }
+      layer.replaceChildren(frag);
+    };
+    const render = (): void => {
+      const tip = window.innerHeight * 0.62 - root.getBoundingClientRect().top;
+      prints.forEach(({ el, y }) => el.classList.toggle('is-on', y <= tip));
+      steps.forEach((s, i) => s.classList.toggle('is-reached', stopY[i] <= tip + 1));
+    };
+    build();
+    render();
+    ScrollTrigger.create({
+      trigger: root,
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: render,
+      onRefresh: () => {
+        build();
+        render();
+      },
+    });
+    cleanups.push(() => {
+      layer.replaceChildren();
+      root.classList.remove('has-trail');
+      steps.forEach((s) => s.classList.remove('is-reached'));
+    });
+  });
+}
+
+/* ── Foto a ventaglio ────────────────────────────────────────────────
+   Le polaroid partono impilate al centro e si aprono nelle loro posizioni
+   mentre la sezione entra. Le distanze si misurano sul layout (offset),
+   non sui rettangoli già trasformati. */
+function fans(): void {
+  gsap.utils.toArray<HTMLElement>('[data-fan]').forEach((root) => {
+    const items = gsap.utils.toArray<HTMLElement>(root.querySelectorAll('[data-fan-item]'));
+    if (!items.length) return;
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: root, start: 'top 88%', end: 'center 52%', scrub: 0.7, invalidateOnRefresh: true },
+    });
+    const mid = (items.length - 1) / 2;
+    items.forEach((it, i) => {
+      // La rotazione di riposo (CSS rotate) la assorbe GSAP: si parte e si torna da lì.
+      const rest = Number(gsap.getProperty(it, 'rotation')) || 0;
+      tl.fromTo(
+        it,
+        {
+          x: () => root.clientWidth / 2 - (it.offsetLeft + it.offsetWidth / 2),
+          y: () => root.clientHeight / 2 - (it.offsetTop + it.offsetHeight / 2),
+          rotation: rest + (i - mid) * 7,
+        },
+        { x: 0, y: 0, rotation: rest, ease: 'power2.out' },
+        0
+      );
+    });
+  });
+}
+
+/* Evidenziatore che passa sulle parole importanti. data-hl="scrub" lo
+   lega allo scroll: dentro un testo data-scrub arriva insieme alla parola. */
 function highlights(): void {
   gsap.utils.toArray<HTMLElement>('[data-hl]').forEach((m) => {
     if (inFirstView(m)) return;
+    if (m.dataset.hl === 'scrub') {
+      gsap.fromTo(
+        m,
+        { '--hl': '0%' },
+        { '--hl': '100%', ease: 'none', scrollTrigger: { trigger: m, start: 'top 66%', end: 'top 50%', scrub: 0.6 } }
+      );
+      return;
+    }
     gsap.fromTo(
       m,
       { '--hl': '0%' },
@@ -847,13 +1027,14 @@ function stickerWalls(): void {
   });
 }
 
-/* Timbri che sbattono sul foglio. */
+/* Timbri che sbattono sul foglio; data-stamp="0.25" li fa arrivare in fila. */
 function stamps(): void {
   gsap.utils.toArray<HTMLElement>('[data-stamp]').forEach((el) => {
     if (inFirstView(el)) return;
     const host = el.parentElement;
+    const delay = parseFloat(el.dataset.stamp ?? '') || 0;
     const tl = gsap.timeline({ scrollTrigger: { trigger: host ?? el, start: 'top 70%', once: true } });
-    tl.from(el, { scale: 2.6, rotation: -45, opacity: 0, duration: 0.45, ease: 'power4.in' }).fromTo(
+    tl.from(el, { scale: 2.6, rotation: -45, opacity: 0, duration: 0.45, ease: 'power4.in' }, delay).fromTo(
       host ?? el,
       { x: 0 },
       { keyframes: { x: [-6, 5, -3, 0] }, duration: 0.3, ease: 'none', clearProps: 'transform' }
@@ -1239,6 +1420,7 @@ function initPage(): void {
     storiesScroll(media);
     strikes();
     hscroll(media);
+    venns(media);
     stackCards();
     heroAway();
     splitHeadings();
@@ -1253,6 +1435,8 @@ function initPage(): void {
     spins();
     stickerWalls();
     stamps();
+    trails();
+    fans();
     counters();
     pops();
     drawPaths();
