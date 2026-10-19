@@ -1,0 +1,746 @@
+---
+// Laboratorio — pagina "finta": le animazioni belle che sul sito non
+// usiamo (fuori tono, troppo pesanti o senza un posto dove stare). Non è
+// linkata da nessuna parte, è fuori dalla sitemap e non si indicizza.
+// Le demo vivono in src/scripts/lab (caricate solo qui).
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import LabDemo from '../components/LabDemo.astro';
+import heroPhoto from '../assets/hero.jpg';
+import chiSonoPhoto from '../assets/chi-sono.jpg';
+import consulenzaPhoto from '../assets/consulenza.jpg';
+import lavoraPhoto from '../assets/lavora-con-noi.jpg';
+import stkCani from '../assets/stickers/cani.webp';
+import stkSegugio from '../assets/stickers/segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+import stkAndreaFiume from '../assets/stickers/andrea-fiume.webp';
+import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
+import { assetImage } from '../lib/images';
+import '../styles/lab.css';
+
+// Il poster del webinar, se c'è (vedi Servizi); altrimenti la foto dei cani.
+const posterPhoto = assetImage('alimentazione') ?? consulenzaPhoto;
+
+// La texture del WebGL: una versione già leggera della foto.
+const liquidTex = await getImage({ src: heroPhoto, width: 1200, format: 'webp', quality: 72 });
+
+const ALT = {
+  hero: 'Andrea Bellettati con il suo bassotto lungo un fiume di montagna',
+  chiSono: 'Andrea Bellettati guancia a guancia con il suo segugio, in inverno',
+  consulenza: 'Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto',
+  lavora: 'TeamNutrizione — cani e gatti di tante razze in fila',
+  poster: 'Il poster del webinar “Etichette a 4 zampe”',
+};
+
+const groups = [
+  { id: 'stonano', title: 'Stonano col tono', count: 6, tone: 'stona' },
+  { id: 'pesanti', title: 'Troppo pesanti', count: 6, tone: 'pesante' },
+  { id: 'senza-casa', title: 'Belle ma senza casa', count: 5, tone: 'senza-casa' },
+];
+const index = [
+  ['decode', 'Decode', 'stona'],
+  ['liquid', 'Liquid', 'stona'],
+  ['torcia', 'Torcia', 'stona'],
+  ['lookbook', 'Lookbook', 'stona'],
+  ['scatti', 'Scroll a scatti', 'stona'],
+  ['scia', 'Scia di foto', 'stona'],
+  ['particelle', 'Particelle', 'pesante'],
+  ['lettera', 'Dentro la lettera', 'pesante'],
+  ['sogno', 'Sogno', 'pesante'],
+  ['tavolo', 'Tavolo infinito', 'pesante'],
+  ['giostra', 'Giostra 3D', 'pesante'],
+  ['scatola', 'Scatola di sticker', 'pesante'],
+  ['metamorfosi', 'Metamorfosi', 'senza-casa'],
+  ['flip', 'Flip', 'senza-casa'],
+  ['swipe', 'Swipe', 'senza-casa'],
+  ['medaglietta', 'Medaglietta', 'senza-casa'],
+  ['respiro', 'Respiro tipografico', 'senza-casa'],
+];
+
+const lookbook = [
+  [
+    { src: heroPhoto, alt: ALT.hero, cap: 'Look 01 — Fiume', pos: '62% 50%' },
+    { src: stkCani, alt: 'Sticker del segugio e del bassotto', cap: 'Look 02 — Coppia', pos: '50% 50%', sticker: true },
+    { src: posterPhoto, alt: ALT.poster, cap: 'Look 03 — Etichette', pos: '50% 30%' },
+  ],
+  [
+    { src: chiSonoPhoto, alt: ALT.chiSono, cap: 'Look 04 — Inverno', pos: '50% 40%' },
+    { src: lavoraPhoto, alt: ALT.lavora, cap: 'Look 05 — Branco', pos: '30% 50%' },
+    { src: consulenzaPhoto, alt: ALT.consulenza, cap: 'Look 06 — Quadri', pos: '40% 60%' },
+  ],
+  [
+    { src: stkSegugio, alt: 'Sticker del segugio', cap: 'Look 07 — Segugio', pos: '50% 50%', sticker: true },
+    { src: heroPhoto, alt: ALT.hero, cap: 'Look 08 — Roccia', pos: '78% 70%' },
+    { src: stkBassotto, alt: 'Sticker del bassotto', cap: 'Look 09 — Bassotto', pos: '50% 50%', sticker: true },
+  ],
+];
+const lookSpeed = ['-0.5', '0.6', '-0.25'];
+
+const trailImgs = [heroPhoto, stkCani, chiSonoPhoto, stkSegugio, consulenzaPhoto, stkBassotto, lavoraPhoto, stkAndreaSegugio];
+
+const boardTiles = [
+  { kind: 'img', src: heroPhoto, alt: '', pos: '60% 50%' },
+  { kind: 'word', text: 'bau', tone: 'peach' },
+  { kind: 'img', src: chiSonoPhoto, alt: '', pos: '50% 40%' },
+  { kind: 'stk', src: stkCani, tone: 'sage' },
+  { kind: 'img', src: posterPhoto, alt: '', pos: '50% 30%' },
+  { kind: 'stk', src: stkBassotto, tone: 'paper' },
+  { kind: 'img', src: lavoraPhoto, alt: '', pos: '20% 50%' },
+  { kind: 'word', text: 'ciotola', tone: 'ink' },
+  { kind: 'img', src: consulenzaPhoto, alt: '', pos: '40% 60%' },
+  { kind: 'stk', src: stkAndreaFiume, tone: 'peach' },
+  { kind: 'word', text: 'zampe', tone: 'sage' },
+  { kind: 'img', src: lavoraPhoto, alt: '', pos: '80% 50%' },
+  { kind: 'stk', src: stkSegugio, tone: 'ink' },
+  { kind: 'word', text: 'branco', tone: 'paper' },
+  { kind: 'stk', src: stkAndreaSegugio, tone: 'sage' },
+];
+
+const carouselCards = [
+  { src: heroPhoto, cap: 'Il fiume', pos: '60% 50%' },
+  { src: chiSonoPhoto, cap: 'Guancia a guancia', pos: '50% 40%' },
+  { src: consulenzaPhoto, cap: 'Maglioni a quadri', pos: '40% 60%' },
+  { src: lavoraPhoto, cap: 'Il branco', pos: '25% 50%' },
+  { src: posterPhoto, cap: 'Etichette', pos: '50% 30%' },
+  { src: heroPhoto, cap: 'La roccia', pos: '82% 75%' },
+  { src: lavoraPhoto, cap: 'In fila', pos: '75% 50%' },
+  { src: consulenzaPhoto, cap: 'Pisolino', pos: '75% 55%' },
+];
+
+const PAW_ICON =
+  '<svg viewBox="0 0 50 44" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="15" rx="4.3" ry="5.8"/><ellipse cx="21" cy="10" rx="4.3" ry="6"/><ellipse cx="30" cy="11" rx="4.3" ry="6"/><ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"/><ellipse cx="25" cy="29" rx="9.5" ry="8"/></svg>';
+const HEART_ICON =
+  '<svg viewBox="0 0 24 22" fill="currentColor" aria-hidden="true"><path d="M12 21.5S1.5 15 1.5 7.6C1.5 4 4.2 1.5 7.3 1.5c2 0 3.7 1 4.7 2.6 1-1.6 2.7-2.6 4.7-2.6 3.1 0 5.8 2.5 5.8 6.1C22.5 15 12 21.5 12 21.5Z"/></svg>';
+const BONE_ICON =
+  '<svg viewBox="0 0 44 20" fill="currentColor" aria-hidden="true"><path d="M9 1.5a5 5 0 0 0-4.6 6.9A5 5 0 1 0 9.6 16H34.4a5 5 0 1 0 5.2-7.6A5 5 0 1 0 31 5.2H13A5 5 0 0 0 9 1.5Z"/></svg>';
+
+const boxBodies = [
+  { kind: 'stk', src: stkCani, size: 190 },
+  { kind: 'stk', src: stkSegugio, size: 160 },
+  { kind: 'stk', src: stkBassotto, size: 120 },
+  { kind: 'stk', src: stkAndreaFiume, size: 190 },
+  { kind: 'stk', src: stkAndreaSegugio, size: 150 },
+  { kind: 'badge', icon: PAW_ICON, tone: 'peach', size: 84 },
+  { kind: 'badge', icon: HEART_ICON, tone: 'deep', size: 70 },
+  { kind: 'badge', icon: BONE_ICON, tone: 'sage', size: 80 },
+  { kind: 'badge', icon: PAW_ICON, tone: 'ink', size: 72 },
+  { kind: 'badge', icon: HEART_ICON, tone: 'peach', size: 62 },
+  { kind: 'badge', icon: BONE_ICON, tone: 'ochre', size: 74 },
+  { kind: 'badge', icon: PAW_ICON, tone: 'sage', size: 66 },
+];
+
+// Forme della metamorfosi (viewBox 200×200): la zampa è fatta di cinque
+// pezzi, la ciotola di quattro; MorphSVG accoppia i pezzi da solo.
+const PAW_D =
+  'M22.8 75.8a18.9 25.5 0 1 0 37.8 0a18.9 25.5 0 1 0-37.8 0ZM62.4 53.8a18.9 26.4 0 1 0 37.8 0a18.9 26.4 0 1 0-37.8 0ZM102 58.2a18.9 26.4 0 1 0 37.8 0a18.9 26.4 0 1 0-37.8 0ZM139.4 80.2a18.9 24.6 0 1 0 37.8 0a18.9 24.6 0 1 0-37.8 0ZM57.1 137.4a41.8 35.2 0 1 0 83.6 0a41.8 35.2 0 1 0-83.6 0Z';
+const HEART_D = 'M100 170C62 142 22 112 22 72C22 46 42 28 66 28C82 28 94 37 100 50C106 37 118 28 134 28C158 28 178 46 178 72C178 112 138 142 100 170Z';
+const BONE_D =
+  'M76 84L124 84C126 66 150 60 160 72C172 86 162 98 154 100C162 102 172 114 160 128C150 140 126 134 124 116L76 116C74 134 50 140 40 128C28 114 38 102 46 100C38 98 28 86 40 72C50 60 74 66 76 84Z';
+const BOWL_D =
+  'M28 112L172 112C172 121 167 126 160 128L148 164C146 170 140 174 132 174L68 174C60 174 54 170 52 164L40 128C33 126 28 121 28 112ZM68 98a12 12 0 1 0 24 0a12 12 0 1 0-24 0ZM91 90a13 13 0 1 0 26 0a13 13 0 1 0-26 0ZM115 99a12 12 0 1 0 24 0a12 12 0 1 0-24 0Z';
+
+const flipItems = [
+  { src: stkSegugio, alt: 'Sticker del segugio', title: 'Il segugio', kind: 'sticker', tone: 'peach', text: 'La stessa immagine della card: Flip ne ha misurato la posizione e l’ha fatta volare fin qui.' },
+  { src: heroPhoto, alt: ALT.hero, title: 'Il fiume', kind: 'foto', tone: 'paper', text: 'Niente seconda immagine da caricare: è la miniatura che si allarga, con lo stesso data-flip-id.' },
+  { src: stkBassotto, alt: 'Sticker del bassotto', title: 'Il bassotto', kind: 'sticker', tone: 'sage', text: 'Chiudendo il dettaglio fa la strada al contrario e torna nella sua card.' },
+  { src: chiSonoPhoto, alt: ALT.chiSono, title: 'Inverno', kind: 'foto', tone: 'ink', text: 'In un catalogo o nel filtro del blog, ogni cambio di vista diventerebbe un movimento leggibile.' },
+  { src: stkCani, alt: 'Sticker del segugio e del bassotto', title: 'La coppia', kind: 'sticker', tone: 'paper', text: 'Griglia, lista e pila sono solo classi CSS diverse: il movimento lo calcola Flip.' },
+  { src: consulenzaPhoto, alt: ALT.consulenza, title: 'Pisolino', kind: 'foto', tone: 'peach', text: 'Il mescola sposta gli elementi nel DOM: Flip li fa scivolare nei nuovi posti.' },
+];
+
+const swipeCards = [
+  { src: stkCani, title: 'La coppia', tone: 'peach', sticker: true },
+  { src: chiSonoPhoto, title: 'Guancia a guancia', tone: 'paper', sticker: false },
+  { src: stkBassotto, title: 'Il bassotto', tone: 'sage', sticker: true },
+  { src: heroPhoto, title: 'Pausa al fiume', tone: 'paper', sticker: false },
+  { src: stkSegugio, title: 'Il segugio', tone: 'ink', sticker: true },
+];
+---
+<Base
+  title="Laboratorio — animazioni fuori catalogo · Andrea Bellettati"
+  description="Pagina di prova: le animazioni belle che sul sito non usiamo, perché fuori tono, troppo pesanti o senza un posto dove stare."
+  robots="noindex, nofollow"
+>
+  <div class="lab" data-lab-page>
+    <!-- HERO -->
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div class="container">
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Laboratorio · pagina di prova, non indicizzata</span>
+        <h1 class="lab-hero-title intro-lines" id="lab-title">
+          <span class="line"><span>Le animazioni</span></span>
+          <span class="line"><span>che qui <span class="script">non mettiamo.</span></span></span>
+        </h1>
+        <p class="lead" data-intro style="--intro-d:0.7s;">
+          Belle, ma fuori tono, troppo pesanti per un sito che si apre soprattutto dal telefono, o
+          semplicemente senza un posto dove stare. Sono tutte qui, vere e funzionanti: per ognuna,
+          dove brillerebbe, perché non la uso e quanto costa.
+        </p>
+        <ul class="lab-legend" data-intro style="--intro-d:0.85s;">
+          {
+            groups.map((g) => (
+              <li>
+                <a class={`lab-tag lab-tag--${g.tone}`} href={`#${g.id}`}>
+                  {g.title} <b>{g.count}</b>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <nav class="lab-index" aria-label="Indice delle demo" data-intro style="--intro-d:1s;">
+          <ol>
+            {
+              index.map(([id, name, tone], i) => (
+                <li>
+                  <a href={`#${id}`} class={`tone-${tone}`}>
+                    <span>{String(i + 1).padStart(2, '0')}</span> {name}
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+        <p class="lab-note" data-intro style="--intro-d:1.1s;">
+          Ogni demo gira solo quando è a schermo e si spegne quando esci dalla pagina. Con
+          “riduci movimento” attivo restano tutte ferme.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═════ 1. STONANO COL TONO ═════ -->
+    <section class="lab-group" id="stonano" aria-labelledby="g1-title">
+      <div class="container">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Gruppo 1 · 6 demo</span>
+          <h2 class="display-lg" id="g1-title">Stonano <span class="script">col tono.</span></h2>
+          <p class="lead">
+            Effetti da agenzia, da moda, da lancio tecnologico. Fatti bene stupiscono, ma parlano
+            una lingua fredda o teatrale: non quella di chi cerca aiuto per il proprio cane.
+          </p>
+        </div>
+
+        <LabDemo
+          n="01"
+          id="decode"
+          title="Decode"
+          tags={['stona']}
+          where="Siti tech, software, gaming, crypto, agenzie digitali."
+          why="È la lingua del terminale: fredda, un po' minacciosa. Chi ama il proprio cane non vuole sentirsi hackerato."
+          cost="Leggero: cambia solo del testo."
+          weight={1}
+          tech="GSAP ScrambleTextPlugin + ScrollTrigger"
+        >
+          <div class="lab-stage lab-decode" data-lab="decode">
+            <div class="dc-screen">
+              <p class="dc-kicker" data-dc>&gt; accesso: branco/benessere</p>
+              <p class="dc-title" data-dc>Il benessere parte dalla ciotola.</p>
+              <p class="dc-sub" data-dc>// alimentazione · comportamento · stile di vita</p>
+              <ul class="dc-links">
+                <li><a href="#decode" data-dc-hover>consulenza</a></li>
+                <li><a href="#decode" data-dc-hover>metodo</a></li>
+                <li><a href="#decode" data-dc-hover>branco</a></li>
+              </ul>
+            </div>
+            <button type="button" class="btn btn-sm lab-btn" data-dc-replay data-no-roll>Rigioca</button>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="02"
+          id="liquid"
+          title="Liquid"
+          tags={['stona', 'pesante']}
+          where="Portfolio di fotografi, moda, agenzie creative, campagne di prodotto."
+          why="WebGL su ogni foto consuma batteria al telefono e fa “agenzia”, non “persona”. Qui le foto devono essere vere e nitide."
+          cost="GPU: uno shader a ogni frame, ma solo mentre ci passi sopra."
+          weight={3}
+          tech="WebGL puro (vertex + fragment shader), senza librerie"
+        >
+          <div class="lab-stage lab-liquid" data-lab="liquid" data-src={liquidTex.src}>
+            <Image class="lq-img" src={heroPhoto} alt={ALT.hero} widths={[640, 1200]} sizes="(min-width: 1200px) 1150px, 92vw" loading="lazy" />
+            <canvas class="lq-canvas" aria-hidden="true"></canvas>
+            <span class="lab-hint">Passa sopra (o tocca): la foto diventa acqua</span>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="03"
+          id="torcia"
+          title="Torcia"
+          tags={['stona']}
+          where="Storytelling, musei, lanci a sorpresa, eventi, giochi."
+          why="Nasconde i contenuti per scelta. Qui la foto di Andrea col suo cane deve farsi vedere subito, non cercare."
+          cost="Leggero: una maschera CSS che segue il puntatore."
+          weight={1}
+          tech="mask-image radial-gradient + gsap.quickTo"
+        >
+          <div class="lab-stage lab-torch" data-lab="torch">
+            <Image class="tc-photo" src={chiSonoPhoto} alt={ALT.chiSono} widths={[640, 1100]} sizes="(min-width: 1200px) 1150px, 92vw" loading="lazy" />
+            <div class="tc-dark" aria-hidden="true"></div>
+            <p class="tc-q" aria-hidden="true">Chi c'è al buio?</p>
+            <button type="button" class="btn btn-sm lab-btn tc-switch" data-tc-switch aria-pressed="false" data-no-roll>Accendi la luce</button>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="04"
+          id="lookbook"
+          title="Lookbook"
+          tags={['stona']}
+          where="E-commerce di moda, lookbook stagionali, riviste online."
+          why="Le foto che si piegano scrollando danno fastidio a qualcuno, e qui non vendiamo vestiti: è il gesto di un catalogo."
+          cost="Medio: trasformazioni su tutte le foto a ogni scroll."
+          weight={2}
+          tech="ScrollTrigger getVelocity() + quickSetter (skew), colonne a velocità diverse"
+        >
+          <div class="lab-lookbook" data-lab="lookbook">
+            {
+              lookbook.map((col, c) => (
+                <div class="lb-col" data-lb-col={lookSpeed[c]}>
+                  {col.map((f) => (
+                    <figure class:list={['lb-fig', { 'is-sticker': f.sticker }]} data-lb-fig>
+                      <Image src={f.src} alt={f.alt} widths={[360, 720]} sizes="(min-width: 900px) 360px, 90vw" loading="lazy" style={`object-position:${f.pos}`} />
+                      <figcaption>{f.cap}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+              ))
+            }
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="05"
+          id="scatti"
+          title="Scroll a scatti"
+          tags={['stona']}
+          where="Lanci di prodotto, presentazioni, portfolio “a slide”, siti evento."
+          why="Prende il controllo della rotella: frustrante e poco accessibile, soprattutto per chi legge con calma. Qui è chiuso in un riquadro e alla fine lascia andare."
+          cost="Leggero per il browser, pesante per l'usabilità."
+          weight={1}
+          tech="Rotella intercettata (wheel non passivo) + clip-path + SplitText"
+        >
+          <div class="lab-stage lab-steps" data-lab="steps" tabindex="0" role="region" aria-roledescription="presentazione" aria-label="Scroll a scatti: rotella, frecce o pulsanti">
+            <div class="st-slide tone-ink" data-st-slide>
+              <span class="st-n">01</span>
+              <h4 class="st-title" data-st-title>Un colpo di rotella,</h4>
+              <p class="st-p">e la pagina cambia tutta.</p>
+            </div>
+            <div class="st-slide tone-peach" data-st-slide>
+              <span class="st-n">02</span>
+              <h4 class="st-title" data-st-title>una slide intera.</h4>
+              <p class="st-p">Niente vie di mezzo, niente scroll a metà.</p>
+              <Image class="st-stk" src={stkBassotto} alt="" widths={[200, 400]} sizes="200px" loading="lazy" />
+            </div>
+            <div class="st-slide tone-sage" data-st-slide>
+              <span class="st-n">03</span>
+              <h4 class="st-title" data-st-title>Bello da vedere,</h4>
+              <p class="st-p">scomodo per chi vuole solo leggere.</p>
+              <Image class="st-stk st-stk--b" src={stkSegugio} alt="" widths={[260, 520]} sizes="260px" loading="lazy" />
+            </div>
+            <div class="st-slide tone-paper" data-st-slide>
+              <span class="st-n">04</span>
+              <h4 class="st-title" data-st-title>Fine corsa: ora la pagina riparte.</h4>
+              <p class="st-p">Alla prima e all'ultima slide la rotella torna alla pagina.</p>
+            </div>
+            <div class="st-ui">
+              <button type="button" data-st-prev aria-label="Slide precedente">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 19V5m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+              <span class="st-count" data-st-count>1 / 4</span>
+              <button type="button" data-st-next aria-label="Slide successiva">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14m0 0 6-6m-6 6-6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </div>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="06"
+          id="scia"
+          title="Scia di foto"
+          tags={['stona']}
+          where="Portfolio di fotografi, eventi, agenzie, pagine “about” di studi creativi."
+          why="Caotica e pensata per il mouse: chi arriva da Instagram è al telefono, dove il mouse non c'è."
+          cost="Medio: immagini riciclate che si animano a ogni passo del puntatore."
+          weight={2}
+          tech="Pool di immagini riciclate + GSAP timeline"
+        >
+          <div class="lab-stage lab-trail" data-lab="trail">
+            <p class="tr-hint" aria-hidden="true">Muovi il mouse qui<span>dal telefono: trascina il dito di lato</span></p>
+            <div class="tr-pool" aria-hidden="true">
+              {trailImgs.map((src) => <Image src={src} alt="" data-tr-img widths={[240, 480]} sizes="240px" loading="lazy" />)}
+            </div>
+          </div>
+        </LabDemo>
+      </div>
+    </section>
+
+    <!-- ═════ 2. TROPPO PESANTI ═════ -->
+    <section class="lab-group bg-deep" id="pesanti" aria-labelledby="g2-title">
+      <div class="container">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Gruppo 2 · 6 demo</span>
+          <h2 class="display-lg" id="g2-title">Troppo <span class="script">pesanti.</span></h2>
+          <p class="lead">
+            Calcoli a ogni frame, filtri, 3D, fisica. Su un portatile volano; su un telefono di tre
+            anni fa, aperto da una storia di Instagram, scaldano e scaricano la batteria.
+          </p>
+        </div>
+
+        <LabDemo
+          n="07"
+          id="particelle"
+          title="Particelle"
+          tags={['pesante']}
+          where="Lanci tecnologici, eventi, intro di brand, pagine di attesa."
+          why="Migliaia di punti calcolati a ogni frame, e la parola diventa un disegno che gli screen reader non leggono."
+          cost="CPU alta finché i punti si muovono (poi il ciclo si spegne)."
+          weight={3}
+          tech="Canvas 2D: testo campionato in punti, molle e repulsione"
+        >
+          <div class="lab-stage lab-particles" data-lab="particles">
+            <p class="pt-word" data-pt-word>branco</p>
+            <canvas class="pt-canvas" aria-hidden="true"></canvas>
+            <span class="lab-hint">Passa il mouse (o il dito): i punti scappano e tornano a casa</span>
+          </div>
+        </LabDemo>
+      </div>
+
+      <LabDemo
+        n="08"
+        id="lettera"
+        title="Dentro la lettera"
+        tags={['pesante']}
+        where="Campagne, landing di lancio, brand con un nome forte da “attraversare”."
+        why="Un'altra sezione ferma lunghissima solo per entrare in una foto: la home ha già la sua ciotola, e due sarebbero troppe."
+        cost="Alto: maschera a tutto schermo ridisegnata a ogni frame."
+        weight={3}
+        tech="Maschera SVG + ScrollTrigger pin/scrub (scale con svgOrigin)"
+        bleed
+      >
+        <div class="lab-zoom" data-lab="zoom">
+          <Image class="zm-photo" data-zm-photo src={lavoraPhoto} alt={ALT.lavora} widths={[900, 1778]} sizes="100vw" loading="lazy" />
+          <svg class="zm-svg" data-zm-svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <mask id="zm-mask" maskUnits="userSpaceOnUse">
+                <rect data-zm-rect width="1600" height="900" fill="#fff"></rect>
+                <text class="zm-word" data-zm-word x="800" y="590" text-anchor="middle" font-size="500" fill="#000">ciao</text>
+              </mask>
+            </defs>
+            <rect class="zm-ink" data-zm-rect width="1600" height="900" mask="url(#zm-mask)"></rect>
+          </svg>
+          <p class="zm-caption" data-zm-caption>…e sei dentro il <span class="script">branco.</span></p>
+        </div>
+      </LabDemo>
+
+      <div class="container">
+        <LabDemo
+          n="09"
+          id="sogno"
+          title="Sogno"
+          tags={['pesante']}
+          where="Hotel, spa, viaggi, profumi, brand del lusso."
+          why="I filtri SVG pesano sulla CPU e sfocano proprio le foto che qui devono essere nitide."
+          cost="Alto: il filtro si ricalcola a ogni frame su tutta la foto."
+          weight={3}
+          tech="Filtro SVG feTurbulence + feDisplacementMap animato con GSAP (attr)"
+        >
+          <div class="lab-stage lab-water" data-lab="water">
+            <svg class="lab-defs" width="0" height="0" aria-hidden="true" focusable="false">
+              <filter id="lab-water-filter" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.009 0.026" numOctaves="2" seed="7" result="noise"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+              </filter>
+            </svg>
+            <div class="wt-frame">
+              <Image class="wt-photo" src={consulenzaPhoto} alt={ALT.consulenza} widths={[640, 1100]} sizes="(min-width: 1200px) 1150px, 92vw" loading="lazy" />
+            </div>
+            <span class="lab-hint">Passa sopra: il sogno si fa più profondo</span>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="10"
+          id="tavolo"
+          title="Tavolo infinito"
+          tags={['pesante']}
+          where="Archivi, portfolio, gallerie d'arte, moodboard, collezioni."
+          why="Bello da esplorare, ma qui non c'è un archivio così grande, e al telefono il trascinamento litiga con lo scroll."
+          cost="Medio-alto: decine di immagini in movimento."
+          weight={2}
+          tech="Draggable + InertiaPlugin, griglia 2×2 avvolta con gsap.utils.wrap"
+        >
+          <div class="lab-stage lab-board" data-lab="board">
+            <div class="bd-track" data-bd-track>
+              {
+                [0, 1, 2, 3].map((copy) => (
+                  <div class="bd-grid" data-bd-grid aria-hidden={copy ? 'true' : undefined}>
+                    {boardTiles.map((t) =>
+                      t.kind === 'img' ? (
+                        <figure class="bd-tile">
+                          <Image src={t.src!} alt="" widths={[260, 520]} sizes="260px" loading="lazy" style={`object-position:${t.pos}`} draggable="false" />
+                        </figure>
+                      ) : t.kind === 'stk' ? (
+                        <figure class={`bd-tile bd-tile--stk tone-${t.tone}`}>
+                          <Image src={t.src!} alt="" widths={[240, 480]} sizes="240px" loading="lazy" draggable="false" />
+                        </figure>
+                      ) : (
+                        <figure class={`bd-tile bd-tile--word tone-${t.tone}`}>
+                          <span>{t.text}</span>
+                        </figure>
+                      )
+                    )}
+                  </div>
+                ))
+              }
+            </div>
+            <span class="lab-hint">Trascina in ogni direzione: il tavolo non finisce</span>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="11"
+          id="giostra"
+          title="Giostra 3D"
+          tags={['pesante', 'stona']}
+          where="Vetrine di prodotto, portfolio, configuratori, siti di eventi."
+          why="3D e testi inclinati sono difficili da leggere; troppo “effetto speciale” per un tono caldo e diretto."
+          cost="Medio-alto: compositing 3D di molte immagini insieme."
+          weight={2}
+          tech="CSS 3D (preserve-3d) + Draggable/Inertia su un proxy"
+        >
+          <div class="lab-stage lab-carousel" data-lab="carousel">
+            <div class="cr-scene">
+              <div class="cr-ring" data-cr-ring>
+                {
+                  carouselCards.map((c, i) => (
+                    <figure class="cr-card" data-cr-card style={`--i:${i}`}>
+                      <Image src={c.src} alt="" widths={[280, 560]} sizes="280px" loading="lazy" style={`object-position:${c.pos}`} draggable="false" />
+                      <figcaption>{c.cap}</figcaption>
+                    </figure>
+                  ))
+                }
+              </div>
+            </div>
+            <span class="lab-hint">Trascina per far girare la giostra</span>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="12"
+          id="scatola"
+          title="Scatola di sticker"
+          tags={['pesante']}
+          where="Brand per bambini, app giocose, concorsi, pagine 404."
+          why="Fisica in tempo reale per non dire niente: è solo gioco, e distrarrebbe dal messaggio."
+          cost="Alto finché qualcosa si muove; quando tutto è fermo il ciclo si spegne."
+          weight={3}
+          tech="Fisica scritta a mano (gravità, urti tra cerchi, lancio) + Pointer Events"
+        >
+          <div class="lab-stage lab-box" data-lab="box">
+            <div class="bx-world" data-bx-world>
+              {
+                boxBodies.map((b) => (
+                  <span class={`bx-body bx-body--${b.kind}`} data-bx-body style={`--s:${b.size}px`}>
+                    {b.kind === 'stk' ? (
+                      <Image src={b.src!} alt="" widths={[200, 400]} sizes="200px" loading="lazy" draggable="false" />
+                    ) : (
+                      <span class={`bx-badge tone-${b.tone}`} set:html={b.icon} />
+                    )}
+                  </span>
+                ))
+              }
+            </div>
+            <button type="button" class="btn btn-sm lab-btn" data-bx-shake data-no-roll>Scuoti la scatola</button>
+          </div>
+        </LabDemo>
+      </div>
+    </section>
+
+    <!-- ═════ 3. BELLE MA SENZA CASA ═════ -->
+    <section class="lab-group" id="senza-casa" aria-labelledby="g3-title">
+      <div class="container">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Gruppo 3 · 5 demo</span>
+          <h2 class="display-lg" id="g3-title">Belle, ma <span class="script">senza casa.</span></h2>
+          <p class="lead">
+            Queste starebbero bene col tono del sito. Manca solo il contenuto che le giustifichi:
+            appena arriva (un catalogo, un quiz, uno shop), sono pronte.
+          </p>
+        </div>
+
+        <LabDemo
+          n="13"
+          id="metamorfosi"
+          title="Metamorfosi"
+          tags={['senza-casa']}
+          where="Icone che cambiano stato, loader, onboarding, conferme di invio."
+          why="Ci starebbe, ma oggi non c'è un momento in cui un'icona debba diventare un'altra."
+          cost="Leggero."
+          weight={1}
+          tech="GSAP MorphSVGPlugin (anche tra forme fatte di più pezzi)"
+        >
+          <div class="lab-stage lab-morph" data-lab="morph">
+            <div class="mp-disc">
+              <svg class="mp-svg" viewBox="0 0 200 200" aria-hidden="true"><path data-mp-shape d={PAW_D} fill="#f4a98a"></path></svg>
+            </div>
+            <p class="mp-label" aria-hidden="true"><span data-mp-label>zampa</span></p>
+            <svg class="lab-defs" width="0" height="0" aria-hidden="true" focusable="false">
+              <path data-mp-target data-label="cuore" fill="#d0673f" d={HEART_D}></path>
+              <path data-mp-target data-label="osso" fill="#c9a96a" d={BONE_D}></path>
+              <path data-mp-target data-label="ciotola" fill="#7c9474" d={BOWL_D}></path>
+              <path data-mp-target data-label="zampa" fill="#f4a98a" d={PAW_D}></path>
+            </svg>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="14"
+          id="flip"
+          title="Flip"
+          tags={['senza-casa']}
+          where="Filtri di e-commerce, gallerie, dashboard. Qui: il filtro del blog o il catalogo archiviato, se tornasse."
+          why="Serve un elenco da riordinare o filtrare; nelle pagine di oggi non c'è."
+          cost="Leggero-medio: misura gli elementi prima e dopo, anima la differenza."
+          weight={1}
+          tech="GSAP Flip (getState → cambio di layout → Flip.from), data-flip-id"
+        >
+          <div class="lab-stage lab-flip" data-lab="flip">
+            <div class="fl-bar">
+              <div class="fl-seg" role="group" aria-label="Disposizione">
+                <button type="button" class="fl-btn" data-fl-layout="grid" aria-pressed="true">Griglia</button>
+                <button type="button" class="fl-btn" data-fl-layout="list" aria-pressed="false">Lista</button>
+                <button type="button" class="fl-btn" data-fl-layout="stack" aria-pressed="false">Pila</button>
+              </div>
+              <button type="button" class="fl-btn" data-fl-shuffle>Mescola</button>
+            </div>
+            <ul class="fl-list" data-fl-list data-layout="grid">
+              {
+                flipItems.map((it, i) => (
+                  <li class={`fl-item tone-${it.tone}`} data-fl-item data-title={it.title} data-text={it.text}>
+                    <button type="button" class="fl-card" aria-expanded="false">
+                      <Image class={it.kind === 'sticker' ? 'is-sticker' : undefined} src={it.src} alt={it.alt} data-flip-id={`fl-${i}`} widths={[320, 640]} sizes="320px" loading="lazy" />
+                      <span class="fl-name">{it.title}</span>
+                      <span class="fl-kind">{it.kind}</span>
+                    </button>
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="fl-detail" data-fl-detail hidden>
+              <img class="fl-detail-img" data-fl-detail-img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" />
+              <div class="fl-detail-body">
+                <h4 data-fl-detail-title></h4>
+                <p data-fl-detail-text></p>
+                <button type="button" class="btn btn-sm" data-fl-close data-no-roll>Chiudi</button>
+              </div>
+            </div>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="15"
+          id="swipe"
+          title="Swipe"
+          tags={['senza-casa']}
+          where="Quiz, onboarding, scoperta di prodotti, sondaggi sui social."
+          why="Un gioco senza scopo, per ora; e al telefono il gesto si confonde con lo scroll. Con un quiz (“che cane sei?”) avrebbe senso."
+          cost="Leggero."
+          weight={1}
+          tech="GSAP Draggable + velocità calcolata al rilascio"
+        >
+          <div class="lab-stage lab-swipe" data-lab="swipe">
+            <div class="sw-deck">
+              {
+                swipeCards.map((c) => (
+                  <article class={`sw-card tone-${c.tone}`} data-sw-card>
+                    <div class:list={['sw-media', { 'is-sticker': c.sticker }]}>
+                      <Image src={c.src} alt="" widths={[320, 640]} sizes="320px" loading="lazy" draggable="false" />
+                    </div>
+                    <h4>{c.title}</h4>
+                    <p>Ti piace?</p>
+                    <span class="sw-stamp sw-stamp--yes" data-sw-stamp="yes" aria-hidden="true">Sì!</span>
+                    <span class="sw-stamp sw-stamp--no" data-sw-stamp="no" aria-hidden="true">No</span>
+                  </article>
+                ))
+              }
+              <div class="sw-end">
+                <p>Mazzo finito.</p>
+                <button type="button" class="btn btn-sm" data-sw-reset data-no-roll>Rimescola</button>
+              </div>
+            </div>
+            <div class="sw-actions">
+              <button type="button" class="sw-act sw-act--no" data-sw-no aria-label="No">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"></path></svg>
+              </button>
+              <button type="button" class="sw-act sw-act--yes" data-sw-yes aria-label="Sì">
+                <svg viewBox="0 0 24 22" width="22" height="20" aria-hidden="true" fill="currentColor"><path d="M12 21.5S1.5 15 1.5 7.6C1.5 4 4.2 1.5 7.3 1.5c2 0 3.7 1 4.7 2.6 1-1.6 2.7-2.6 4.7-2.6 3.1 0 5.8 2.5 5.8 6.1C22.5 15 12 21.5 12 21.5Z"></path></svg>
+              </button>
+            </div>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="16"
+          id="medaglietta"
+          title="Medaglietta"
+          tags={['senza-casa']}
+          where="Uno shop di accessori per cani, una pagina 404 simpatica, un configuratore di medagliette."
+          why="Carina, ma è un gioco senza contenuto: nel sito di oggi distrarrebbe dal messaggio."
+          cost="Medio mentre oscilla, zero da ferma."
+          weight={2}
+          tech="Integrazione di Verlet + vincoli di distanza, SVG + Pointer Events"
+        >
+          <div class="lab-stage lab-medal" data-lab="tag">
+            <svg class="tg-svg" aria-hidden="true"><polyline class="tg-chain" data-tg-chain points=""></polyline></svg>
+            <span class="tg-hook" aria-hidden="true"></span>
+            <div class="tg-tag" data-tg-tag aria-hidden="true">
+              <span class="tg-ring"></span>
+              <span class="tg-name">Bau!</span>
+              <span class="tg-paw" set:html={PAW_ICON} />
+            </div>
+            <span class="lab-hint">Afferra la medaglietta e lanciala</span>
+          </div>
+        </LabDemo>
+
+        <LabDemo
+          n="17"
+          id="respiro"
+          title="Respiro tipografico"
+          tags={['senza-casa', 'pesante']}
+          where="Riviste, festival di design, siti editoriali, fonderie di caratteri."
+          why="Ricalcola il layout a ogni frame, e al telefono non c'è un cursore da seguire (lì passa un'onda)."
+          cost="Medio-alto: reflow continuo finché è a schermo."
+          weight={2}
+          tech="Font variabile del sito (wght 200–800, opsz 12–96) + SplitText"
+        >
+          <div class="lab-stage lab-breath" data-lab="breath">
+            <p class="br-text" data-br-text>Pelo, ciotola, coccole.</p>
+            <span class="lab-hint">Avvicina il cursore: le lettere prendono peso</span>
+          </div>
+        </LabDemo>
+      </div>
+    </section>
+
+    <!-- RIMASTE FUORI ANCHE DA QUI -->
+    <section class="lab-out" aria-labelledby="out-title">
+      <div class="container">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Fuori anche dal laboratorio</span>
+          <h2 class="display-md" id="out-title">Servirebbero materiali <span class="script">che non abbiamo.</span></h2>
+        </div>
+        <ul class="lab-out-list">
+          <li><b>Sequenza di fotogrammi</b> (stile pagine di prodotto Apple): un oggetto che gira mentre scorri. Servono decine di foto o un render 3D.</li>
+          <li><b>Fluidi in WebGL</b>: fumo o inchiostro che seguono il cursore. Centinaia di righe di shader e una GPU generosa.</li>
+          <li><b>Modelli 3D veri</b> (three.js o model-viewer): un bassotto da far girare col dito. Serve il modello.</li>
+          <li><b>Personaggi animati</b> (Lottie o Rive): un bassotto disegnato che scodinzola e reagisce. Serve un illustratore.</li>
+          <li><b>Animazioni che ascoltano</b> la musica o la voce. Qui non c'è audio.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import '../scripts/lab/index.ts';
+</script>

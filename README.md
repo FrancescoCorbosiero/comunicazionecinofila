@@ -201,6 +201,11 @@ mostra il fallback, ed è il comportamento atteso.
   testa a `motion.ts`). Senza JavaScript
   ogni sezione mostra il suo stato finale; con `prefers-reduced-motion` è
   tutto fermo.
+- **Laboratorio** (`/showcase`, non linkato, `noindex` e fuori dalla
+  sitemap): le animazioni scartate perché fuori tono, troppo pesanti o senza
+  un posto nel sito (WebGL, particelle, fisica, Flip, MorphSVG, Draggable,
+  3D…), ognuna funzionante e con dove brillerebbe, perché non c'è e quanto
+  costa. Il codice sta in `src/scripts/lab/` e lo carica solo quella pagina.
 - **JSON-LD** WebSite/Person/LocalBusiness ovunque, Article (con wordCount e
   tempo di lettura)/Event/ItemList/Breadcrumb dove pertinente; `sitemap.xml`,
   `robots.txt`, header di cache (`netlify.toml`, `_headers`).

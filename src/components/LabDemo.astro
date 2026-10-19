@@ -1,0 +1,52 @@
+---
+// Scheda di una demo del laboratorio (/showcase): titolo, etichette,
+// dove brillerebbe, perché non è nel sito, quanto costa. Il palco della
+// demo arriva nello slot.
+type Tag = 'stona' | 'pesante' | 'senza-casa';
+interface Props {
+  n: string;
+  id: string;
+  title: string;
+  tags: Tag[];
+  where: string;
+  why: string;
+  cost: string;
+  /** Peso da 1 (leggera) a 3 (impegnativa). */
+  weight: 1 | 2 | 3;
+  tech: string;
+  /** Palco a tutta larghezza: titolo e note restano nel container. */
+  bleed?: boolean;
+}
+const { n, id, title, tags, where, why, cost, weight, tech, bleed = false } = Astro.props;
+const LABEL: Record<Tag, string> = { stona: 'Stona col tono', pesante: 'Troppo pesante', 'senza-casa': 'Senza casa' };
+---
+<article class:list={['lab-demo', { 'lab-demo--bleed': bleed }]} id={id} aria-labelledby={`${id}-t`}>
+  <header class:list={['lab-head', { container: bleed }]}>
+    <span class="lab-n" aria-hidden="true">{n}</span>
+    <div class="lab-titles">
+      <h3 class="lab-title" id={`${id}-t`}>{title}</h3>
+      <ul class="lab-tags" aria-label="Etichette">
+        {tags.map((t) => <li class={`lab-tag lab-tag--${t}`}>{LABEL[t]}</li>)}
+      </ul>
+    </div>
+    <dl class="lab-meta">
+      <div>
+        <dt>Dove brillerebbe</dt>
+        <dd>{where}</dd>
+      </div>
+      <div>
+        <dt>Perché non qui</dt>
+        <dd>{why}</dd>
+      </div>
+      <div>
+        <dt>Costo</dt>
+        <dd>
+          <span class="lab-weight" data-w={weight} role="img" aria-label={`Peso ${weight} su 3`}><i></i><i></i><i></i></span>
+          {cost}
+        </dd>
+      </div>
+    </dl>
+  </header>
+  <slot />
+  <p class:list={['lab-tech', { container: bleed }]}><b>Tecnica</b> {tech}</p>
+</article>

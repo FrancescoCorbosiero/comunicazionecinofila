@@ -7,7 +7,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   // TODO: confermare dominio definitivo
   site: 'https://www.andreabellettati.it',
-  integrations: [sitemap()],
+  // /showcase è il laboratorio delle animazioni: pagina di prova, fuori dalla sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/showcase') })],
   // Font self-hosted (Fonts API, provider locale): i .woff2 (subset latin,
   // scaricati una tantum da Google Fonts / Fontsource) vivono in src/assets/fonts e vengono
   // serviti da /_astro con hash immutabile. Vantaggi:
