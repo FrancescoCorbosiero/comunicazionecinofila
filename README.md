@@ -7,11 +7,13 @@ nutrizione per cani e gatti. Due pubblici, un'unica identità: i proprietari
 (TypeScript), static-first, mobile-first.
 
 > Il design di partenza è in [`design_handoff_sito_andrea/`](./design_handoff_sito_andrea)
-> (handoff + prototipi di riferimento). Da lì il sito è passato al **Brand
-> System v3 "Branco"** (`src/styles/brand.css`): stessi colori del logo e del
-> feed, ma via il crema caldo, le micro-etichette in monospace e i titoli
-> poster tutti maiuscoli — al loro posto Bricolage Grotesque in minuscolo,
-> sticker, bordi d'inchiostro, ombre piene e le foto vere dei cani scontornate.
+> (handoff + prototipi di riferimento). Il sito oggi usa il **Brand System v5
+> "Editoriale"** (`src/styles/brand.css`): toni della terra (crema, corteccia,
+> argilla, salvia), **Fraunces** per i titoli con le parole chiave in corsivo,
+> Bricolage Grotesque per il testo, bordi sottili e ombre morbide. Niente
+> sticker, nastri, timbri o rotazioni: struttura, aria e foto vere in cornici
+> pulite. I due flussi del sito (consulenza → corteccia, Team → argilla) sono
+> sempre in vista: header, hero, porte della home, barra fissa su telefono.
 
 ## Comandi
 
@@ -25,7 +27,6 @@ npm run build      # build statica in dist/
 npm run preview    # anteprima della build
 npm run check      # type-check (astro check)
 npm run assets     # rigenera favicon + comprime le foto di public/assets
-python scripts/make-stickers.py   # rigenera gli sticker fustellati (vedi sotto)
 ```
 
 ## Struttura
@@ -36,7 +37,7 @@ src/
   lib/seo.ts             # default SEO + JSON-LD (Person/LocalBusiness/breadcrumb)
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
-  components/            # Header, Footer, CallModal, CoverImage, Sticker, Ticker, card/row, icone
+  components/            # Header, Footer, CallModal, CoverImage, card/row, icone
   scripts/site.ts        # nav, step-form→WhatsApp, form→/api/form (SES), ricerca blog, modale
   scripts/motion.ts      # ⭐ animazioni GSAP + Lenis (API ad attributi: vedi l'intestazione del file)
   scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
@@ -46,12 +47,10 @@ src/
   content/articoli/*.md  content/eventi/*.md      # contenuti (Markdown)
   data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
   _archive/catalogo.astro # pagina Catalogo archiviata: fuori dal build, riattivabile
-  _archive/home-v3.*      # la home precedente (hero con zoom, indice, biglietto…): blocchi da riusare
   content.config.ts      # schema delle Content Collections
   styles/                # brand.css (design system v3), site.css (base), content/catalog/effects.css,
                          # motion.css (intro above-the-fold + stati degli effetti),
                          # sections.css (le sezioni delle landing: hero, stories, stack…)
-  assets/stickers/       # foto scontornate col bordo bianco (scripts/make-stickers.py)
   assets/                # foto ottimizzate da astro:assets (webp responsive)
 public/assets/           # favicon + immagini per OG e cover delle collection
 server/                  # server Docker: sito statico + /api/form → AWS SES
@@ -202,8 +201,9 @@ Per provarlo senza Docker: `npm run build` con
   latin vivono in `src/assets/fonts/` e vengono serviti da `/_astro` con cache
   immutabile. Zero richieste a Google Fonts dal browser (privacy/GDPR), build
   deterministica, fallback con metriche adattate contro il layout shift.
-  Tre famiglie: **Bricolage Grotesque** (variabile: titoli e testo, l'unica
-  in preload), **Anton** (nastri e numeri) e **Caveat** (note scritte a mano).
+  Due famiglie: **Fraunces** (variabile, titoli e numeri; le parole chiave in
+  corsivo) e **Bricolage Grotesque** (variabile, testo), entrambe in preload.
+  `TYPE_STYLE` in `src/config.ts` riporta i titoli in grotesk se serve.
 - **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
   interni e **Speculation Rules** per navigazione più rapida. Le cover degli
   articoli fanno **morph** dalla card alla pagina di dettaglio.
@@ -227,9 +227,8 @@ Per provarlo senza Docker: `npm run build` con
   sfogliano scrollando (dentro lo schermo del telefono) e il monitoraggio è
   un binario che si riempie; in
   Lavora con noi "una rete di venditori" viene barrata a mano e diventa "un
-  Team", i principi sono card che si impilano, i profili sono sticker che
-  cadono e, toccati, preselezionano l'ambito nel modulo; in Approccio ogni
-  principio riceve il suo timbro "Non negoziabile" e le tre fonti del metodo
+  Team", i principi sono card che si impilano, i profili sono etichette che,
+  toccate, preselezionano l'ambito nel modulo; in Approccio le tre fonti del metodo
   sono cerchi che convergono (Venn) mentre la sezione resta ferma; in Chi
   sono l'hero è un biglietto da visita (ritratto ad arco, sigillo del Team che
   gira, firma che si scrive), le polaroid si aprono a ventaglio e le impronte
@@ -246,22 +245,6 @@ Per provarlo senza Docker: `npm run build` con
   tempo di lettura)/Event/ItemList/Breadcrumb dove pertinente; `sitemap.xml`,
   `robots.txt`, header di cache (`netlify.toml`, `_headers`).
 - Verifica Search Console e handle social: compila i campi in `src/lib/seo.ts`.
-
-## Sticker dei cani (foto scontornate)
-
-Gli sticker in `src/assets/stickers/` sono le foto vere di Andrea e dei suoi
-cani, scontornate e con il bordo bianco fustellato. Si rigenerano con:
-
-```bash
-pip install "rembg[cpu]" scipy
-python scripts/make-stickers.py
-```
-
-Lo script scontorna le foto originali del design handoff
-(`design_handoff_sito_andrea/reference/assets/`) con il modello BiRefNet,
-pulisce la maschera e aggiunge il bordo. Per cambiare uno sticker basta
-sostituire la foto sorgente con lo stesso nome e rilanciarlo. Nelle pagine si
-usano con `<Sticker src={...} width={240} rotate={-4} />`.
 
 ## Integrazione cal.com ("Richiedi la tua consulenza gratuita")
 

@@ -118,7 +118,8 @@ const HEADINGS = [
 ].join(',');
 
 const BLOCKS = '[data-reveal]:not(.stagger), [data-reveal].stagger > *';
-const TILTS = '.card, [data-tilt]';
+/* v5: il tilt 3D solo dove è chiesto; le card del blog restano ferme. */
+const TILTS = '[data-tilt]';
 const MAGNETS = '[data-magnetic]';
 
 /* ── Helper ─────────────────────────────────────────────────────── */
@@ -211,7 +212,7 @@ function fxLayer(): HTMLElement {
 /** Esplosione di zampe, cuori e ossa dal centro di un elemento. */
 export function celebrate(origin: Element, opts: { count?: number; shapes?: string[]; spread?: number } = {}): void {
   if (reduced()) return;
-  const { count = 26, shapes = [PAW, HEART, BONE], spread = 1 } = opts;
+  const { count = 14, shapes = [PAW, HEART, BONE], spread = 0.8 } = opts;
   const r = origin.getBoundingClientRect();
   const cx = r.left + r.width / 2;
   const cy = r.top + r.height / 2;
@@ -246,14 +247,10 @@ export function celebrate(origin: Element, opts: { count?: number; shapes?: stri
   }
 }
 
-/** Un'oscillazione da medaglietta appesa al collare (mirror della consulenza). */
+/** Un piccolo respiro della medaglietta quando cambia il nome (mirror della consulenza). */
 export function swing(el: Element): void {
   if (reduced()) return;
-  gsap.fromTo(
-    el,
-    { rotation: 0 },
-    { keyframes: { rotation: [-7, 5, -3, 1.5, 0] }, duration: 0.9, ease: 'none', overwrite: 'auto', transformOrigin: '50% -12%' }
-  );
+  gsap.fromTo(el, { scale: 0.96 }, { scale: 1, duration: 0.7, ease: 'power3.out', overwrite: 'auto', clearProps: 'transform' });
 }
 
 /* ── Form a step: transizioni, zampa che salta, errori ──────────── */
@@ -361,14 +358,15 @@ function on<K extends keyof HTMLElementEventMap>(
      chars  le lettere cadono e rimbalzano (solo titoli brevi)
      blur   le righe vanno a fuoco salendo */
 type HeadingVariant = 'lines' | 'pop' | 'wipe' | 'chars' | 'blur';
-const CYCLE: HeadingVariant[] = ['lines', 'pop', 'wipe', 'chars', 'blur'];
+/* v5: a turno solo le varianti sobrie; 'pop' e 'chars' restano disponibili a richiesta. */
+const CYCLE: HeadingVariant[] = ['lines', 'blur', 'wipe'];
 
 function headingVariant(el: HTMLElement, index: number): HeadingVariant {
   const asked = el.dataset.split as HeadingVariant | undefined;
   if (asked && CYCLE.includes(asked)) return asked;
   const v = CYCLE[index % CYCLE.length];
   // Lettera per lettera si legge bene solo su poche parole.
-  return v === 'chars' && (el.textContent ?? '').trim().length > 28 ? 'pop' : v;
+  return v === 'chars' && (el.textContent ?? '').trim().length > 28 ? 'lines' : v;
 }
 
 function headingTween(self: SplitText, v: HeadingVariant, trigger: HTMLElement): gsap.core.Tween {
@@ -455,7 +453,7 @@ function revealBlocks(): void {
   if (!blocks.length) return;
   const isChild = (el: HTMLElement) => !!el.parentElement?.matches('[data-reveal].stagger');
   blocks.forEach((el) => {
-    gsap.set(el, isChild(el) ? { opacity: 0, y: 54, scale: 0.94, transition: 'none' } : { opacity: 0, y: 44, transition: 'none' });
+    gsap.set(el, isChild(el) ? { opacity: 0, y: 40, transition: 'none' } : { opacity: 0, y: 36, transition: 'none' });
     el.setAttribute('data-motion-pending', '');
   });
   ScrollTrigger.batch(blocks, {
@@ -475,9 +473,9 @@ function revealBlocks(): void {
       const blocksIn = entering.filter((el) => !isChild(el));
       const childrenIn = entering.filter(isChild);
       if (blocksIn.length) gsap.to(blocksIn, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger, ...done });
-      // I figli delle griglie atterrano con un piccolo rimbalzo.
+      // I figli delle griglie entrano a cascata, senza rimbalzo.
       if (childrenIn.length) {
-        gsap.to(childrenIn, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'back.out(1.6)', stagger, ...done });
+        gsap.to(childrenIn, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger, ...done });
       }
     },
   });
