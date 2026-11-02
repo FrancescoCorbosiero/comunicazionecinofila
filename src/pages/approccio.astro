@@ -2,9 +2,10 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import heroPhoto from '../assets/hero.jpg';
+import riverPhoto from '../assets/consulenza.jpg';
 
-// I tre principi: ognuno porta l'etichetta "Non negoziabile".
+// I tre principi: ognuno riceve il suo timbro "Non negoziabile" (data-stamp,
+// il valore è il ritardo: sulla stessa riga arrivano uno dopo l'altro).
 const principi = [
   {
     n: '01',
@@ -38,7 +39,8 @@ const principi = [
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- HERO — la promessa a sinistra, Andrea e la sua bassotta al fiume a destra. -->
+  <!-- HERO — la promessa a sinistra; a destra Andrea e la sua bassotta al
+       fiume, nel disco pesca. -->
   <section class="a-hero" aria-labelledby="a-title">
     <div class="container a-hero-grid">
       <div class="a-hero-copy">
@@ -47,7 +49,14 @@ const principi = [
           <span class="line"><span>Non parto</span></span>
           <span class="line"><span class="a-title-dim">dal prodotto.</span></span>
           <span class="line"><span>Parto</span></span>
-          <span class="line"><span class="a-title-hl">dall'animale.</span></span>
+          <span class="line">
+            <span class="a-title-hl"
+              >dall'animale.<svg class="a-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"
+                ><path d="M4 15c46-9 92-12 142-8s96 6 150-3" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" pathLength="1"
+                ></path></svg
+              ></span
+            >
+          </span>
         </h1>
         <p class="lead" data-intro style="--intro-d:0.75s;">
           Alimentazione, comportamento e stile di vita fanno parte dello stesso equilibrio. Il mio
@@ -55,29 +64,31 @@ const principi = [
           per lui e per la sua famiglia.
         </p>
         <div data-intro style="--intro-d:0.9s;">
-          <a class="btn btn-cream btn-lg" href="/consulenza-gratuita">
+          <a class="btn btn-lg" href="/consulenza-gratuita">
             Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
           </a>
         </div>
       </div>
 
-      <figure class="a-hero-visual" data-speed="0.06">
-        <div class="photo-frame a-hero-photo">
-          <Image
-            src={heroPhoto}
-            alt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
-            widths={[480, 720, 960]}
-            sizes="(min-width: 900px) 460px, 86vw"
-            loading="eager"
-            fetchpriority="high"
-          />
+      <figure class="a-hero-visual" data-speed="0.08">
+        <div class="a-hero-disc">
+          <div class="a-hero-photo">
+            <Image
+              src={riverPhoto}
+              alt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
+              widths={[480, 720, 960]}
+              sizes="(min-width: 900px) 500px, 86vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
         </div>
-        <figcaption class="a-hero-cap">Lei, per esempio: la mia bassotta, al fiume.</figcaption>
+        <figcaption class="a-hero-cap">lei, per esempio: la mia bassotta, al fiume</figcaption>
       </figure>
     </div>
   </section>
 
-  <!-- IL METODO — tre principi -->
+  <!-- IL METODO — tre principi, tre timbri -->
   <section class="section bg-sage a-rules" aria-labelledby="rules-title">
     <div class="container">
       <div class="head-block">
@@ -86,13 +97,15 @@ const principi = [
       </div>
       <ol class="rules stagger" data-reveal>
         {
-          principi.map((p) => (
+          principi.map((p, i) => (
             <li class="rule-item">
               <article class={`rule tone-${p.tone}`}>
                 <span class="rule-n" aria-hidden="true">{p.n}</span>
                 <h3>{p.title}</h3>
                 <p>{p.body}</p>
-                <span class="rule-stamp" aria-hidden="true">Non negoziabile</span>
+                <span class="rule-stamp" data-stamp={String(i * 0.28)} aria-hidden="true">
+                  Non negoziabile
+                </span>
               </article>
             </li>
           ))
@@ -158,14 +171,14 @@ const principi = [
   <!-- CTA — salvia, i due flussi -->
   <section class="a-cta" aria-labelledby="a-cta-title">
     <div class="container a-cta-inner">
-      <span class="eyebrow kicker-rule">Consulenza gratuita · 45 minuti</span>
+      <span class="eyebrow">Consulenza gratuita · 45 minuti</span>
       <h2 class="a-cta-title" id="a-cta-title" data-split="lines">
         Raccontami il <span class="script">tuo animale.</span>
       </h2>
       <p class="lead">Il primo passo è gratuito e senza impegno.</p>
       <div class="cta-row">
-        <a class="btn btn-cream btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
-        <a class="btn btn-ghost-cream btn-lg" href="/chi-sono">Conosci la mia storia</a>
+        <a class="btn btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+        <a class="btn btn-ghost-cream btn-lg" href="/lavora-con-noi">Lavora con noi</a>
       </div>
     </div>
   </section>

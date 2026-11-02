@@ -12,12 +12,12 @@ import { assetImage } from '../lib/images';
 import { eventDay, eventMonthTime } from '../lib/dates';
 import { IG_URL, STATS, WA_LINK, formatNumber, waLink } from '../config';
 
-/* Home v5 — editoriale. Un compito solo: portare il proprietario alla
-   consulenza gratuita e chi vuole lavorare nel Team al colloquio. I due
-   flussi sono sempre in vista (hero, porte, header, barra fissa su
-   telefono) e ogni altro percorso del sito è a un click dall'indice.
-   Ordine: promessa → scegli il percorso → chi sono → l'approccio →
-   come funziona → storie vere → prossimo incontro → dal blog → domande → CTA. */
+/* Home v4 — una pagina sola con un compito solo: portare il proprietario
+   alla consulenza gratuita (e chi vuole lavorare nel Team al colloquio).
+   Ordine pensato per la conversione: promessa e CTA → scegli la porta (+
+   l'indice di tutti i percorsi) → chi sono → come ragiono → come funziona →
+   storie vere → prossimo incontro → blog → dubbi (FAQ) → CTA. Su telefono
+   una barra fissa tiene i due flussi sempre a portata di pollice. */
 
 // Blog: gli ultimi tre articoli con pagina di dettaglio, più il rimando all'indice.
 const articoli = await getCollection('articoli');
@@ -40,6 +40,24 @@ const prossimoHref = prossimo
   ? (prossimo.data.externalUrl ?? prossimo.data.internalUrl ?? `/eventi/${prossimo.id}`)
   : null;
 const prossimoEsterno = Boolean(prossimo?.data.externalUrl);
+
+// L'indice dei percorsi: tutto ciò che si può fare sul sito, a un click.
+const ICON = {
+  compass:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
+  person:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>',
+  stories:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m3.5 15 4.5-4.5 4 4 3-3 5.5 5.5"/><circle cx="16" cy="9" r="1.2"/></svg>',
+  book:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18V5.5M8 7h8M8 10.5h6"/></svg>',
+  calendar:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  bowl:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path d="M12 11.5V8M8.5 11.5l1-3M15.5 11.5l-1-3"/></svg>',
+  chat:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/></svg>',
+};
 
 // "Come funziona": i quattro passi, dal questionario al piano.
 const passi = [
@@ -65,23 +83,18 @@ const passi = [
   },
 ];
 
-// L'indice dei percorsi: tutto ciò che si può fare sul sito, a un click.
-const ICON = {
-  compass:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
-  person:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>',
-  stories:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m3.5 15 4.5-4.5 4 4 3-3 5.5 5.5"/><circle cx="16" cy="9" r="1.2"/></svg>',
-  book:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18V5.5M8 7h8M8 10.5h6"/></svg>',
-  calendar:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
-  bowl:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path d="M12 11.5V8M8.5 11.5l1-3M15.5 11.5l-1-3"/></svg>',
-  chat:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/></svg>',
-};
+// Storie vere: le foto arrivano per nome (src/assets/storia-*.jpg, vedi
+// public/assets/README.md). Finché mancano, al loro posto c'è un segnaposto.
+const zoePrima = assetImage('storia-zoe-prima');
+const zoeDopo = assetImage('storia-zoe-dopo');
+const pelleFoto = assetImage('storia-pelle');
+
+// Le foto vere di Andrea (src/assets/home-*.jpg), con le vecchie come ripiego.
+const heroPortrait = assetImage('home-hero') ?? chiSonoPhoto;
+const aboutPhoto = assetImage('home-chi-sono') ?? chiSonoPhoto;
+const aboutPolaroid = assetImage('home-ciotola') ?? consulenzaPhoto;
+const approccioPhoto = assetImage('home-approccio') ?? heroPhoto;
+
 const percorsi = [
   { href: '/approccio', icon: ICON.compass, title: 'Il mio approccio', text: 'Non parto dal prodotto, parto dall’animale.' },
   { href: '/chi-sono', icon: ICON.person, title: 'Chi sono', text: 'La mia storia, dal primo cane a un metodo condiviso.' },
@@ -91,18 +104,6 @@ const percorsi = [
   { href: '/servizi', icon: ICON.bowl, title: 'I servizi', text: 'Consulenze, percorsi e monitoraggio.' },
   { href: WA_LINK, icon: ICON.chat, title: 'Scrivimi su WhatsApp', text: 'Una domanda veloce, senza questionario.', wa: true },
 ];
-
-// Storie vere: le foto arrivano per nome (src/assets/storia-*.jpg).
-const zoePrima = assetImage('storia-zoe-prima');
-const zoeDopo = assetImage('storia-zoe-dopo');
-const pelleFoto = assetImage('storia-pelle');
-
-// Le foto vere di Andrea (src/assets/home-*.jpg), con le vecchie come ripiego.
-const heroPortrait = assetImage('home-hero') ?? chiSonoPhoto;
-const heroDetail = assetImage('home-ciotola') ?? consulenzaPhoto;
-const aboutPhoto = assetImage('home-chi-sono') ?? chiSonoPhoto;
-const aboutSide = assetImage('home-approccio') ?? heroPhoto;
-const approccioPhoto = heroPhoto;
 
 // FAQ: le domande che arrivano prima di compilare il questionario.
 const faqs = [
@@ -143,10 +144,6 @@ const PAW_D = [
   { cx: 38.5, cy: 16, rx: 4.3, ry: 5.6 },
   { cx: 25, cy: 29, rx: 9.5, ry: 8 },
 ];
-const CHECK =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>';
-const widthsFor = (img: ImageMetadata, list: number[]) =>
-  list.map((w) => Math.min(w, img.width)).filter((w, i, a) => a.indexOf(w) === i);
 ---
 <Base
   active="home"
@@ -160,63 +157,79 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
   ogImageHeight={1440}
   jsonLd={faqLd}
 >
-  <!-- HERO — corteccia, serif editoriale, i due flussi in chiaro.
-       L'intro è tutta CSS (righe che salgono, foto che si posano). -->
-  <section class="hm-hero" data-sticky-from aria-labelledby="hm-title">
+  <!-- HERO — testo a sinistra, il disco con la foto vera di Andrea e la
+       ciotola in una seconda cornice a destra; intro tutta in CSS. -->
+  <!-- Sfondo: hm-hero--green (verde bosco). Per la versione marrone aggiungi
+       anche hm-hero--bark; senza nessuna delle due torna sul chiaro. -->
+  <section class="hm-hero hm-hero--green" data-sticky-from aria-labelledby="hm-title">
     <div class="container hm-hero-grid">
       <div class="hm-hero-copy">
         <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Nutrizione e comportamento · cane e gatto</span>
         <h1 class="hm-title intro-lines" id="hm-title">
           <span class="line"><span>Il cibo è il</span></span>
-          <span class="line"><span><em>primo passo.</em></span></span>
+          <span class="line">
+            <span class="hm-title-hl"
+              >primo passo.<svg class="hm-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"
+                ><path d="M4 15c46-9 92-12 142-8s96 6 150-3" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" pathLength="1"
+                ></path></svg
+              ></span
+            >
+          </span>
         </h1>
-        <p class="lead hm-lead" data-intro style="--intro-d:0.6s;">
+        <p class="lead hm-lead" data-intro style="--intro-d:0.65s;">
           Ti aiuto a capire cosa mettere nella ciotola del tuo cane e del tuo gatto, e come questo
           cambia il loro comportamento. Sempre al fianco del tuo veterinario.
         </p>
-        <div class="hm-ctas" data-intro style="--intro-d:0.75s;">
-          <a class="btn btn-cream btn-lg" href="/consulenza-gratuita#questionario">
+        <div class="hm-ctas" data-intro style="--intro-d:0.8s;">
+          <a class="btn btn-lg" href="/consulenza-gratuita#questionario">
             Prenota la consulenza gratuita <ArrowIcon size={16} />
           </a>
-          <a class="btn btn-accent btn-lg" href="/lavora-con-noi">Lavora con noi</a>
+          <a class="btn btn-ghost btn-lg" href="/lavora-con-noi">Lavora con noi</a>
         </div>
-        <ul class="hm-facts" data-intro style="--intro-d:0.9s;">
+        <ul class="hm-facts" data-intro style="--intro-d:0.95s;">
           <li>45 minuti al telefono</li>
           <li>Piano scritto e firmato</li>
           <li>Senza impegno</li>
         </ul>
       </div>
 
-      <div class="hm-hero-visual" aria-hidden="true">
-        <div class="photo-frame hm-photo" data-speed="0.05">
+      <div class="hm-hero-visual">
+        <!-- Il protagonista: la foto vera di Andrea dentro la "ciotola" (il
+             disco). Parallax (data-speed) sui contenitori: le intro CSS
+             animano i figli. -->
+        <div class="hm-disc-wrap" data-speed="0.08">
+          <div class="hm-disc">
+            <div class="hm-disc-photo">
+              <Image
+                src={heroPortrait}
+                alt="Andrea Bellettati con la sua bassotta in braccio"
+                widths={[360, 540, 720].map((w) => Math.min(w, heroPortrait.width)).filter((w, i, a) => a.indexOf(w) === i)}
+                sizes="(min-width: 900px) 400px, 70vw"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="hm-photo-2" data-speed="-0.05" aria-hidden="true">
           <Image
-            src={heroPortrait}
+            src={aboutPolaroid}
             alt=""
-            widths={widthsFor(heroPortrait, [420, 640, 900])}
-            sizes="(min-width: 900px) 460px, 86vw"
+            widths={[240, 480].map((w) => Math.min(w, aboutPolaroid.width)).filter((w, i, a) => a.indexOf(w) === i)}
+            sizes="220px"
             loading="eager"
-            fetchpriority="high"
           />
-        </div>
-        <div class="photo-frame hm-photo-2" data-speed="-0.04">
-          <Image src={heroDetail} alt="" widths={widthsFor(heroDetail, [240, 480])} sizes="200px" loading="eager" />
-        </div>
-        <div class="hm-chip">
-          <b>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-          </b>
-          <span><strong>Consulenza gratuita</strong><small>45 minuti · al telefono</small></span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SCEGLI IL PERCORSO — le due porte e, sotto, l'indice di tutto il sito. -->
-  <section class="section hm-paths" aria-labelledby="doors-title">
+  <!-- LE DUE PORTE — il bivio di conversione, subito dopo la promessa. -->
+  <section class="section hm-doors" aria-labelledby="doors-title">
     <div class="container">
       <div class="head-block">
         <span class="eyebrow kicker-rule">Da dove vuoi partire?</span>
-        <h2 class="display-lg" id="doors-title">Scegli il tuo <em>primo passo.</em></h2>
+        <h2 class="display-lg" id="doors-title">Scegli il tuo <span class="script">primo passo.</span></h2>
       </div>
       <div class="doors stagger" data-reveal>
         <a class="door door--care" href="/consulenza-gratuita#questionario">
@@ -227,11 +240,11 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
             del tuo animale.
           </p>
           <ul class="door-list">
-            <li><Fragment set:html={CHECK} />Un piano di lavoro scritto e firmato</li>
-            <li><Fragment set:html={CHECK} />Su misura, non un menu uguale per tutti</li>
-            <li><Fragment set:html={CHECK} />In accordo con il tuo veterinario</li>
+            <li>Un piano di lavoro scritto e firmato</li>
+            <li>Su misura, non un menu uguale per tutti</li>
+            <li>In accordo con il tuo veterinario</li>
           </ul>
-          <span class="door-go">Compila il questionario <b><ArrowIcon size={20} /></b></span>
+          <span class="door-go">Compila il questionario <b><ArrowIcon size={22} /></b></span>
           <svg class="door-paw" viewBox="0 0 50 44" fill="currentColor" aria-hidden="true">
             {PAW_D.map((e) => <ellipse cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} />)}
           </svg>
@@ -244,16 +257,16 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
             fa per te.
           </p>
           <ul class="door-list">
-            <li><Fragment set:html={CHECK} />Formazione e affiancamento</li>
-            <li><Fragment set:html={CHECK} />Cosa si fa e come si guadagna, detto chiaro</li>
+            <li>Formazione e affiancamento</li>
+            <li>Cosa si fa e come si guadagna, detto chiaro</li>
           </ul>
-          <span class="door-go">Richiedi il colloquio <b><ArrowIcon size={20} /></b></span>
+          <span class="door-go">Richiedi il colloquio <b><ArrowIcon size={22} /></b></span>
           <svg class="door-paw" viewBox="0 0 50 44" fill="currentColor" aria-hidden="true">
             {PAW_D.map((e) => <ellipse cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} />)}
           </svg>
         </a>
       </div>
-
+      <!-- L'indice: ogni percorso del sito a un click, come la lista di un'app. -->
       <nav class="paths-index" data-reveal aria-labelledby="paths-title">
         <div class="paths-index-head">
           <h3 id="paths-title">Oppure esplora</h3>
@@ -286,30 +299,31 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
   <!-- CHI SONO — la persona dietro la consulenza, con i numeri. -->
   <section class="section hm-about" aria-labelledby="about-title">
     <div class="container hm-about-grid">
-      <div class="hm-about-media" data-reveal>
-        <div class="photo-frame hm-about-main" data-clip>
+      <div class="hm-about-media">
+        <div class="hm-arch" data-clip>
           <Image
             src={aboutPhoto}
             alt="Andrea Bellettati al mare con i suoi due cani in braccio"
-            widths={widthsFor(aboutPhoto, [480, 720])}
-            sizes="(min-width: 900px) 430px, 80vw"
+            widths={[480, 720].map((w) => Math.min(w, aboutPhoto.width)).filter((w, i, a) => a.indexOf(w) === i)}
+            sizes="(min-width: 900px) 440px, 80vw"
             loading="lazy"
           />
         </div>
-        <div class="photo-frame hm-about-side" data-speed="0.08">
+        <figure class="polaroid hm-about-pol" data-speed="0.16">
           <Image
-            src={aboutSide}
+            src={approccioPhoto}
             alt="Andrea con il furgone aperto e i cani, pronti a partire in montagna"
-            widths={widthsFor(aboutSide, [240, 480])}
-            sizes="200px"
+            widths={[240, 480].map((w) => Math.min(w, approccioPhoto.width)).filter((w, i, a) => a.indexOf(w) === i)}
+            sizes="220px"
             loading="lazy"
           />
-        </div>
+          <figcaption>si parte!</figcaption>
+        </figure>
       </div>
       <div class="hm-about-copy">
         <div class="head-block">
           <span class="eyebrow kicker-rule">Chi sono</span>
-          <h2 class="display-lg" id="about-title">Ciao, sono <em>Andrea.</em></h2>
+          <h2 class="display-lg" id="about-title">Ciao, sono <span class="script">Andrea.</span></h2>
         </div>
         <p class="lead">
           Mi occupo di comportamento e nutrizione per cani e gatti. Da anni studio il legame tra
@@ -342,15 +356,16 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
         fanno parte dello stesso equilibrio.
       </h2>
       <div class="statement-foot">
-        <div class="photo-frame statement-photo" data-speed="-0.1">
+        <figure class="polaroid" data-speed="-0.25">
           <Image
-            src={approccioPhoto}
-            alt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
-            widths={widthsFor(approccioPhoto, [320, 640])}
+            src={heroPhoto}
+            alt="Quattro ciotole con carne, verdure e crocchette: una razione preparata con cura"
+            widths={[320, 640].map((w) => Math.min(w, heroPhoto.width)).filter((w, i, a) => a.indexOf(w) === i)}
             sizes="300px"
             loading="lazy"
           />
-        </div>
+          <figcaption>cosa c'è nella ciotola</figcaption>
+        </figure>
         <div class="statement-copy" data-reveal>
           <p>
             Il mio lavoro è osservare il soggetto nella sua globalità e costruire un percorso
@@ -377,11 +392,11 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
 
   <!-- COME FUNZIONA — quattro passi su un binario che si riempie con lo
        scroll; la zampina lo percorre (data-rail). -->
-  <section class="section hm-how" id="come-funziona" aria-labelledby="how-title">
+  <section class="section bg-bark hm-how" aria-labelledby="how-title">
     <div class="container">
       <div class="head-block">
         <span class="eyebrow kicker-rule">Come funziona la consulenza</span>
-        <h2 class="display-lg" id="how-title">Dal questionario al piano, <em>passo dopo passo.</em></h2>
+        <h2 class="display-lg" id="how-title">Dal questionario al piano, <span class="script">passo dopo passo.</span></h2>
       </div>
       <div class="how-rail" data-rail>
         <span class="how-line" aria-hidden="true">
@@ -415,12 +430,13 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
   </section>
 
   <!-- STORIE VERE — carosello nativo (swipe, frecce): prima/dopo da
-       trascinare, foto con la durata, la chat di Brownie che si scrive da sola. -->
+       trascinare, foto con il badge della durata, la chat di Brownie che
+       si scrive da sola quando arriva a schermo. -->
   <section class="hm-stories" id="storie" data-sv aria-labelledby="stories-title">
     <div class="container hm-stories-head">
       <div class="head-block">
         <span class="eyebrow kicker-rule">Storie vere</span>
-        <h2 class="display-lg" id="stories-title">Cani veri, <em>ciotole vere.</em></h2>
+        <h2 class="display-lg" id="stories-title">Cani veri, <span class="script">ciotole vere.</span></h2>
         <p class="lead">
           Ogni storia dice quanto è durata e da dove si partiva. Sono esperienze individuali, non
           promesse.
@@ -466,7 +482,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
           </div>
         </div>
         <div class="sv-body">
-          <span class="pill">Prima e dopo</span>
+          <span class="pill pill-peach">Prima e dopo</span>
           <h3 id="sv-zoe">Zoe, un mese dopo</h3>
           <p>
             Cucciola dal pelo riccio, appena cambiata l'alimentazione. Dopo trenta giorni il mantello
@@ -494,7 +510,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
           </div>
         </div>
         <div class="sv-body">
-          <span class="pill">Prima e dopo</span>
+          <span class="pill pill-peach">Prima e dopo</span>
           <h3 id="sv-pelle">La pelle racconta</h3>
           <p>
             Sei mesi di tempo e costanza. Quello che succede dentro, prima o poi, si vede fuori: nel
@@ -525,7 +541,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
           </div>
         </div>
         <div class="sv-body">
-          <span class="pill pill-sage">La vostra esperienza</span>
+          <span class="pill">La vostra esperienza</span>
           <h3 id="sv-brownie">Brownie e la giardia</h3>
           <p>
             Un messaggio arrivato una sera, a percorso avviato: test negativo al controllo dopo due
@@ -556,7 +572,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
         <div class="container">
           <div class="head-block">
             <span class="eyebrow kicker-rule">Dal vivo e online</span>
-            <h2 class="display-md" id="evt-title">Prossimo incontro</h2>
+            <h2 class="display-md" id="evt-title">Prossimo <span class="script">incontro.</span></h2>
           </div>
           <article class="evt" data-reveal>
             {prossimo.data.date && prossimo.data.status === 'upcoming' ? (
@@ -572,7 +588,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
               </div>
             )}
             <div class="evt-body">
-              {prossimo.data.statusLabel && <span class="pill">{prossimo.data.statusLabel}</span>}
+              {prossimo.data.statusLabel && <span class="pill pill-peach">{prossimo.data.statusLabel}</span>}
               <h3>{prossimo.data.title}</h3>
               <p>{prossimo.data.excerpt}</p>
               <ul class="evt-meta">
@@ -616,7 +632,8 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
     )
   }
 
-  <!-- BLOG — gli ultimi articoli in griglia su desktop, carosello a swipe su telefono. -->
+  <!-- BLOG — gli ultimi articoli in griglia su desktop (niente scroll
+       dirottato), carosello a swipe su telefono. -->
   {
     latestArticoli.length > 0 && (
       <section class="h-blog h-blog--grid" aria-labelledby="blog-title">
@@ -626,7 +643,7 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
             <h2 class="display-lg" id="blog-title">
               Senza slogan.
               <br />
-              Con <em>metodo.</em>
+              Con <span class="script">metodo.</span>
             </h2>
           </div>
           <a class="btn btn-ghost" href="/articoli">
@@ -655,12 +672,12 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
 
   <!-- FAQ — i dubbi prima di compilare; si aprono con un'animazione morbida
        (data-accordion), senza script restano <details> nativi. -->
-  <section class="section hm-faq" id="domande" aria-labelledby="faq-title">
+  <section class="section hm-faq" aria-labelledby="faq-title">
     <div class="container hm-faq-grid">
       <div class="hm-faq-head">
         <div class="head-block">
           <span class="eyebrow kicker-rule">Domande frequenti</span>
-          <h2 class="display-lg" id="faq-title">Prima di <em>compilare.</em></h2>
+          <h2 class="display-lg" id="faq-title">Prima di <span class="script">compilare.</span></h2>
         </div>
         <p>Non trovi la tua domanda? Scrivimi: ti rispondo io, di persona.</p>
         <a
@@ -692,20 +709,20 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
     </div>
   </section>
 
-  <!-- CTA — corteccia, i due flussi un'ultima volta. -->
+  <!-- CTA — foglio pesca, i due flussi un'ultima volta -->
   <section class="h-cta" data-sticky-until aria-labelledby="cta-title">
     <div class="container h-cta-inner">
-      <span class="eyebrow kicker-rule">Il primo passo è gratuito</span>
+      <span class="eyebrow">Il primo passo è gratuito</span>
       <h2 class="h-cta-title" id="cta-title" data-split="lines">
-        Partiamo <em>dalla ciotola.</em>
+        Parliamo del tuo animale, <span class="script">davvero.</span>
       </h2>
       <p class="lead">
         45 minuti insieme per analizzare alimentazione e comportamento. Al termine ricevi un piano
         di lavoro scritto e firmato. Senza impegno.
       </p>
       <div class="cta-row">
-        <a class="btn btn-cream btn-lg" href="/consulenza-gratuita#questionario">Prenota la consulenza gratuita <ArrowIcon size={16} /></a>
-        <a class="btn btn-accent btn-lg" href="/lavora-con-noi#candidatura">Lavora con noi</a>
+        <a class="btn btn-lg btn-dark" href="/consulenza-gratuita#questionario">Compila il questionario <ArrowIcon size={16} /></a>
+        <a class="btn btn-ghost btn-lg" href="/lavora-con-noi#candidatura">Lavora con noi</a>
         <a
           class="text-link"
           href={waLink('Ciao Andrea! Vorrei informazioni sulla consulenza gratuita.')}
@@ -721,9 +738,9 @@ const widthsFor = (img: ImageMetadata, list: number[]) =>
     </svg>
   </section>
 
-  <!-- Barra fissa (telefono e tablet): compare dopo l'hero, sparisce sulla CTA finale. -->
+  <!-- Barra fissa (telefono e tablet): i due flussi, compare dopo l'hero e sparisce sulla CTA finale -->
   <div class="sticky-bar" data-sticky-cta>
-    <a class="btn" href="/consulenza-gratuita#questionario" data-no-roll>Consulenza gratuita</a>
-    <a class="btn btn-accent" href="/lavora-con-noi" data-no-roll>Lavora con noi</a>
+    <a class="btn btn-dark" href="/consulenza-gratuita#questionario" data-no-roll>Consulenza gratuita</a>
+    <a class="btn" href="/lavora-con-noi" data-no-roll>Lavora con noi</a>
   </div>
 </Base>

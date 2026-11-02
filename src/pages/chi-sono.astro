@@ -12,7 +12,7 @@ import heroPhoto from '../assets/hero.jpg';
 // "professionale", vedi public/assets/README.md), altrimenti chi-sono.jpg.
 const portrait = assetImage('ritratto') ?? chiSonoPhoto;
 
-// Le tre foto del ventaglio (data-fan): l'ultima sta in cima alla pila.
+// Le polaroid del ventaglio (data-fan): l'ultima sta in cima alla pila.
 const polaroid = [
   { src: consulenzaPhoto, alt: 'Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto', caption: 'maglioni a quadri' },
   { src: heroPhoto, alt: 'Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna', caption: 'pausa al fiume' },
@@ -72,9 +72,10 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- HERO — un biglietto da visita: nome e ruolo in chiaro, il ritratto
-       incorniciato, i numeri che contano, il sigillo del Team e la firma
-       (la stessa che chiude ogni piano di lavoro). -->
+  <!-- HERO — un biglietto da visita, non un cartellino: nome e ruolo in
+       chiaro, la foto incorniciata ad arco, i numeri che contano, il sigillo
+       del Team e la firma a mano (la stessa che chiude ogni piano di lavoro).
+       Autorevole, ma con il calore di una firma vera. -->
   <section class="cs-hero" aria-labelledby="cs-title">
     <div class="container cs-hero-grid">
       <div class="cs-hero-copy">
@@ -97,14 +98,14 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
           <li><b>{formatNumber(STATS.followers)}</b><span>persone mi seguono</span></li>
         </ul>
         <div class="cs-ctas" data-intro style="--intro-d:0.95s;">
-          <a class="btn btn-cream btn-lg" href="/consulenza-gratuita">
+          <a class="btn btn-lg" href="/consulenza-gratuita">
             Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
           </a>
           <a class="btn btn-ghost-cream btn-lg" href="/approccio">Il mio approccio</a>
         </div>
       </div>
       <!-- Parallax (data-speed) sul contenitore: la cornice ha la sua intro
-           CSS e GSAP non deve leggerla a metà. -->
+           CSS su scale e GSAP non deve leggerla a metà. -->
       <figure class="cs-portrait" data-speed="0.06">
         <div class="cs-portrait-frame">
           <Image
@@ -117,15 +118,18 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
           />
         </div>
         <span class="cs-seal" aria-hidden="true">
-          <span class="cs-seal-core"><small>Dal</small><b>{STATS.teamSince}</b></span>
-          <span class="cs-seal-tag">TeamNutrizione, metodo condiviso</span>
+          <svg viewBox="0 0 200 200">
+            <defs><path id="cs-seal-path" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"></path></defs>
+            <text><textPath href="#cs-seal-path" textLength="468" lengthAdjust="spacing">TeamNutrizione · metodo condiviso ·</textPath></text>
+          </svg>
+          <span class="cs-seal-core"><small>dal</small><b>{STATS.teamSince}</b></span>
         </span>
         <figcaption class="cs-sign">Andrea Bellettati</figcaption>
       </figure>
     </div>
   </section>
 
-  <!-- BIO — le foto partono impilate e si aprono a ventaglio (data-fan) -->
+  <!-- BIO — le polaroid partono impilate e si aprono a ventaglio (data-fan) -->
   <section class="section cs-bio" aria-labelledby="bio-title">
     <div class="container">
       <div class="cs-bio-head">
@@ -210,11 +214,11 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
     </div>
   </section>
 
-  <!-- CTA — corteccia e la scheda del profilo Instagram -->
+  <!-- CTA — foglio pesca e la scheda del profilo Instagram -->
   <section class="cs-cta" aria-labelledby="cs-cta-title">
     <div class="container cs-cta-grid">
       <div class="cs-cta-copy">
-        <span class="eyebrow kicker-rule">Consulenza gratuita · 45 minuti</span>
+        <span class="eyebrow">Consulenza gratuita · 45 minuti</span>
         <h2 class="cs-cta-title" id="cs-cta-title" data-split="lines">
           Raccontami il <span class="script">tuo animale.</span>
         </h2>
@@ -222,11 +226,12 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
           Il primo passo è gratuito e senza impegno. Nel frattempo, ci vediamo su Instagram.
         </p>
         <div class="cta-row">
-          <a class="btn btn-cream btn-lg" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
-          <a class="btn btn-accent btn-lg" href="/lavora-con-noi">Lavora con noi</a>
+          <a class="btn btn-lg btn-dark" href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
+          <a class="btn btn-ghost btn-lg" href="/lavora-con-noi">Lavora con noi</a>
         </div>
       </div>
-      <aside class="ig-card" aria-label="Il profilo Instagram di Andrea">
+      <aside class="ig-card" data-tilt aria-label="Il profilo Instagram di Andrea">
+        <span class="cs-cta-note" aria-hidden="true">seguimi!</span>
         <div class="ig-head">
           <span class="ig-avatar"><img src="/assets/logo.jpg" alt="" width="52" height="52" loading="lazy" decoding="async" /></span>
           <span class="ig-id"><b>{igHandle}</b><small>Andrea Bellettati</small></span>

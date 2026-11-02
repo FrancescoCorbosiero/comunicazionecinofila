@@ -118,8 +118,7 @@ const HEADINGS = [
 ].join(',');
 
 const BLOCKS = '[data-reveal]:not(.stagger), [data-reveal].stagger > *';
-/* v5: il tilt 3D solo dove è chiesto; le card del blog restano ferme. */
-const TILTS = '[data-tilt]';
+const TILTS = '.card, [data-tilt]';
 const MAGNETS = '[data-magnetic]';
 
 /* ── Helper ─────────────────────────────────────────────────────── */
@@ -212,7 +211,7 @@ function fxLayer(): HTMLElement {
 /** Esplosione di zampe, cuori e ossa dal centro di un elemento. */
 export function celebrate(origin: Element, opts: { count?: number; shapes?: string[]; spread?: number } = {}): void {
   if (reduced()) return;
-  const { count = 14, shapes = [PAW, HEART, BONE], spread = 0.8 } = opts;
+  const { count = 26, shapes = [PAW, HEART, BONE], spread = 1 } = opts;
   const r = origin.getBoundingClientRect();
   const cx = r.left + r.width / 2;
   const cy = r.top + r.height / 2;
@@ -247,10 +246,14 @@ export function celebrate(origin: Element, opts: { count?: number; shapes?: stri
   }
 }
 
-/** Un piccolo respiro della medaglietta quando cambia il nome (mirror della consulenza). */
+/** Un'oscillazione da medaglietta appesa al collare (mirror della consulenza). */
 export function swing(el: Element): void {
   if (reduced()) return;
-  gsap.fromTo(el, { scale: 0.96 }, { scale: 1, duration: 0.7, ease: 'power3.out', overwrite: 'auto', clearProps: 'transform' });
+  gsap.fromTo(
+    el,
+    { scale: 0.96 },
+    { scale: 1, duration: 0.7, ease: 'power3.out', overwrite: 'auto', clearProps: 'transform' }
+  );
 }
 
 /* ── Form a step: transizioni, zampa che salta, errori ──────────── */
@@ -295,7 +298,7 @@ export function stepProgress(form: HTMLElement, index: number, animate: boolean)
     return;
   }
   gsap.to(runner, { left, xPercent: -50, duration: 0.7, ease: 'power2.inOut' });
-  gsap.to(runner, { keyframes: { y: [0, -16, 0], rotation: [0, -18, 0] }, duration: 0.7, ease: 'none' });
+  gsap.to(runner, { keyframes: { y: [0, -16, 0] }, duration: 0.7, ease: 'none' });
   gsap.fromTo(dot, { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center', duration: 0.6, ease: 'power3.out', clearProps: 'transform' });
 }
 
@@ -310,7 +313,7 @@ export function successBurst(success: HTMLElement): void {
   if (reduced()) return;
   const check = success.querySelector<HTMLElement>('.success-check');
   const path = success.querySelector<SVGPathElement>('.success-check path');
-  if (check) gsap.from(check, { scale: 0, rotation: -120, duration: 0.9, ease: 'back.out(2.2)' });
+  if (check) gsap.from(check, { scale: 0, duration: 0.9, ease: 'back.out(2.2)' });
   if (path) {
     const len = path.getTotalLength();
     gsap.fromTo(path, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.6, delay: 0.35, ease: 'power2.out' });
@@ -358,15 +361,15 @@ function on<K extends keyof HTMLElementEventMap>(
      chars  le lettere cadono e rimbalzano (solo titoli brevi)
      blur   le righe vanno a fuoco salendo */
 type HeadingVariant = 'lines' | 'pop' | 'wipe' | 'chars' | 'blur';
-/* v5: a turno solo le varianti sobrie; 'pop' e 'chars' restano disponibili a richiesta. */
-const CYCLE: HeadingVariant[] = ['lines', 'blur', 'wipe'];
+/* Niente lettere che cadono ruotando: a turno solo righe, pop, wipe e blur. */
+const CYCLE: HeadingVariant[] = ['lines', 'pop', 'wipe', 'blur'];
 
 function headingVariant(el: HTMLElement, index: number): HeadingVariant {
   const asked = el.dataset.split as HeadingVariant | undefined;
   if (asked && CYCLE.includes(asked)) return asked;
   const v = CYCLE[index % CYCLE.length];
   // Lettera per lettera si legge bene solo su poche parole.
-  return v === 'chars' && (el.textContent ?? '').trim().length > 28 ? 'lines' : v;
+  return v === 'chars' && (el.textContent ?? '').trim().length > 28 ? 'pop' : v;
 }
 
 function headingTween(self: SplitText, v: HeadingVariant, trigger: HTMLElement): gsap.core.Tween {
@@ -377,7 +380,6 @@ function headingTween(self: SplitText, v: HeadingVariant, trigger: HTMLElement):
         opacity: 0,
         y: 46,
         scale: 0.6,
-        rotation: () => gsap.utils.random(-12, 12),
         duration: 0.9,
         ease: 'back.out(2.2)',
         stagger: 0.05,
@@ -432,7 +434,7 @@ function splitHeadings(): void {
     el.querySelectorAll<HTMLElement>('.script').forEach((s) => {
       gsap.fromTo(
         s,
-        { '--draw': 0, rotation: -8, scale: 0.7 },
+        { '--draw': 0, scale: 0.7 },
         {
           '--draw': 1,
           rotation: 0,
@@ -453,7 +455,7 @@ function revealBlocks(): void {
   if (!blocks.length) return;
   const isChild = (el: HTMLElement) => !!el.parentElement?.matches('[data-reveal].stagger');
   blocks.forEach((el) => {
-    gsap.set(el, isChild(el) ? { opacity: 0, y: 40, transition: 'none' } : { opacity: 0, y: 36, transition: 'none' });
+    gsap.set(el, isChild(el) ? { opacity: 0, y: 54, scale: 0.94, transition: 'none' } : { opacity: 0, y: 44, transition: 'none' });
     el.setAttribute('data-motion-pending', '');
   });
   ScrollTrigger.batch(blocks, {
@@ -473,9 +475,9 @@ function revealBlocks(): void {
       const blocksIn = entering.filter((el) => !isChild(el));
       const childrenIn = entering.filter(isChild);
       if (blocksIn.length) gsap.to(blocksIn, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger, ...done });
-      // I figli delle griglie entrano a cascata, senza rimbalzo.
+      // I figli delle griglie atterrano con un piccolo rimbalzo.
       if (childrenIn.length) {
-        gsap.to(childrenIn, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger, ...done });
+        gsap.to(childrenIn, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'back.out(1.6)', stagger, ...done });
       }
     },
   });
@@ -548,7 +550,6 @@ function floaters(): void {
   gsap.utils.toArray<HTMLElement>('[data-float]').forEach((el, i) => {
     gsap.to(el, {
       y: '+=14',
-      rotation: i % 2 ? '+=4' : '-=4',
       duration: gsap.utils.random(2.2, 3.2),
       ease: 'sine.inOut',
       yoyo: true,
@@ -748,7 +749,6 @@ function stackCards(): void {
       if (!next) return;
       gsap.to(card, {
         scale: 0.9 + i * 0.02,
-        rotation: i % 2 ? 2.5 : -2.5,
         '--dim': 0.16,
         ease: 'none',
         scrollTrigger: {
@@ -783,7 +783,7 @@ function strikes(): void {
     tl.to(path, { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' })
       .to(old, { opacity: 0.38, duration: 0.5 }, 0.5)
       .to(neu, { clipPath: 'inset(-30% -6% -40% -6%)', duration: 1, ease: 'power1.inOut' }, 0.95)
-      .fromTo(neu, { rotation: -8, scale: 0.85 }, { rotation: -3, scale: 1, duration: 0.6, ease: 'back.out(2.4)' }, 1.1)
+      .fromTo(neu, { scale: 0.85 }, { scale: 1, duration: 0.6, ease: 'back.out(2.4)' }, 1.1)
       .to({}, { duration: 0.35 });
   });
 }
@@ -810,18 +810,16 @@ function venns(media: gsap.MatchMedia): void {
         const [fx, fy] = (c.dataset.from ?? '0 0').split(' ').map(Number);
         tl.fromTo(
           c,
-          { xPercent: fx, yPercent: fy, scale: 0.78, rotation: fx / 6 },
-          { xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 1, ease: 'power2.inOut' },
+          { xPercent: fx, yPercent: fy, scale: 0.78 },
+          { xPercent: 0, yPercent: 0, scale: 1, duration: 1, ease: 'power2.inOut' },
           0
         );
       });
       if (core) {
-        // GSAP assorbe la rotazione CSS di riposo (rotate): si torna a quella.
-        const rest = Number(gsap.getProperty(core, 'rotation')) || 0;
         tl.fromTo(
           core,
-          { scale: 0, rotation: rest - 25, opacity: 0 },
-          { scale: 1, rotation: rest, opacity: 1, duration: 0.3, ease: 'back.out(2.4)' },
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(2.4)' },
           0.86
         );
       }
@@ -931,18 +929,14 @@ function fans(): void {
     const tl = gsap.timeline({
       scrollTrigger: { trigger: root, start: 'top 88%', end: 'center 52%', scrub: 0.7, invalidateOnRefresh: true },
     });
-    const mid = (items.length - 1) / 2;
-    items.forEach((it, i) => {
-      // La rotazione di riposo (CSS rotate) la assorbe GSAP: si parte e si torna da lì.
-      const rest = Number(gsap.getProperty(it, 'rotation')) || 0;
+    items.forEach((it) => {
       tl.fromTo(
         it,
         {
           x: () => root.clientWidth / 2 - (it.offsetLeft + it.offsetWidth / 2),
           y: () => root.clientHeight / 2 - (it.offsetTop + it.offsetHeight / 2),
-          rotation: rest + (i - mid) * 7,
         },
-        { x: 0, y: 0, rotation: rest, ease: 'power2.out' },
+        { x: 0, y: 0, ease: 'power2.out' },
         0
       );
     });
@@ -1120,7 +1114,7 @@ function stamps(): void {
     const host = el.parentElement;
     const delay = parseFloat(el.dataset.stamp ?? '') || 0;
     const tl = gsap.timeline({ scrollTrigger: { trigger: host ?? el, start: 'top 70%', once: true } });
-    tl.from(el, { scale: 2.6, rotation: -45, opacity: 0, duration: 0.45, ease: 'power4.in' }, delay).fromTo(
+    tl.from(el, { scale: 2.2, opacity: 0, duration: 0.45, ease: 'power4.in' }, delay).fromTo(
       host ?? el,
       { x: 0 },
       { keyframes: { x: [-6, 5, -3, 0] }, duration: 0.3, ease: 'none', clearProps: 'transform' }
@@ -1315,7 +1309,7 @@ function pathRows(): void {
   gsap.utils.toArray<HTMLElement>('[data-path-row]').forEach((row) => {
     const thumb = row.querySelector<HTMLElement>('[data-path-thumb]');
     if (!thumb) return;
-    gsap.set(thumb, { xPercent: -50, yPercent: -50, scale: 0, rotation: -12 });
+    gsap.set(thumb, { xPercent: -50, yPercent: -50, scale: 0 });
     const xTo = gsap.quickTo(thumb, 'x', { duration: 0.55, ease: 'power3.out' });
     const yTo = gsap.quickTo(thumb, 'y', { duration: 0.55, ease: 'power3.out' });
     const place = (e: PointerEvent): void => {
@@ -1326,10 +1320,10 @@ function pathRows(): void {
     on(row, 'pointerenter', (e) => {
       const r = row.getBoundingClientRect();
       gsap.set(thumb, { x: e.clientX - r.left, y: e.clientY - r.top });
-      gsap.to(thumb, { scale: 1, rotation: gsap.utils.random(-9, 9), duration: 0.55, ease: 'back.out(2)', overwrite: 'auto' });
+      gsap.to(thumb, { scale: 1, duration: 0.55, ease: 'back.out(2)', overwrite: 'auto' });
     });
     on(row, 'pointermove', place);
-    on(row, 'pointerleave', () => gsap.to(thumb, { scale: 0, rotation: -12, duration: 0.35, ease: 'power2.in', overwrite: 'auto' }));
+    on(row, 'pointerleave', () => gsap.to(thumb, { scale: 0, duration: 0.35, ease: 'power2.in', overwrite: 'auto' }));
   });
 }
 
