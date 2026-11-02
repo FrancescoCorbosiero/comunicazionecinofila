@@ -18,15 +18,21 @@
 
 :root {
   /* ── PALETTE ─────────────────────────────────────────── */
-  --bg-cream:        #f3f4ee;   /* fondo pagina: bianco salvia (non più crema) */
+  --bg-cream:        #f1ebdf;   /* fondo pagina: sabbia calda (v4: meno pallido) */
+  --sand:            #e6dac6;   /* superfici calde, fasce chiare con più corpo */
   --bg-paper:        #ffffff;   /* superfici, card, sticker */
   --bg-deep:         #1f2818;   /* verde notte: bande scure, footer */
 
-  --sage:            #7c9474;   /* VERDE PRIMARIO — il verde delle cover */
+  --sage:            #6f8b60;   /* VERDE PRIMARIO — il verde delle cover, più pieno */
   --sage-soft:       #a4b59c;
-  --sage-mist:       #dfe5d6;
+  --sage-mist:       #d4dfc6;
   --olive-deep:      #34402a;
   --olive-darkest:   #151b0f;
+
+  /* Marroni (v4): la terra e il pelo, per dare calore accanto al verde. */
+  --bark:            #4a3426;   /* marrone pieno: fasce scure calde */
+  --bark-deep:       #33231a;
+  --bark-soft:       #9a7556;
 
   --peach:           #f4a98a;   /* accento del logo: CTA, sticker, evidenze */
   --peach-soft:      #f9d0bd;

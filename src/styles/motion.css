@@ -82,7 +82,7 @@ html.lenis { scroll-behavior: auto; } /* lo smooth nativo litiga con Lenis */
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8c18-6 30 2 46-1s28-6 44-2 20 3 26 0' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
   transform: scaleX(var(--draw, 1)); transform-origin: left center; pointer-events: none;
 }
-.bg-deep h2 .script::after, .booking-card h2 .script::after { background: var(--peach-soft); }
+.bg-deep h2 .script::after, .bg-bark h2 .script::after, .booking-card h2 .script::after { background: var(--peach-soft); }
 
 
 /* Header che si toglie di mezzo leggendo verso il basso. */
