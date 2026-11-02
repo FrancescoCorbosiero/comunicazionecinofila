@@ -14,9 +14,9 @@ const portrait = assetImage('ritratto') ?? chiSonoPhoto;
 
 // Le polaroid del ventaglio (data-fan): l'ultima sta in cima alla pila.
 const polaroid = [
-  { src: consulenzaPhoto, alt: 'Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto', caption: 'maglioni a quadri' },
-  { src: heroPhoto, alt: 'Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna', caption: 'pausa al fiume' },
-  { src: chiSonoPhoto, alt: 'Andrea Bellettati guancia a guancia con il suo segugio, in inverno', caption: 'guancia a guancia' },
+  { src: consulenzaPhoto, alt: 'Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna', caption: 'pausa al fiume' },
+  { src: heroPhoto, alt: 'Quattro ciotole con carne, verdure e crocchette: una razione preparata con cura', caption: 'cosa c’è nella ciotola' },
+  { src: chiSonoPhoto, alt: 'Andrea Bellettati con la sua bassotta in braccio, d’inverno, con il cappuccio', caption: 'guancia a guancia' },
 ];
 
 // Il percorso: un sentiero di impronte unisce le tappe (data-trail).
@@ -68,7 +68,7 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
   ogTitle="Chi sono — Andrea Bellettati"
   ogDescription="Vivo con una bassotta: la teoria la verifico ogni giorno, a casa. La mia storia, dal primo sacco di crocchette a un metodo condiviso."
   ogImage="/assets/consulenza.jpg"
-  ogImageAlt="Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto"
+  ogImageAlt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
@@ -118,11 +118,8 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
           />
         </div>
         <span class="cs-seal" aria-hidden="true">
-          <svg viewBox="0 0 200 200">
-            <defs><path id="cs-seal-path" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"></path></defs>
-            <text><textPath href="#cs-seal-path" textLength="468" lengthAdjust="spacing">TeamNutrizione · metodo condiviso ·</textPath></text>
-          </svg>
-          <span class="cs-seal-core"><small>dal</small><b>{STATS.teamSince}</b></span>
+          <span class="cs-seal-core"><small>Nel Team dal</small><b>{STATS.teamSince}</b></span>
+          <span class="cs-seal-tag">TeamNutrizione · metodo condiviso</span>
         </span>
         <figcaption class="cs-sign">Andrea Bellettati</figcaption>
       </figure>

@@ -10,7 +10,8 @@ import chiSonoPhoto from '../assets/chi-sono.jpg';
 import consulenzaPhoto from '../assets/consulenza.jpg';
 import { assetImage } from '../lib/images';
 import { eventDay, eventMonthTime } from '../lib/dates';
-import { IG_URL, STATS, WA_LINK, formatNumber, waLink } from '../config';
+import { IG_HANDLE, IG_URL, STATS, WA_LINK, formatNumber, waLink } from '../config';
+import InstagramIcon from '../components/InstagramIcon.astro';
 
 /* Home v4 — una pagina sola con un compito solo: portare il proprietario
    alla consulenza gratuita (e chi vuole lavorare nel Team al colloquio).
@@ -95,6 +96,16 @@ const aboutPhoto = assetImage('home-chi-sono') ?? chiSonoPhoto;
 const aboutPolaroid = assetImage('home-ciotola') ?? consulenzaPhoto;
 const approccioPhoto = assetImage('home-approccio') ?? heroPhoto;
 
+// "Dal profilo": una fila di foto vere che porta su Instagram.
+const igTiles = [
+  { src: aboutPolaroid, alt: 'La bassotta di Andrea che mangia dalla sua ciotola' },
+  { src: heroPhoto, alt: 'Quattro ciotole con carne, verdure e crocchette: una razione preparata con cura' },
+  { src: approccioPhoto, alt: 'Andrea con il furgone aperto e i cani, pronti a partire in montagna' },
+  { src: chiSonoPhoto, alt: 'Andrea Bellettati con la sua bassotta in braccio, d’inverno, con il cappuccio' },
+  { src: consulenzaPhoto, alt: 'Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna' },
+  { src: aboutPhoto, alt: 'Andrea Bellettati al mare con i suoi due cani in braccio' },
+];
+
 const percorsi = [
   { href: '/approccio', icon: ICON.compass, title: 'Il mio approccio', text: 'Non parto dal prodotto, parto dall’animale.' },
   { href: '/chi-sono', icon: ICON.person, title: 'Chi sono', text: 'La mia storia, dal primo cane a un metodo condiviso.' },
@@ -151,8 +162,8 @@ const PAW_D = [
   description="Nutrizione e comportamento per cani e gatti: consulenza gratuita di 45 minuti al telefono e un piano di lavoro scritto e firmato, sempre al fianco del tuo veterinario."
   ogTitle="Andrea Bellettati — Il cibo è il primo passo"
   ogDescription="Consulenza gratuita di 45 minuti per il tuo cane o gatto: alimentazione e comportamento, con un piano scritto e firmato."
-  ogImage="/assets/hero.jpg"
-  ogImageAlt="Andrea Bellettati con la sua bassotta lungo un fiume di montagna"
+  ogImage="/assets/consulenza.jpg"
+  ogImageAlt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
   ogImageWidth={1440}
   ogImageHeight={1440}
   jsonLd={faqLd}
@@ -562,6 +573,27 @@ const PAW_D = [
     <div class="container sv-foot">
       <div class="sv-dots" data-sv-dots aria-hidden="true"><i class="on"></i><i></i><i></i></div>
       <a class="text-link" href="/consulenza-gratuita#questionario">Inizia anche tu dal questionario <ArrowIcon size={14} /></a>
+    </div>
+  </section>
+
+  <!-- DAL PROFILO — una fila di foto vere che porta su Instagram. -->
+  <section class="h-ig" aria-labelledby="ig-title">
+    <div class="container h-ig-head">
+      <div class="head-block">
+        <span class="eyebrow kicker-rule">Dal profilo</span>
+        <h2 class="display-md" id="ig-title">Ogni giorno, <span class="script">su Instagram.</span></h2>
+      </div>
+      <a class="btn btn-ghost" href={IG_URL} target="_blank" rel="noopener"><InstagramIcon size={16} /> {IG_HANDLE}</a>
+    </div>
+    <div class="ig-row stagger" data-reveal>
+      {
+        igTiles.map((t) => (
+          <a class="ig-tile" href={IG_URL} target="_blank" rel="noopener">
+            <Image src={t.src} alt={t.alt} widths={[240, 480].map((w) => Math.min(w, t.src.width)).filter((w, i, a) => a.indexOf(w) === i)} sizes="(min-width: 1000px) 200px, 44vw" loading="lazy" />
+            <span><InstagramIcon size={15} /> Apri su Instagram</span>
+          </a>
+        ))
+      }
     </div>
   </section>
 
