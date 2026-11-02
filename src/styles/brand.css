@@ -1,72 +1,74 @@
-/* Andrea Bellettati — Brand System v5 ("Editoriale")
+/* Andrea Bellettati — Brand System v3 ("Branco")
 
-   La v3/v4 ("Branco") parlava la lingua degli sticker: bordi d'inchiostro
-   da 2px, ombre piene "stampate", pillole storte, nastri adesivi, foto
-   scontornate, note a pennarello. Allegra, ma poco autorevole.
+   La v2 (handoff) era nata dal feed reale ma parlava la lingua dei
+   prototipi generati: crema caldo + grana carta, titoli poster tutti
+   maiuscoli, micro-etichette in monospace 11px con tracking largo. Belle,
+   ma "da template". La v3 tiene i colori campionati dal logo e dal feed
+   (salvia delle cover, pesca, verde notte) e cambia tutto il resto:
 
-   La v5 cambia paradigma senza perdere l'anima cinofila: toni della terra
-   e del pelo (crema caldo, corteccia, argilla, salvia), un serif editoriale
-   per i titoli (Fraunces, con le parole chiave in corsivo), un grotesk
-   calmo per il testo, bordi sottili e ombre morbide. Niente è ruotato,
-   niente è "attaccato con lo scotch": struttura, aria, gerarchia.
-   Le foto vere restano il cuore, incorniciate con cura.
+   · neutri: un bianco appena salvia al posto del crema, inchiostro
+     verde-nero, bordi pieni d'inchiostro invece dei filetti al 14%;
+   · tipografia: Bricolage Grotesque, nero e stretto, in minuscolo —
+     ha la voce di una persona, non di un manifesto. Anton resta, ma solo
+     per nastri e numeri (richiama le cover di Instagram). Caveat per le
+     note scritte a mano, come si fa sulle stories;
+   · forme: sticker, bordi da 2px, ombre piene "stampate", rotazioni
+     leggere. Niente texture finte: colore pieno e foto vere.
 */
 
 :root {
   /* ── PALETTE ─────────────────────────────────────────── */
-  --bg-cream:        #faf4ea;   /* fondo pagina: crema caldo */
-  --sand:            #efe4d2;   /* fasce chiare con più corpo */
-  --bg-paper:        #fdf9f2;   /* card, superfici */
-  --bg-deep:         #2a1f19;   /* fondo scuro: corteccia profonda */
+  --bg-cream:        #f1ebdf;   /* fondo pagina: sabbia calda (v4: meno pallido) */
+  --sand:            #e6dac6;   /* superfici calde, fasce chiare con più corpo */
+  --bg-paper:        #ffffff;   /* superfici, card, sticker */
+  --bg-deep:         #1f2818;   /* verde notte: bande scure, footer */
 
-  --sage:            #8a9b6e;   /* salvia: il verde cinofilo, calmo */
-  --sage-soft:       #b7c27e;   /* salvia chiara: accenti su scuro */
-  --sage-mist:       #e7ead8;   /* salvia nebbia: fasce tenui */
-  --olive-deep:      #5e6b2e;   /* salvia inchiostro: testo verde su chiaro */
-  --olive-darkest:   #2a1f19;
-  --forest:          #3b2b22;   /* la fascia scura "bosco" ora è corteccia */
+  --sage:            #6f8b60;   /* VERDE PRIMARIO — il verde delle cover, più pieno */
+  --sage-soft:       #a4b59c;
+  --sage-mist:       #d4dfc6;
+  --olive-deep:      #34402a;
+  --olive-darkest:   #151b0f;
+  --forest:          #2f4a2b;   /* verde bosco pieno: hero della home */
 
-  /* Marroni: terra e pelo. */
-  --bark:            #3b2b22;   /* corteccia: superfici scure, bottoni primari */
-  --bark-deep:       #2a1f19;
-  --bark-soft:       #8a7a6c;
+  /* Marroni (v4): la terra e il pelo, per dare calore accanto al verde. */
+  --bark:            #4a3426;   /* marrone pieno: fasce scure calde */
+  --bark-deep:       #33231a;
+  --bark-soft:       #9a7556;
 
-  --peach:           #f0a47a;   /* argilla: il secondo flusso (Team), accenti */
-  --peach-soft:      #f7d2be;
-  --peach-deep:      #a64b22;   /* argilla inchiostro: etichette, corsivi, link */
+  --peach:           #f4a98a;   /* accento del logo: CTA, sticker, evidenze */
+  --peach-soft:      #f9d0bd;
+  --peach-deep:      #d0673f;   /* testo/accenti grandi su chiaro */
   --ochre:           #c9a96a;
 
-  --ink:             #2a1f19;
-  --ink-soft:        #5c4e44;
-  --ink-mute:        #76675a;
-  --cream-ink:       #faf4ea;   /* testo chiaro su scuro */
+  --ink:             #15190f;
+  --ink-soft:        #363f2c;
+  --ink-mute:        #626b58;
+  --cream-ink:       #f1f2ea;   /* testo chiaro su verde */
 
-  --rule:            #e3d5bf;
-  --rule-soft:       rgba(42, 31, 25, 0.08);
-  --rule-cream:      rgba(250, 244, 234, 0.22);
+  --rule:            rgba(21, 25, 15, 0.16);
+  --rule-soft:       rgba(21, 25, 15, 0.08);
+  --rule-cream:      rgba(241, 242, 234, 0.22);
 
-  /* Bordi sottili e ombre morbide: profondità, non "sollevamento". */
-  --line:            1px solid var(--rule);
-  --shadow-s:        0 8px 20px -14px rgba(42, 31, 25, 0.35);
-  --shadow-m:        0 16px 34px -20px rgba(42, 31, 25, 0.38);
-  --shadow-l:        0 30px 56px -30px rgba(42, 31, 25, 0.45);
+  /* Ombre "stampate": piene, senza sfocatura, come uno sticker sollevato. */
+  --line:            2px solid var(--ink);
+  --shadow-s:        3px 3px 0 var(--ink);
+  --shadow-m:        5px 5px 0 var(--ink);
+  --shadow-l:        8px 8px 0 var(--ink);
 
   /* ── TIPOGRAFIA ──────────────────────────────────────── */
-  --display: var(--font-fraunces, 'Fraunces', Georgia, 'Times New Roman', serif);
+  --display: var(--font-bricolage, 'Bricolage Grotesque', 'Arial Black', sans-serif);
   --sans:    var(--font-bricolage, 'Bricolage Grotesque', -apple-system, system-ui, sans-serif);
-  /* Alias storici: niente più poster condensato né corsivo a pennarello.
-     I numeri grandi e le parole "a mano" diventano serif. */
-  --poster:  var(--display);
-  --script:  var(--display);
-  --serif:   var(--display);
+  --poster:  var(--font-anton, 'Anton', 'Bebas Neue', 'Oswald', sans-serif);
+  --script:  var(--font-caveat, 'Caveat', 'Brush Script MT', cursive);
+  /* Alias storici: niente più serif corsivo né monospace. */
+  --serif:   var(--sans);
   --mono:    var(--sans);
 
   /* ── FORME ───────────────────────────────────────────── */
-  --r-1: 6px;
-  --r-2: 14px;
-  --r-3: 24px;
+  --r-1: 4px;
+  --r-2: 12px;
+  --r-3: 22px;
   --r-pill: 999px;
-  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .brand {
@@ -75,71 +77,63 @@
   background: var(--bg-cream);
   -webkit-font-smoothing: antialiased;
   font-optical-sizing: auto;
-  font-size: 17px;
 }
 
-/* DISPLAY — serif editoriale, peso medio, spaziatura appena stretta:
-   la voce di chi sa di cosa parla. */
+/* DISPLAY — nero, stretto, in minuscolo: si legge come una frase detta. */
 .brand h1, .brand h2, .brand h3, .brand .display {
   font-family: var(--display);
-  font-weight: 600;
+  font-weight: 800;
   text-transform: none;
-  letter-spacing: -0.02em;
-  line-height: 1.02;
+  letter-spacing: -0.03em;
+  line-height: 0.94;
   text-wrap: balance;
-  font-optical-sizing: auto;
 }
-.brand h3 { letter-spacing: -0.012em; line-height: 1.12; }
+.brand h3 { letter-spacing: -0.02em; line-height: 1.02; }
 
-/* Le parole chiave dei titoli: corsivo argilla, come su una rivista. */
-.brand .script,
-.brand :is(h1, h2, h3) em {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  text-transform: none;
-  color: var(--peach-deep);
-}
-
-/* Etichetta di sezione: maiuscoletto spaziato, argilla, dritto. */
+/* Etichetta: pillola bordata, dritta, ombra piena. */
 .brand .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: fit-content;
   font-family: var(--sans);
-  font-size: 12.5px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--peach-deep);
-  background: none;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  box-shadow: none;
-  transform: none;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background: var(--bg-paper);
+  border: var(--line);
+  border-radius: var(--r-pill);
+  padding: 7px 14px 8px;
+  box-shadow: var(--shadow-s);
 }
 
 .brand .lead {
   font-family: var(--sans);
   font-size: 19px;
-  line-height: 1.5;
+  line-height: 1.45;
   font-weight: 400;
   color: var(--ink-soft);
   text-wrap: pretty;
 }
 
-/* Colore pieno, nessuna texture. */
+.brand .script {
+  font-family: var(--script);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Colore pieno: le vecchie texture carta sono state ritirate. */
 .paper-bg { background-color: var(--bg-cream); }
 .paper-bg-deep { background-color: var(--bg-deep); }
 
 /* Placeholder per immagini mancanti */
 .placeholder {
   background:
-    repeating-linear-gradient(135deg, rgba(138, 155, 110, 0.18) 0 10px, rgba(138, 155, 110, 0.06) 10px 20px),
+    repeating-linear-gradient(135deg, rgba(124, 148, 116, 0.22) 0 10px, rgba(124, 148, 116, 0.08) 10px 20px),
     var(--sage-mist);
   display: flex;
   align-items: center;
@@ -150,65 +144,61 @@
   color: var(--olive-deep);
 }
 
-/* Bottoni — pillole piene, senza bordo d'inchiostro né ombra stampata.
-   Due flussi, due colori: corteccia per la consulenza (default),
-   argilla (.btn-accent) per il Team. */
+/* Bottoni — sticker premibili: bordo d'inchiostro, ombra piena che si
+   allunga al passaggio e sparisce alla pressione. */
 .brand .btn {
+  --btn-shadow: var(--ink);
   font-family: var(--sans);
   font-size: 15px;
-  font-weight: 650;
-  letter-spacing: 0;
+  font-weight: 700;
+  letter-spacing: -0.005em;
   line-height: 1.1;
-  padding: 15px 26px;
-  border: 1.5px solid transparent;
-  background: var(--bark);
-  color: var(--cream-ink);
+  padding: 14px 24px;
+  border: var(--line);
+  background: var(--peach);
+  color: var(--ink);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   border-radius: var(--r-pill);
-  box-shadow: none;
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
-    background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  box-shadow: 4px 4px 0 var(--btn-shadow);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.25s ease, color 0.25s ease;
 }
 .brand .btn:hover {
-  background: var(--bark-deep);
-  color: var(--cream-ink);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 30px -16px rgba(42, 31, 25, 0.6);
+  background: var(--peach);
+  color: var(--ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--btn-shadow);
 }
-.brand .btn:active { transform: translateY(0); box-shadow: none; }
-.brand .btn-dark { background: var(--bark); color: var(--cream-ink); }
-.brand .btn-dark:hover { background: var(--bark-deep); }
-.brand .btn-accent { background: var(--peach); color: var(--ink); }
-.brand .btn-accent:hover { background: #ec9868; color: var(--ink); box-shadow: 0 16px 30px -16px rgba(166, 75, 34, 0.55); }
-.brand .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
-.brand .btn-ghost:hover { background: rgba(42, 31, 25, 0.06); color: var(--ink); box-shadow: none; }
-.brand .btn-ghost-accent { background: transparent; color: var(--peach-deep); border-color: var(--peach-deep); }
-.brand .btn-ghost-accent:hover { background: rgba(166, 75, 34, 0.07); color: var(--peach-deep); box-shadow: none; }
+.brand .btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--btn-shadow);
+}
+.brand .btn-dark { background: var(--olive-deep); color: var(--cream-ink); }
+.brand .btn-dark:hover { background: var(--ink); color: var(--cream-ink); }
+.brand .btn-ghost { background: var(--bg-paper); color: var(--ink); border: var(--line); }
+.brand .btn-ghost:hover { background: var(--sage-mist); color: var(--ink); }
 
-/* Pill / tag — etichette piccole in maiuscoletto. */
+/* Pill / tag */
 .brand .pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 13px;
   border-radius: var(--r-pill);
-  background: transparent;
-  color: var(--peach-deep);
-  border: 1.5px solid currentColor;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 1.2;
+  background: var(--sage-mist);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0;
 }
-.brand .pill-peach { background: var(--peach-soft); color: var(--peach-deep); border-color: transparent; }
-.brand .pill-dark { background: var(--bark); color: var(--cream-ink); border-color: transparent; }
-.brand .pill-sage { background: var(--sage-mist); color: var(--olive-deep); border-color: transparent; }
+.brand .pill-peach { background: var(--peach); color: var(--ink); }
+.brand .pill-dark { background: var(--ink); color: var(--cream-ink); }
 
-/* Form — campi puliti, bordo che si scurisce al focus. */
+/* Form — campi morbidi, bordo che diventa inchiostro al focus */
 .brand .field {
   display: block;
   margin-bottom: 16px;
@@ -225,8 +215,8 @@
 .brand input, .brand textarea, .brand select {
   font-family: var(--sans);
   font-size: 16px;
-  background: var(--bg-paper);
-  border: 1.5px solid var(--rule);
+  background: var(--bg-cream);
+  border: 2px solid var(--rule);
   border-radius: var(--r-2);
   padding: 13px 15px;
   width: 100%;
@@ -237,14 +227,93 @@
 }
 .brand input:focus, .brand textarea:focus, .brand select:focus {
   border-color: var(--ink);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(166, 75, 34, 0.12);
+  background: var(--bg-paper);
+  box-shadow: 3px 3px 0 var(--peach);
 }
 
-/* ── VARIANTE "GROTESK" (TYPE_STYLE = 'grotesk' in src/config.ts) ───
-   Titoli in Bricolage Grotesque, neri e stretti: il carattere della v3.
-   Il default (TYPE_STYLE = 'serif') non ha bisogno di classi. */
-.type-grotesk { --display: var(--sans); --poster: var(--sans); --script: var(--sans); }
-.type-grotesk :is(h1, h2, h3, .display) { font-weight: 800; letter-spacing: -0.03em; line-height: 0.94; }
-.type-grotesk h3 { letter-spacing: -0.02em; line-height: 1.02; }
-.type-grotesk .script, .type-grotesk :is(h1, h2, h3) em { font-style: normal; font-weight: 800; }
+/* ── TITOLI SERIF (TYPE_STYLE = 'serif' in src/config.ts) ─────────────
+   Fraunces per i titoli: pesi più leggeri e spaziatura meno stretta del
+   grotesk (a 800 e -0.05em un serif si impasta), le parole evidenziate dei
+   titoli in corsivo, come una rivista. Testo, numeri (Anton) e note a mano
+   (Caveat) non cambiano. */
+.type-serif {
+  --display: var(--font-fraunces, 'Fraunces', Georgia, serif);
+}
+.type-serif :is(h1, h2, h3, .display, .hm-title, .statement, .c-title, .l-title, .a-title, .cs-title,
+  .h-cta-title, .a-cta-title, .cs-cta-title, .l-strike-title, .step-q, .pr-title, .hs-more-t, .rail-step b,
+  .venn-label b, .pet-tag-name, .stack-card h3, .flex-card h3, .door h3, .sv-body h3, .sv-facts dd,
+  .faq-item summary, .cs-role, .pullquote q, .plan-list b) {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-optical-sizing: auto;
+}
+.type-serif :is(.hm-title, .c-title, .l-title, .a-title, .cs-title, .h-cta-title, .a-cta-title, .cs-cta-title,
+  .l-strike-title, .statement, .display-xl, .display-lg) {
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+.type-serif :is(h3, .faq-item summary, .cs-role, .sv-facts dd, .step-q) { font-weight: 600; letter-spacing: -0.015em; }
+/* Le parole chiave dei titoli in corsivo. */
+.type-serif :is(.hm-title-hl, .a-title-hl, .c-title-hl, .l-title-hl, .cs-title .line:last-child > span) {
+  font-style: italic;
+  font-weight: 500;
+}
+/* Logo e wordmark del footer: il nome in serif, un filo più leggero. */
+.type-serif :is(.lockup-name, .footer-lockup .n) { font-family: var(--display); font-weight: 650; letter-spacing: -0.02em; }
+.type-serif .foot-wordmark { font-family: var(--display); font-weight: 600; letter-spacing: -0.04em; }
+/* Le parole "a mano" dentro i titoli diventano corsivo serif: con Fraunces
+   il pennarello accanto al serif sarebbe troppo. Caveat resta per le note,
+   le didascalie e le firme. */
+.type-serif :is(h1, h2) .script {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+/* Sotto il corsivo serif la sottolineatura a mano è più sottile e più bassa. */
+.type-serif h2 .script::after { bottom: -0.16em; height: 0.12em; }
+
+/* ── TITOLI "SERIF-BOLD" (Playfair Display pieno) ─────────────────────
+   Serif ad alto contrasto, pesante ed elegante: titoli a 800, parole
+   chiave e accenti dei titoli in corsivo nero. Stessa mappa del serif. */
+.type-serif-bold { --display: var(--font-playfair, 'Playfair Display', Georgia, serif); }
+.type-serif-bold :is(h1, h2, h3, .display, .hm-title, .statement, .c-title, .l-title, .a-title, .cs-title,
+  .h-cta-title, .a-cta-title, .cs-cta-title, .l-strike-title, .step-q, .pr-title, .hs-more-t, .rail-step b,
+  .venn-label b, .pet-tag-name, .stack-card h3, .flex-card h3, .door h3, .sv-body h3, .sv-facts dd,
+  .faq-item summary, .cs-role, .pullquote q, .plan-list b, .lockup-name, .footer-lockup .n, .foot-wordmark) {
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.type-serif-bold :is(.hm-title, .c-title, .l-title, .a-title, .cs-title, .h-cta-title, .a-cta-title, .cs-cta-title,
+  .l-strike-title, .display-xl, .display-lg) { font-weight: 900; letter-spacing: -0.03em; line-height: 0.95; }
+.type-serif-bold .statement { font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; }
+.type-serif-bold :is(h3, .faq-item summary, .cs-role, .sv-facts dd, .step-q, .lockup-name, .footer-lockup .n) {
+  font-weight: 700; letter-spacing: -0.01em;
+}
+.type-serif-bold :is(.hm-title-hl, .a-title-hl, .c-title-hl, .l-title-hl, .cs-title .line:last-child > span),
+.type-serif-bold :is(h1, h2) .script {
+  font-family: var(--display); font-style: italic; font-weight: 800; letter-spacing: -0.02em;
+}
+.type-serif-bold h2 .script::after { bottom: -0.14em; height: 0.12em; }
+.type-serif-bold .foot-wordmark { letter-spacing: -0.04em; }
+
+/* ── TITOLI "IMPACT" (Anton maiuscolo) ─────────────────────────────────
+   Condensato, pesante, tutto maiuscolo: il tono dei manifesti e delle cover
+   social. Solo sui titoli grandi; h3, FAQ e frase dell'approccio restano in
+   Bricolage per leggerli bene. Le parole a mano (Caveat) fanno da contrasto. */
+.type-impact { --display-impact: var(--poster); }
+.type-impact :is(h1, h2, .display, .hm-title, .c-title, .l-title, .a-title, .cs-title, .h-cta-title, .a-cta-title,
+  .cs-cta-title, .l-strike-title, .foot-wordmark) {
+  font-family: var(--display-impact);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.92;
+}
+.type-impact :is(.hm-title, .c-title, .l-title, .a-title, .cs-title, .h-cta-title, .a-cta-title, .cs-cta-title) { line-height: 0.9; }
+.type-impact .statement { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: -0.04em; line-height: 0.98; }
+.type-impact :is(h1, h2) .script { text-transform: none; font-size: 0.9em; }
+.type-impact .foot-wordmark { letter-spacing: 0.01em; }
+.type-impact .lockup-name, .type-impact .footer-lockup .n { font-family: var(--poster); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; }

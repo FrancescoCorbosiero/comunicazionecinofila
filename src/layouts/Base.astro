@@ -120,9 +120,13 @@ const speculationRules = JSON.stringify({
     {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
 
     <!-- Font self-hosted (Fonts API, vedi astro.config.mjs): zero richieste a Google.
-         Fraunces per i titoli (serif editoriale), Bricolage per il testo. -->
-    <Font cssVariable="--font-fraunces" preload />
+         Preload solo di Bricolage (titoli + testo, un solo file variabile);
+         Anton (nastri, numeri) e Caveat (note a mano) arrivano subito dopo. -->
     <Font cssVariable="--font-bricolage" preload />
+    <Font cssVariable="--font-anton" />
+    <Font cssVariable="--font-caveat" />
+    {TYPE_STYLE === 'serif' && <Font cssVariable="--font-fraunces" preload />}
+    {TYPE_STYLE === 'serif-bold' && <Font cssVariable="--font-playfair" preload />}
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
     <script type="speculationrules" is:inline set:html={speculationRules} />

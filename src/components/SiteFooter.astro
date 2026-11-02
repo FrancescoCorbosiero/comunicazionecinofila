@@ -4,8 +4,8 @@ import WhatsAppIcon from './WhatsAppIcon.astro';
 
 const year = new Date().getFullYear();
 
-// Il wordmark in fondo: ogni lettera nella sua maschera, così motion.ts
-// le fa salire una dopo l'altra (senza script resta fermo).
+// Il wordmark gigante in fondo: ogni lettera nella sua maschera, così
+// motion.ts le fa salire una dopo l'altra (senza script resta fermo).
 const wordmark = ['comunicazione', 'cinofila'];
 ---
 <footer class="site-footer">
@@ -19,12 +19,11 @@ const wordmark = ['comunicazione', 'cinofila'];
           <span class="n">Andrea Bellettati</span>
         </a>
         <p>
-          Consulenza in comportamento e alimentazione naturale per cani e gatti, al fianco del tuo
-          veterinario.
+          Consulenza in comportamento e alimentazione naturale per cani e gatti.
         </p>
         <div class="footer-ctas">
           <a class="btn btn-cream btn-sm" href="/consulenza-gratuita">Consulenza gratuita</a>
-          <a class="btn btn-accent btn-sm" href="/lavora-con-noi">Lavora con noi</a>
+          <a class="btn btn-sm" href="/lavora-con-noi">Lavora con noi</a>
           <a class="btn btn-ghost-cream btn-sm" href={WA_LINK} target="_blank" rel="noopener">
             <WhatsAppIcon size={15} /> WhatsApp
           </a>
@@ -43,7 +42,7 @@ const wordmark = ['comunicazione', 'cinofila'];
         </div>
         <div class="footer-col">
           <h5>Inizia</h5>
-          <a href="/consulenza-gratuita">Richiedi la consulenza gratuita</a>
+          <a href="/consulenza-gratuita">Richiedi la tua consulenza gratuita</a>
           <a href="/lavora-con-noi">Lavora con noi</a>
           <a href={WA_LINK} target="_blank" rel="noopener">
             WhatsApp
@@ -73,6 +72,6 @@ const wordmark = ['comunicazione', 'cinofila'];
   </div>
   <div class="container footer-bottom">
     <span>© {year} Andrea Bellettati · Comunicazione Cinofila</span>
-    <span>Le informazioni su questo sito non sostituiscono il parere del veterinario.</span>
+    <span>Comportamento &amp; Nutrizione · Cane e Gatto</span>
   </div>
 </footer>

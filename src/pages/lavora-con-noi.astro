@@ -22,6 +22,7 @@ const profili = [
   { label: 'Appassionati di alimentazione e benessere naturale', ambito: 'Altro' },
   { label: 'Chi vuole costruire una nuova attività nel mondo animale', ambito: 'Altro' },
 ];
+const wallTones = ['peach', 'paper', 'sage', 'ink'];
 
 const ambiti = [
   'Educazione cinofila',
@@ -110,7 +111,7 @@ const icons: Record<string, string> = {
           professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere
           animale.
         </p>
-        <a class="btn btn-accent btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
+        <a class="btn btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
       </div>
     </div>
   </section>
@@ -182,9 +183,14 @@ const icons: Record<string, string> = {
       </div>
       <ul class="sticker-wall stagger" data-reveal data-profile-wall>
         {
-          profili.map((p) => (
+          profili.map((p, i) => (
             <li data-wall-item>
-              <button type="button" class="pstk" data-ambito={p.ambito} aria-pressed="false">
+              <button
+                type="button"
+                class={`pstk tone-${wallTones[i % wallTones.length]}`}
+                data-ambito={p.ambito}
+                aria-pressed="false"
+              >
                 {p.label}
               </button>
             </li>
@@ -201,7 +207,7 @@ const icons: Record<string, string> = {
   <!-- FLESSIBILITÀ + FORMAZIONE -->
   <section class="section l-flex">
     <div class="container l-flex-grid">
-      <article class="flex-card tone-paper" data-reveal>
+      <article class="flex-card tone-paper" data-tilt data-reveal>
         <span class="flex-icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="12" width="34" height="24" rx="3"></rect><path d="M4 40h42"></path><path d="M44 26l10-8 8 7v21H44z"></path><path d="M50 46v-8h6v8"></path></svg>
         </span>
@@ -211,7 +217,7 @@ const icons: Record<string, string> = {
           già oppure crescere fino a diventare la tua attività principale, di persona o a distanza.
         </p>
       </article>
-      <article class="flex-card tone-sage" data-reveal>
+      <article class="flex-card tone-sage" data-tilt data-reveal>
         <span class="flex-icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24l28-12 28 12-28 12z"></path><path d="M16 30v14c8 6 24 6 32 0V30"></path><path d="M60 24v16"></path></svg>
         </span>
@@ -224,7 +230,7 @@ const icons: Record<string, string> = {
     </div>
   </section>
 
-  <!-- IL MODELLO, CON TRASPARENZA: la nota di Andrea, con l'evidenziatore -->
+  <!-- IL MODELLO, CON TRASPARENZA: un foglio d'appunti con l'evidenziatore -->
   <section class="section l-note-sec">
     <div class="container container-narrow">
       <article class="l-note" data-reveal>

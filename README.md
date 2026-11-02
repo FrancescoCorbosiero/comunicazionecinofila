@@ -7,13 +7,12 @@ nutrizione per cani e gatti. Due pubblici, un'unica identità: i proprietari
 (TypeScript), static-first, mobile-first.
 
 > Il design di partenza è in [`design_handoff_sito_andrea/`](./design_handoff_sito_andrea)
-> (handoff + prototipi di riferimento). Il sito oggi usa il **Brand System v5
-> "Editoriale"** (`src/styles/brand.css`): toni della terra (crema, corteccia,
-> argilla, salvia), **Fraunces** per i titoli con le parole chiave in corsivo,
-> Bricolage Grotesque per il testo, bordi sottili e ombre morbide. Niente
-> sticker, nastri, timbri o rotazioni: struttura, aria e foto vere in cornici
-> pulite. I due flussi del sito (consulenza → corteccia, Team → argilla) sono
-> sempre in vista: header, hero, porte della home, barra fissa su telefono.
+> (handoff + prototipi di riferimento). Da lì il sito è passato al **Brand
+> System v3 "Branco"** (`src/styles/brand.css`): stessi colori del logo e del
+> feed, bordi d'inchiostro, ombre piene e le foto vere dei cani. Dalla v4.1
+> il tono è più autorevole: niente sticker scontornati, nastri, badge che
+> girano, scotch o elementi storti; titoli in Anton (`TYPE_STYLE = 'impact'`)
+> e i due flussi del sito (consulenza, Team) sempre in vista.
 
 ## Comandi
 
@@ -201,9 +200,8 @@ Per provarlo senza Docker: `npm run build` con
   latin vivono in `src/assets/fonts/` e vengono serviti da `/_astro` con cache
   immutabile. Zero richieste a Google Fonts dal browser (privacy/GDPR), build
   deterministica, fallback con metriche adattate contro il layout shift.
-  Due famiglie: **Fraunces** (variabile, titoli e numeri; le parole chiave in
-  corsivo) e **Bricolage Grotesque** (variabile, testo), entrambe in preload.
-  `TYPE_STYLE` in `src/config.ts` riporta i titoli in grotesk se serve.
+  Tre famiglie: **Bricolage Grotesque** (variabile: titoli e testo, l'unica
+  in preload), **Anton** (nastri e numeri) e **Caveat** (note scritte a mano).
 - **View Transitions** tra le pagine (Astro `ClientRouter`) + **prefetch** dei link
   interni e **Speculation Rules** per navigazione più rapida. Le cover degli
   articoli fanno **morph** dalla card alla pagina di dettaglio.
@@ -228,7 +226,8 @@ Per provarlo senza Docker: `npm run build` con
   un binario che si riempie; in
   Lavora con noi "una rete di venditori" viene barrata a mano e diventa "un
   Team", i principi sono card che si impilano, i profili sono etichette che,
-  toccate, preselezionano l'ambito nel modulo; in Approccio le tre fonti del metodo
+  toccate, preselezionano l'ambito nel modulo; in Approccio ogni
+  principio riceve il suo timbro "Non negoziabile" e le tre fonti del metodo
   sono cerchi che convergono (Venn) mentre la sezione resta ferma; in Chi
   sono l'hero è un biglietto da visita (ritratto ad arco, sigillo del Team che
   gira, firma che si scrive), le polaroid si aprono a ventaglio e le impronte
