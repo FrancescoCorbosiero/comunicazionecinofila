@@ -110,6 +110,27 @@ h1.hm-title { margin: 0; font-family: var(--display); font-weight: 800; letter-s
 .hm-note { position: absolute; z-index: 3; left: -2%; top: 4%; font-family: var(--script); font-size: clamp(24px, 2.4vw, 32px);
   font-weight: 600; line-height: 1; white-space: nowrap; color: var(--bark); rotate: -8deg; }
 .hm-arrow { position: absolute; z-index: 3; left: 6%; top: 13%; width: 12%; overflow: visible; color: var(--bark); pointer-events: none; }
+/* Variante su verde pieno (verde bosco): testo chiaro, accenti pesca,
+   il disco diventa pesca con l'ombra scura. */
+.hm-hero--green { background: var(--forest); color: var(--cream-ink); --paw: var(--peach); }
+.hm-hero--green .eyebrow { background: var(--peach); color: var(--ink); box-shadow: 3px 3px 0 var(--olive-darkest); }
+.hm-hero--green h1.hm-title { color: var(--cream-ink); }
+.hm-hero--green .hm-title-hl { color: var(--peach); }
+.hm-hero--green .hm-underline { color: var(--peach-soft); }
+.brand .hm-hero--green .hm-lead { color: rgba(241, 242, 234, 0.9); }
+.hm-hero--green .hm-facts li { color: rgba(241, 242, 234, 0.85); }
+.hm-hero--green .hm-facts li::before { border-color: var(--olive-darkest); }
+.hm-hero--green .btn { --btn-shadow: var(--olive-darkest); border-color: var(--olive-darkest); }
+.brand .hm-hero--green .btn-ghost { background: transparent; color: var(--cream-ink); border-color: var(--cream-ink); }
+.brand .hm-hero--green .btn-ghost:hover { background: var(--cream-ink); color: var(--ink); }
+.hm-hero--green .hm-disc { background: var(--peach); color: var(--ink); border-color: var(--olive-darkest); box-shadow: 12px 12px 0 var(--olive-darkest); }
+.hm-hero--green .hm-disc-photo { border-color: var(--olive-darkest); box-shadow: 0 0 0 5px var(--cream-ink); }
+.hm-hero--green .hm-note { color: var(--cream-ink); }
+.hm-hero--green .hm-arrow { color: var(--peach); }
+/* Variante marrone: stessa logica, su --bark (basta cambiare la classe). */
+.hm-hero--bark { --forest: var(--bark); }
+.hm-hero--bark .hm-disc { background: var(--sage); color: var(--cream-ink); box-shadow: 12px 12px 0 var(--bark-deep); }
+.hm-hero--bark .hm-disc-photo { box-shadow: 0 0 0 5px var(--peach); }
 @media (min-width: 900px) {
   .hm-hero { display: flex; align-items: center; min-height: calc(100svh - 70px); }
   .hm-hero-grid { width: 100%; grid-template-columns: 1.05fr 0.95fr; gap: 48px; }
