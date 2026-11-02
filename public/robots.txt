@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO: confermare dominio definitivo
-Sitemap: https://www.andreabellettati.it/sitemap-index.xml
+Sitemap: https://andreabellettati.it/sitemap-index.xml

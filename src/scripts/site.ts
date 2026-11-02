@@ -18,8 +18,9 @@ function waLink(text: string): string {
    Un solo punto di uscita per entrambi i form, endpoint configurabile:
    · FORM_ENDPOINT vuoto → Netlify Forms (POST alla pagina, i form
      statici con name= + data-netlify sono registrati dal bot di deploy);
-   · FORM_ENDPOINT valorizzato → il tuo backend (es. function che inoltra
-     via AWS SES). Stesso payload urlencoded, `form-name` incluso.
+   · FORM_ENDPOINT valorizzato (es. /api/form nell'immagine Docker) → il
+     server inoltra via AWS SES. Stesso payload urlencoded, `form-name`
+     incluso. WhatsApp resta: il questionario lo apre comunque.
    In `astro dev` non c'è nessun endpoint: l'invio fallisce e scatta
    il fallback (per il questionario resta comunque WhatsApp). */
 function encodeForm(form: HTMLFormElement): string {
@@ -32,7 +33,7 @@ function encodeForm(form: HTMLFormElement): string {
 function submitForm(form: HTMLFormElement): Promise<boolean> {
   return fetch(FORM_ENDPOINT || '/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
     body: encodeForm(form),
     // keepalive: la richiesta sopravvive anche se l'utente naviga subito via.
     keepalive: true,

@@ -1,0 +1,9 @@
+{
+  "name": "comunicazione-cinofila-server",
+  "private": true,
+  "type": "module",
+  "description": "Runtime dell'immagine Docker: sito statico + /api/form (AWS SES).",
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "3.1161.0"
+  }
+}
