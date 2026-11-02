@@ -13,7 +13,7 @@ export const DEFAULT_DESCRIPTION =
 export const DEFAULT_OG_IMAGE = publicImage('og-home') ?? '/assets/logo.jpg';
 export const LOCALE = 'it_IT';
 export const DEFAULT_ROBOTS = 'index, follow';
-export const THEME_COLOR = '#7c9474';
+export const THEME_COLOR = '#6f8b60';
 
 /** Handle Twitter/X — compila quando l'account sarà attivo (es. '@...'). */
 export const TWITTER_HANDLE = '';

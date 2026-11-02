@@ -45,17 +45,17 @@ section[id] { scroll-margin-top: 84px; }
    La v2 aveva grana carta, micro-punti e aloni su ogni sezione: via,
    ora il colore è pieno. Restano solo i decori opt-in (::after): bordo
    strappato/onda/denti, foglia watermark, trama di zampe.
-   Colori: valori dei token (#f3f4ee fondo, #34402a oliva, #f1f2ea
+   Colori: valori dei token (#f1ebdf fondo, #34402a oliva, #f1f2ea
    chiaro) cablati nei data-URI perché var() non entra negli URL.
    ───────────────────────────────────────────────────────────── */
 :root {
   --tex-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-  --tear-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23f3f4ee'/%3E%3C/svg%3E");
-  --tear-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cg transform='translate(0,18) scale(1,-1)'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23f3f4ee'/%3E%3C/g%3E%3C/svg%3E");
-  --wave-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23f3f4ee'/%3E%3C/svg%3E");
-  --wave-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cg transform='translate(0,20) scale(1,-1)'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23f3f4ee'/%3E%3C/g%3E%3C/svg%3E");
-  --zig-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23f3f4ee'/%3E%3C/svg%3E");
-  --zig-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cg transform='translate(0,12) scale(1,-1)'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23f3f4ee'/%3E%3C/g%3E%3C/svg%3E");
+  --tear-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23f1ebdf'/%3E%3C/svg%3E");
+  --tear-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18' viewBox='0 0 240 18'%3E%3Cg transform='translate(0,18) scale(1,-1)'%3E%3Cpath d='M0 0 H240 V7 C230 10 222 14 210 12 C198 10 192 5 180 7 C168 9 164 14 152 13 C142 12 136 8 124 8 C112 8 106 13 94 13 C84 13 76 7 64 7 C52 7 46 12 34 13 C24 14 16 10 8 9 C5 8.5 2 9 0 10 Z' fill='%23f1ebdf'/%3E%3C/g%3E%3C/svg%3E");
+  --wave-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23f1ebdf'/%3E%3C/svg%3E");
+  --wave-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='20' viewBox='0 0 280 20'%3E%3Cg transform='translate(0,20) scale(1,-1)'%3E%3Cpath d='M0 0 H280 V10 C245 19 210 2 140 10 C93 15 47 4 0 10 Z' fill='%23f1ebdf'/%3E%3C/g%3E%3C/svg%3E");
+  --zig-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23f1ebdf'/%3E%3C/svg%3E");
+  --zig-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='12' viewBox='0 0 28 12'%3E%3Cg transform='translate(0,12) scale(1,-1)'%3E%3Cpath d='M0 0 H28 V3 L21 10 L14 3 L7 10 L0 3 Z' fill='%23f1ebdf'/%3E%3C/g%3E%3C/svg%3E");
   --leaf-olive: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(18 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%2334402a' stroke-opacity='0.09' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
   --leaf-cream: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 44 44'%3E%3Cg transform='rotate(-16 16 16)'%3E%3Cpath d='M16 28 C16 16, 22 8, 28 5 C26 14, 22 22, 16 28 Z M16 28 C16 16, 10 8, 4 5 C6 14, 10 22, 16 28 Z M16 28 L16 6' stroke='%23f1f2ea' stroke-opacity='0.11' stroke-width='0.6' stroke-linejoin='round' fill='none'/%3E%3C/g%3E%3C/svg%3E");
   --tex-paws: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Cg fill='%2334402a' opacity='0.05'%3E%3Cg transform='translate(46,58) rotate(-14) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3Cg transform='translate(238,242) rotate(13) scale(1.35)'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -129,12 +129,14 @@ section[id] { scroll-margin-top: 84px; }
 .bg-sage   { background: var(--sage); color: var(--cream-ink); }
 .bg-mist   { background: var(--sage-mist); }
 .bg-deep   { background: var(--bg-deep); color: var(--cream-ink); }
+/* Marrone: la fascia scura calda (v4), si comporta come .bg-deep. */
+.bg-bark   { background: var(--bark); color: var(--cream-ink); }
 
-.bg-deep .eyebrow { background: var(--peach); color: var(--ink); box-shadow: 3px 3px 0 var(--olive-darkest); }
+.bg-deep .eyebrow, .bg-bark .eyebrow { background: var(--peach); color: var(--ink); box-shadow: 3px 3px 0 var(--olive-darkest); }
 .bg-sage .eyebrow { box-shadow: 3px 3px 0 var(--olive-darkest); }
-.bg-deep h1, .bg-deep h2, .bg-deep h3, .bg-sage h1, .bg-sage h2, .bg-sage h3 { color: var(--cream-ink); }
-.bg-deep p, .bg-sage p { color: rgba(241,242,234,0.92); }
-.bg-deep .lead, .bg-sage .lead { color: rgba(241,242,234,0.92); }
+.bg-deep h1, .bg-deep h2, .bg-deep h3, .bg-bark h1, .bg-bark h2, .bg-bark h3, .bg-sage h1, .bg-sage h2, .bg-sage h3 { color: var(--cream-ink); }
+.bg-deep p, .bg-bark p, .bg-sage p { color: rgba(241,242,234,0.92); }
+.bg-deep .lead, .bg-bark .lead, .bg-sage .lead { color: rgba(241,242,234,0.92); }
 
 /* ── Type scale ────────────────────────────────────────────────── */
 .brand h1, .brand h2, .brand h3 { margin: 0; }
@@ -151,7 +153,7 @@ section[id] { scroll-margin-top: 84px; }
 :root { --paw-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 44'%3E%3Cellipse cx='12' cy='15' rx='4.3' ry='5.8'/%3E%3Cellipse cx='21' cy='10' rx='4.3' ry='6'/%3E%3Cellipse cx='30' cy='11' rx='4.3' ry='6'/%3E%3Cellipse cx='38.5' cy='16' rx='4.3' ry='5.6'/%3E%3Cellipse cx='25' cy='29' rx='9.5' ry='8'/%3E%3C/svg%3E"); }
 
 .script { color: var(--peach-deep); }
-.bg-deep .script, .bg-sage .script { color: var(--peach); }
+.bg-deep .script, .bg-bark .script, .bg-sage .script { color: var(--peach); }
 
 /* ── Buttons (extend brand) ────────────────────────────────────── */
 .brand .btn { justify-content: center; text-decoration: none; white-space: nowrap; }
@@ -166,12 +168,12 @@ section[id] { scroll-margin-top: 84px; }
 .brand .btn-ghost-cream { background: transparent; border: 2px solid var(--cream-ink); color: var(--cream-ink); --btn-shadow: var(--peach); }
 .brand .btn-ghost-cream:hover { background: var(--cream-ink); color: var(--ink); border-color: var(--cream-ink); }
 /* Su verde notte l'ombra d'inchiostro sparirebbe: diventa pesca. */
-.bg-deep .btn:not(.btn-cream):not(.btn-ghost-cream), .booking-card .btn:not(.btn-cream):not(.btn-ghost-cream) { --btn-shadow: var(--olive-darkest); border-color: var(--olive-darkest); }
+.bg-deep .btn:not(.btn-cream):not(.btn-ghost-cream), .bg-bark .btn:not(.btn-cream):not(.btn-ghost-cream), .booking-card .btn:not(.btn-cream):not(.btn-ghost-cream) { --btn-shadow: var(--olive-darkest); border-color: var(--olive-darkest); }
 
 .text-link { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 15.5px;
   color: var(--ink); border-bottom: 2.5px solid var(--peach); padding-bottom: 2px; transition: border-color 0.2s, gap 0.2s; }
 .text-link:hover { border-color: var(--peach-deep); gap: 12px; }
-.bg-deep .text-link, .bg-sage .text-link { color: var(--peach); }
+.bg-deep .text-link, .bg-bark .text-link, .bg-sage .text-link { color: var(--peach); }
 
 /* ── Header / nav ──────────────────────────────────────────────────
    Chiaro, bordo d'inchiostro. Su desktop: logo, quattro voci corte e la
@@ -180,7 +182,7 @@ section[id] { scroll-margin-top: 84px; }
    un foglio pesca a tutto schermo che si apre a cerchio dal pulsante. */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(243, 244, 238, 0.9);
+  background: rgba(241, 235, 223, 0.92);
   -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%);
   border-bottom: var(--line);
 }

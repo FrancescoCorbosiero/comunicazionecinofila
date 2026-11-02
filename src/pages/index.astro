@@ -69,6 +69,12 @@ const zoePrima = assetImage('storia-zoe-prima');
 const zoeDopo = assetImage('storia-zoe-dopo');
 const pelleFoto = assetImage('storia-pelle');
 
+// Le foto vere di Andrea (src/assets/home-*.jpg), con le vecchie come ripiego.
+const heroPortrait = assetImage('home-hero') ?? chiSonoPhoto;
+const aboutPhoto = assetImage('home-chi-sono') ?? chiSonoPhoto;
+const aboutPolaroid = assetImage('home-ciotola') ?? consulenzaPhoto;
+const approccioPhoto = assetImage('home-approccio') ?? heroPhoto;
+
 // FAQ: le domande che arrivano prima di compilare il questionario.
 const faqs = [
   {
@@ -157,23 +163,34 @@ const PAW_D = [
         </ul>
       </div>
 
-      <div class="hm-hero-visual" aria-hidden="true">
-        <!-- Parallax (data-speed) sui contenitori: le intro CSS animano i figli. -->
-        <div class="hm-disc-wrap" data-speed="0.1">
+      <div class="hm-hero-visual">
+        <!-- Il protagonista: la foto vera di Andrea dentro la "ciotola" (il
+             disco), con l'offerta che gira sull'anello. Parallax (data-speed)
+             sui contenitori: le intro CSS animano i figli. -->
+        <div class="hm-disc-wrap" data-speed="0.08">
           <div class="hm-disc">
-            <svg class="hm-disc-ring" viewBox="0 0 200 200" data-spin>
-              <defs><path id="hm-ring-path" d="M100 100m-84 0a84 84 0 1 1 168 0a84 84 0 1 1-168 0"></path></defs>
-              <circle cx="100" cy="100" r="71"></circle>
-              <text><textPath href="#hm-ring-path" textLength="524" lengthAdjust="spacing">consulenza gratuita · 45 minuti · piano firmato ·</textPath></text>
+            <div class="hm-disc-photo">
+              <Image
+                src={heroPortrait}
+                alt="Andrea Bellettati con la sua bassotta in braccio"
+                widths={[360, 540, 720].map((w) => Math.min(w, heroPortrait.width)).filter((w, i, a) => a.indexOf(w) === i)}
+                sizes="(min-width: 900px) 400px, 70vw"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+            <svg class="hm-disc-ring" viewBox="0 0 200 200" data-spin aria-hidden="true">
+              <defs><path id="hm-ring-path" d="M100 100m-87 0a87 87 0 1 1 174 0a87 87 0 1 1-174 0"></path></defs>
+              <text><textPath href="#hm-ring-path" textLength="540" lengthAdjust="spacing">consulenza gratuita · 45 minuti · piano firmato ·</textPath></text>
             </svg>
           </div>
         </div>
-        <div class="hm-stk-wrap" data-speed="-0.06">
-          <Sticker src={stkCani} width={540} rotate={-2} eager class="hm-hero-stk" />
+        <div class="hm-stk-wrap" data-speed="-0.06" aria-hidden="true">
+          <Sticker src={stkCani} width={280} rotate={-4} eager class="hm-hero-stk" />
         </div>
-        <span class="hm-stamp">Gratis</span>
-        <span class="hm-note">il mio branco</span>
-        <svg class="hm-arrow" viewBox="0 0 90 110"
+        <span class="hm-stamp" aria-hidden="true">Gratis</span>
+        <span class="hm-note" aria-hidden="true">piacere, Andrea!</span>
+        <svg class="hm-arrow" viewBox="0 0 90 110" aria-hidden="true"
           ><path d="M10 6c34 6 58 34 62 88" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" pathLength="1"
           ></path><path d="M58 82l14 14 10-17" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"
           ></path></svg
@@ -239,22 +256,22 @@ const PAW_D = [
       <div class="hm-about-media">
         <div class="hm-arch" data-clip>
           <Image
-            src={chiSonoPhoto}
-            alt="Andrea Bellettati guancia a guancia con il suo cane, in inverno"
-            widths={[480, 720]}
+            src={aboutPhoto}
+            alt="Andrea Bellettati al mare con i suoi due cani in braccio"
+            widths={[480, 720].map((w) => Math.min(w, aboutPhoto.width)).filter((w, i, a) => a.indexOf(w) === i)}
             sizes="(min-width: 900px) 440px, 80vw"
             loading="lazy"
           />
         </div>
         <figure class="polaroid hm-about-pol" data-speed="0.16">
           <Image
-            src={consulenzaPhoto}
-            alt="Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto"
-            widths={[240, 480]}
+            src={aboutPolaroid}
+            alt="La bassotta di Andrea che mangia dalla sua ciotola"
+            widths={[240, 480].map((w) => Math.min(w, aboutPolaroid.width)).filter((w, i, a) => a.indexOf(w) === i)}
             sizes="220px"
             loading="lazy"
           />
-          <figcaption>a casa</figcaption>
+          <figcaption>l'ora della pappa</figcaption>
         </figure>
       </div>
       <div class="hm-about-copy">
@@ -297,13 +314,13 @@ const PAW_D = [
       <div class="statement-foot">
         <figure class="polaroid" data-speed="-0.25">
           <Image
-            src={heroPhoto}
-            alt="Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna"
-            widths={[320, 640]}
+            src={approccioPhoto}
+            alt="Andrea con il furgone aperto e i cani, pronti a partire in montagna"
+            widths={[320, 640].map((w) => Math.min(w, approccioPhoto.width)).filter((w, i, a) => a.indexOf(w) === i)}
             sizes="300px"
             loading="lazy"
           />
-          <figcaption>pausa al fiume</figcaption>
+          <figcaption>si parte!</figcaption>
         </figure>
         <div class="statement-copy" data-reveal>
           <p>
@@ -331,7 +348,7 @@ const PAW_D = [
 
   <!-- COME FUNZIONA — quattro passi su un binario che si riempie con lo
        scroll; la zampina lo percorre (data-rail). -->
-  <section class="section hm-how" aria-labelledby="how-title">
+  <section class="section bg-bark hm-how" aria-labelledby="how-title">
     <div class="container">
       <div class="head-block">
         <span class="eyebrow kicker-rule">Come funziona la consulenza</span>
@@ -398,14 +415,14 @@ const PAW_D = [
           <div class="sv-compare" data-compare>
             {
               zoeDopo ? (
-                <Image src={zoeDopo} alt="Zoe dopo un mese di nuova alimentazione" widths={[480, 900]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" />
+                <Image src={zoeDopo} alt="Zoe dopo un mese di nuova alimentazione" widths={[480]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" />
               ) : (
                 <span class="sv-ph"><span>Foto “dopo un mese” in arrivo</span></span>
               )
             }
             {
               zoePrima ? (
-                <Image src={zoePrima} alt="Zoe all'inizio del percorso" widths={[480, 900]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" class="is-before" />
+                <Image src={zoePrima} alt="Zoe all'inizio del percorso" widths={[480]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" class="is-before" />
               ) : (
                 <span class="sv-ph sv-ph--b is-before"><span>Foto “prima” in arrivo</span></span>
               )
@@ -440,7 +457,7 @@ const PAW_D = [
           <div class="sv-photo">
             {
               pelleFoto ? (
-                <Image src={pelleFoto} alt="Un pastore australiano su un prato dopo sei mesi di percorso" widths={[480, 900]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" />
+                <Image src={pelleFoto} alt="Un pastore australiano su un prato dopo sei mesi di percorso" widths={[Math.min(480, pelleFoto.width)]} sizes="(min-width: 820px) 480px, 86vw" loading="lazy" />
               ) : (
                 <span class="sv-ph"><span>Foto “dopo sei mesi” in arrivo</span></span>
               )

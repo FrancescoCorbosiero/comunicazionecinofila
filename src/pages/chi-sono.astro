@@ -113,7 +113,7 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
           <Image
             src={portrait}
             alt="Andrea Bellettati, consulente in comportamento e nutrizione per cani e gatti"
-            widths={[480, 720, 960].filter((w) => w <= portrait.width)}
+            widths={[480, 720, 960].map((w) => Math.min(w, portrait.width)).filter((w, i, a) => a.indexOf(w) === i)}
             sizes="(min-width: 900px) 450px, 84vw"
             loading="eager"
             fetchpriority="high"
@@ -173,7 +173,7 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
 
   <!-- IL PERCORSO — le impronte percorrono il sentiero al passo con lo
        scroll e accendono le tappe (data-trail). -->
-  <section class="section bg-deep cs-path" aria-labelledby="path-title">
+  <section class="section bg-bark cs-path" aria-labelledby="path-title">
     <div class="container">
       <div class="head-block">
         <span class="eyebrow kicker-rule">Il percorso</span>
