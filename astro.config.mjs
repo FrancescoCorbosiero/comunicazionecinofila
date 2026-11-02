@@ -2,11 +2,10 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// NB: aggiorna `site` con il dominio definitivo prima del deploy.
+// Dominio definitivo (anche in src/config.ts e public/robots.txt).
 // Serve a sitemap.xml, canonical e agli URL assoluti di Open Graph.
 export default defineConfig({
-  // TODO: confermare dominio definitivo
-  site: 'https://www.andreabellettati.it',
+  site: 'https://andreabellettati.it',
   integrations: [sitemap()],
   // Font self-hosted (Fonts API, provider locale): i .woff2 (subset latin,
   // scaricati una tantum da Google Fonts / Fontsource) vivono in src/assets/fonts e vengono

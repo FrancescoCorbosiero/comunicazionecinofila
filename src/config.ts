@@ -5,8 +5,7 @@
  */
 
 /** Dominio di produzione — aggiorna qui e in astro.config.mjs. */
-// TODO: confermare dominio definitivo
-export const SITE = 'https://www.andreabellettati.it';
+export const SITE = 'https://andreabellettati.it';
 
 /** Brand */
 export const SITE_NAME = 'Andrea Bellettati · Comunicazione Cinofila';

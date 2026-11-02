@@ -290,13 +290,15 @@ In alternativa la build statica gira anche su **Netlify / Vercel /
 Cloudflare Pages** (build `npm run build`, output `dist/`); su Netlify i
 form possono usare la function SES o Netlify Forms.
 
-**Prima del deploy:** imposta il dominio reale in
-[`astro.config.mjs`](./astro.config.mjs) (`site`), in `src/config.ts` (`SITE`) e
-in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e OG.
+**Dominio:** `https://andreabellettati.it` (senza www; `www.` reindirizza qui
+tramite Caddy). È impostato in [`astro.config.mjs`](./astro.config.mjs)
+(`site`), in `src/config.ts` (`SITE`), in
+[`public/robots.txt`](./public/robots.txt) e in `.env.example`: serve a
+sitemap, canonical e anteprime social. Al DNS servono i record A/AAAA di
+`andreabellettati.it` e di `www` verso il server dove gira Caddy.
 
 ## Da completare
 
-- **Dominio** definitivo (placeholder attuale: `www.andreabellettati.it` — vedi i TODO in `src/config.ts`, `astro.config.mjs`, `public/robots.txt`).
 - **Foto reali**: i nomi da usare sono già decisi e auto-rilevati — vedi
   [`public/assets/README.md`](./public/assets/README.md) (cover articoli/eventi,
   foto team/formazione, `og-home.jpg` 1200×630). Basta caricare il file.
