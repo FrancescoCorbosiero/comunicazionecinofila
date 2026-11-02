@@ -3,17 +3,21 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import Sticker from '../components/Sticker.astro';
-import { IG_HANDLE, IG_URL, SITE_TAGLINE } from '../config';
+import { IG_HANDLE, IG_URL, SITE_TAGLINE, STATS, formatNumber } from '../config';
+import { assetImage } from '../lib/images';
 import chiSonoPhoto from '../assets/chi-sono.jpg';
 import consulenzaPhoto from '../assets/consulenza.jpg';
 import heroPhoto from '../assets/hero.jpg';
-import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
 import stkBassotto from '../assets/stickers/bassotto.webp';
+
+// Il ritratto dell'hero: src/assets/ritratto.jpg se c'è (una foto più
+// "professionale", vedi public/assets/README.md), altrimenti chi-sono.jpg.
+const portrait = assetImage('ritratto') ?? chiSonoPhoto;
 
 // Le polaroid del ventaglio (data-fan): l'ultima sta in cima alla pila.
 const polaroid = [
-  { src: consulenzaPhoto, alt: 'Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto', caption: 'maglioni a quadri' },
-  { src: heroPhoto, alt: 'Andrea Bellettati seduto su una roccia con il suo bassotto, lungo un fiume di montagna', caption: 'pausa al fiume' },
+  { src: consulenzaPhoto, alt: 'Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto', caption: 'maglioni a quadri' },
+  { src: heroPhoto, alt: 'Andrea Bellettati seduto su una roccia con la sua bassotta, lungo un fiume di montagna', caption: 'pausa al fiume' },
   { src: chiSonoPhoto, alt: 'Andrea Bellettati guancia a guancia con il suo segugio, in inverno', caption: 'guancia a guancia' },
 ];
 
@@ -62,56 +66,68 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
   active="chi-sono"
   ogType="article"
   title="Chi sono — Andrea Bellettati · La mia storia"
-  description="Mi chiamo Andrea Bellettati, esperto in comportamento e nutrizione per cani e gatti. Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia e il mio percorso."
+  description="Mi chiamo Andrea Bellettati, consulente in comportamento e nutrizione per cani e gatti. Vivo con una bassotta: la teoria la verifico ogni giorno, a casa. La mia storia e il mio percorso."
   ogTitle="Chi sono — Andrea Bellettati"
-  ogDescription="Vivo con un bassotto: la teoria la verifico ogni giorno, a casa. La mia storia, dal primo sacco di crocchette a un metodo condiviso."
+  ogDescription="Vivo con una bassotta: la teoria la verifico ogni giorno, a casa. La mia storia, dal primo sacco di crocchette a un metodo condiviso."
   ogImage="/assets/consulenza.jpg"
-  ogImageAlt="Il segugio e il bassotto di Andrea con i maglioni a quadri, sul letto"
+  ogImageAlt="Il segugio e la bassotta di Andrea con i maglioni a quadri, sul letto"
   ogImageWidth={1440}
   ogImageHeight={1440}
 >
-  <!-- HERO — il titolo è un cartellino "Ciao! mi chiamo": arriva come uno
-       sticker sbattuto sul foglio e il nome si scrive a pennarello. -->
-  <section class="cs-hero" data-paw-trail aria-labelledby="cs-title">
+  <!-- HERO — un biglietto da visita, non un cartellino: nome e ruolo in
+       chiaro, la foto incorniciata ad arco, i numeri che contano, il sigillo
+       del Team e la firma a mano (la stessa che chiude ogni piano di lavoro).
+       Autorevole, ma con il calore di una firma vera. -->
+  <section class="cs-hero" aria-labelledby="cs-title">
     <div class="container cs-hero-grid">
       <div class="cs-hero-copy">
         <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Chi sono</span>
-        <h1 class="nametag" id="cs-title">
-          <span class="nametag-top"><b>Ciao!</b> mi chiamo</span>
-          <span class="nametag-name">Andrea Bellettati</span>
+        <h1 class="cs-title intro-lines" id="cs-title">
+          <span class="line"><span>Andrea</span></span>
+          <span class="line"><span>Bellettati</span></span>
         </h1>
-        <p class="lead" data-intro style="--intro-d:1.05s;">
-          Sono un esperto in comportamento e nutrizione per cani e gatti. Studio da anni la relazione
-          che intercorre tra questi due mondi: non si può parlare di benessere animale senza tenerli
-          insieme.
+        <p class="cs-role" data-intro style="--intro-d:0.5s;">
+          Consulente in comportamento e nutrizione per cani e gatti
         </p>
-        <div class="cs-ctas" data-intro style="--intro-d:1.2s;">
+        <p class="lead" data-intro style="--intro-d:0.65s;">
+          Studio da anni la relazione tra alimentazione e comportamento: non si può parlare di
+          benessere animale senza tenerli insieme. E lavoro al fianco del tuo veterinario, mai al suo
+          posto.
+        </p>
+        <ul class="cs-creds" data-intro style="--intro-d:0.8s;">
+          <li><b>{STATS.teamSince}</b><span>nel Team di professionisti</span></li>
+          <li><b>{formatNumber(STATS.posts)}</b><span>contenuti divulgativi</span></li>
+          <li><b>{formatNumber(STATS.followers)}</b><span>persone mi seguono</span></li>
+        </ul>
+        <div class="cs-ctas" data-intro style="--intro-d:0.95s;">
           <a class="btn btn-lg" href="/consulenza-gratuita">
             Richiedi la tua consulenza gratuita <ArrowIcon size={16} />
           </a>
-          <a class="btn btn-ghost btn-lg" href="/approccio">Il mio approccio</a>
+          <a class="btn btn-ghost-cream btn-lg" href="/approccio">Il mio approccio</a>
         </div>
       </div>
-      <div class="cs-hero-media">
-        <Sticker
-          src={stkAndreaSegugio}
-          alt="Andrea Bellettati guancia a guancia con il suo segugio"
-          width={470}
-          rotate={4}
-          eager
-          class="cs-hero-stk"
-          data-pet
-          data-speed="0.12"
-        />
-        <span class="cs-hero-note" aria-hidden="true">
-          io e il mio segugio
-          <svg viewBox="0 0 110 96"
-            ><path d="M104 4c2 38-28 72-88 86" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" pathLength="1"
-            ></path><path d="M34 76 16 90l20 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"
-            ></path></svg
-          >
+      <!-- Parallax (data-speed) sul contenitore: la cornice ha la sua intro
+           CSS su scale e GSAP non deve leggerla a metà. -->
+      <figure class="cs-portrait" data-speed="0.06">
+        <div class="cs-portrait-frame">
+          <Image
+            src={portrait}
+            alt="Andrea Bellettati, consulente in comportamento e nutrizione per cani e gatti"
+            widths={[480, 720, 960].filter((w) => w <= portrait.width)}
+            sizes="(min-width: 900px) 450px, 84vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+        <span class="cs-seal" aria-hidden="true">
+          <svg viewBox="0 0 200 200" data-spin>
+            <defs><path id="cs-seal-path" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"></path></defs>
+            <text><textPath href="#cs-seal-path" textLength="468" lengthAdjust="spacing">TeamNutrizione · metodo condiviso ·</textPath></text>
+          </svg>
+          <span class="cs-seal-core"><small>dal</small><b>{STATS.teamSince}</b></span>
         </span>
-      </div>
+        <figcaption class="cs-sign">Andrea Bellettati</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -120,12 +136,12 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
     <div class="container">
       <div class="cs-bio-head">
         <div class="head-block">
-          <span class="eyebrow kicker-rule">Vivo con un bassotto</span>
+          <span class="eyebrow kicker-rule">Vivo con una bassotta</span>
           <h2 class="display-lg" id="bio-title">La teoria la verifico ogni giorno, <span class="script">a casa.</span></h2>
         </div>
         <div class="cs-bio-text" data-reveal>
           <p>
-            Convivo con un bassotto: ogni cosa che studio passa prima dalla nostra quotidianità. Le
+            Convivo con una bassotta: ogni cosa che studio passa prima dalla nostra quotidianità. Le
             passeggiate, i pasti, le piccole intolleranze, gli inverni in montagna. È lì che la
             nutrizione smette di essere una tabella e diventa cura concreta.
           </p>

@@ -32,7 +32,7 @@ python scripts/make-stickers.py   # rigenera gli sticker fustellati (vedi sotto)
 
 ```
 src/
-  config.ts              # ⭐ contatti reali + CAL_LINK (sorgente unica)
+  config.ts              # ⭐ contatti reali, numeri (STATS) + CAL_LINK (sorgente unica)
   lib/seo.ts             # default SEO + JSON-LD (Person/LocalBusiness/breadcrumb)
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
@@ -46,6 +46,7 @@ src/
   content/articoli/*.md  content/eventi/*.md      # contenuti (Markdown)
   data/catalogo.json     # prodotti del catalogo (editabili in un solo file)
   _archive/catalogo.astro # pagina Catalogo archiviata: fuori dal build, riattivabile
+  _archive/home-v3.*      # la home precedente (hero con zoom, indice, biglietto…): blocchi da riusare
   content.config.ts      # schema delle Content Collections
   styles/                # brand.css (design system v3), site.css (base), content/catalog/effects.css,
                          # motion.css (intro above-the-fold + stati degli effetti),
@@ -181,18 +182,22 @@ mostra il fallback, ed è il comportamento atteso.
   interattivo, testo nero su bianco, URL dei link esterni in chiaro).
 - **Animazioni GSAP** (`src/scripts/motion.ts`), stessa architettura del sito
   Alpacode ma con un tono più giocoso, da social. Scroll morbido (Lenis) e
-  **sezioni raccontate dallo scroll**: in home la foto nella "ciotola" si
-  allarga a tutto schermo, il blog scorre in orizzontale, i cani spuntano dal
-  fondo della CTA; in Consulenza il "come funziona" è una serie di stories che
-  si sfogliano scrollando e il monitoraggio è un binario che si riempie; in
+  **sezioni raccontate dallo scroll**: in home (v4, pensata per la
+  conversione) l'hero è una "ciotola" vista dall'alto con l'offerta che gira
+  sull'anello, "come funziona" è un binario percorso da una zampina, le storie
+  vere sono un carosello con il prima/dopo da trascinare e una chat che si
+  scrive da sola, le FAQ si aprono morbide e Andrea spunta dal fondo della
+  CTA; in Consulenza il "come funziona" è una serie di stories che si
+  sfogliano scrollando (dentro lo schermo del telefono) e il monitoraggio è
+  un binario che si riempie; in
   Lavora con noi "una rete di venditori" viene barrata a mano e diventa "un
   Team", i principi sono card che si impilano, i profili sono sticker che
   cadono e, toccati, preselezionano l'ambito nel modulo; in Approccio ogni
   principio riceve il suo timbro "Non negoziabile" e le tre fonti del metodo
   sono cerchi che convergono (Venn) mentre la sezione resta ferma; in Chi
-  sono il titolo è un cartellino "Ciao! mi chiamo", le polaroid si aprono a
-  ventaglio e le impronte percorrono il sentiero delle tappe al passo con lo
-  scroll. In più: titoli a
+  sono l'hero è un biglietto da visita (ritratto ad arco, sigillo del Team che
+  gira, firma che si scrive), le polaroid si aprono a ventaglio e le impronte
+  percorrono il sentiero delle tappe al passo con lo scroll. In più: titoli a
   righe/parole/lettere, frasi che si accendono parola per parola, nastri che
   seguono lo scroll, scia di zampe dietro al mouse, tilt 3D, evidenziatore,
   coriandoli di zampe/cuori/ossa all'invio dei form, wordmark del footer che
@@ -233,8 +238,9 @@ cal.com:
 2. In `src/components/CallModal.astro` sostituisci il corpo `.booking-cal` con
    l'embed ufficiale (`@calcom/embed-react` `<Cal calLink={CAL_LINK} />`).
 
-I trigger `[data-open-call]` sono già presenti su Home, Servizi e
-Consulenza gratuita.
+I trigger `[data-open-call]` sono già presenti su Servizi e Consulenza
+gratuita (dentro il questionario). In home le CTA portano dritte al
+questionario, con WhatsApp come alternativa.
 
 ## Contatti
 

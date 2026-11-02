@@ -1,0 +1,393 @@
+---
+/* ARCHIVIO — la home v3 com'era fino a novembre 2026, messa da parte (non
+   viene buildata: sta fuori da src/pages). Dentro ci sono blocchi pronti da
+   riusare altrove: la hero "ciotola" con lo zoom allo scroll
+   (data-hero-zoom), l'indice-smistatore con la miniatura che segue il
+   puntatore (data-path-row), il blog in orizzontale pinnato (data-hscroll),
+   il biglietto dell'evento e il muro di numeri. Gli effetti vivono ancora
+   in src/scripts/motion.ts; gli stili dei blocchi tolti sono in
+   ./home-v3.css (non importato). */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import CalendarIcon from '../components/CalendarIcon.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import Sticker from '../components/Sticker.astro';
+import Ticker from '../components/Ticker.astro';
+import heroPhoto from '../assets/hero.jpg';
+import chiSonoPhoto from '../assets/chi-sono.jpg';
+import stkCani from '../assets/stickers/cani.webp';
+import stkSegugio from '../assets/stickers/segugio.webp';
+import stkBassotto from '../assets/stickers/bassotto.webp';
+import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
+import { autoCover } from '../lib/images';
+
+// Gli articoli più recenti con pagina di dettaglio: scorrono in orizzontale.
+const articoli = await getCollection('articoli');
+const latestArticoli = articoli
+  .filter((a) => a.data.status === 'published' && !a.data.externalUrl)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+const nArticoli = articoli.filter((a) => a.data.status === 'published').length;
+
+// Home-smistatore: due pubblici diversi (famiglie e futuri collaboratori)
+// più il blog, serviti da un'unica identità. È IL bivio di conversione:
+// un indice editoriale, ogni riga con la sua foto che segue il puntatore.
+const paths = [
+  {
+    num: '01',
+    href: '/consulenza-gratuita',
+    badge: 'Gratuita · 45 min',
+    title: "Voglio migliorare l'alimentazione del mio animale",
+    body: 'Analizziamo insieme alimentazione, abitudini e stile di vita del tuo cane o gatto.',
+    cta: 'Consulenza gratuita',
+    tone: 'peach',
+    thumb: { kind: 'sticker' as const, src: stkCani },
+  },
+  {
+    num: '02',
+    href: '/lavora-con-noi',
+    badge: 'TeamNutrizione',
+    title: 'Voglio lavorare nel benessere animale',
+    body: 'Un Team di persone e professionisti che crescono con un metodo condiviso — non una rete di venditori.',
+    cta: 'Lavora con noi',
+    tone: 'sage',
+    thumb: { kind: 'sticker' as const, src: stkAndreaSegugio },
+  },
+  {
+    num: '03',
+    href: '/articoli',
+    badge: `${nArticoli} articoli`,
+    title: 'Voglio approfondire',
+    body: 'Alimentazione, comportamento, intestino, integrazione naturale e vita quotidiana con cani e gatti.',
+    cta: 'Leggi il blog',
+    tone: 'ink',
+    thumb: { kind: 'post' as const, src: '/assets/articolo-antistaminico-naturale-per-cani.jpg' },
+  },
+];
+
+const ticker = [
+  'Alimentazione naturale',
+  'Comportamento',
+  'Cane & gatto',
+  'Consulenza gratuita · 45 minuti',
+  'Piano di lavoro firmato',
+  'Nel Team dal 2021',
+];
+
+// Evento in evidenza per il rimando alla pagina Eventi.
+const eventi = await getCollection('eventi');
+const featuredEvent = eventi.find((e) => e.data.featured) ?? eventi[0];
+const ev = featuredEvent?.data;
+const evCover = featuredEvent && ev ? autoCover('evento', featuredEvent.id, ev.cover) : undefined;
+---
+<Base
+  active="home"
+  title="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+  description="Comportamento e alimentazione naturale per cani e gatti: consulenza gratuita di 45 minuti e un percorso su misura per il tuo animale."
+  ogTitle="Andrea Bellettati — Comportamento & Nutrizione per Cani e Gatti"
+  ogDescription="Nutrire bene è la prima forma di cura. Consulenza gratuita e percorso su misura per il tuo animale."
+  ogImage="/assets/hero.jpg"
+  ogImageAlt="Andrea Bellettati con il suo bassotto lungo un fiume di montagna"
+  ogImageWidth={1440}
+  ogImageHeight={1440}
+>
+  <!-- HERO — la ciotola. La foto sta in un cerchio pesca (la ciotola vista
+       dall'alto); scrollando, su desktop, la sezione resta ferma e il
+       cerchio si allarga finché la foto riempie lo schermo (motion.ts). -->
+  <section class="h-hero" aria-labelledby="h-title">
+    <div class="h-stage" data-hero-zoom data-paw-trail>
+      <div class="h-photo" data-zoom-photo data-focal="0.6 0.45">
+        <Image
+          src={heroPhoto}
+          alt="Andrea Bellettati con il suo bassotto lungo un fiume di montagna"
+          widths={[640, 960, 1440]}
+          sizes="(min-width: 900px) 100vw, 86vw"
+          loading="eager"
+          fetchpriority="high"
+          quality={70}
+        />
+      </div>
+      <span class="h-ring" data-zoom-ring aria-hidden="true"></span>
+
+      <div class="container h-copy" data-zoom-out>
+        <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">
+          Comportamento &amp; Nutrizione · Cane e Gatto
+        </span>
+        <h1 class="h-title intro-lines" id="h-title">
+          <span class="line"><span>Il benessere</span></span>
+          <span class="line"><span>parte dalla</span></span>
+          <span class="line">
+            <span class="h-word"
+              >ciotola.<svg class="h-circle" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"
+                ><path
+                  d="M150 12C78 8 16 30 12 62c-4 34 66 50 148 48 82-2 132-22 128-54C284 24 214 6 128 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  pathLength="1"></path></svg
+              ></span
+            >
+          </span>
+        </h1>
+        <p class="h-lead" data-intro style="--intro-d:0.7s;">
+          Studio la relazione tra <strong>comportamento e alimentazione</strong>: non esiste
+          benessere animale senza tenerli insieme. Da qui parte ogni mia consulenza.
+        </p>
+        <div class="h-ctas" data-intro style="--intro-d:0.85s;">
+          <a class="btn btn-lg" href="/consulenza-gratuita">Scopri la consulenza gratuita <ArrowIcon size={16} /></a>
+          <button type="button" class="btn btn-ghost btn-lg" data-open-call>
+            Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
+          </button>
+        </div>
+        <span class="h-note" data-intro style="--intro-d:1s;">Primo confronto gratuito · cane e gatto</span>
+      </div>
+
+      <span class="h-tag" data-zoom-fly aria-hidden="true">
+        io e il mio bassotto
+        <svg viewBox="0 0 80 60" aria-hidden="true"
+          ><path d="M6 8c30-6 56 6 62 38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          ></path><path d="M56 38l12 10 6-15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          ></path></svg
+        >
+      </span>
+      <Sticker src={stkCani} width={250} rotate={-7} eager class="h-stk" data-zoom-fly />
+      <p class="h-caption" data-zoom-caption aria-hidden="true">
+        <span>Il benessere parte dalla ciotola.</span>
+        <span class="script">Andrea &amp; il suo bassotto</span>
+      </p>
+    </div>
+  </section>
+
+  <Ticker items={ticker} tone="peach" tilt={-1.4} />
+
+  <!-- SMISTATORE: da dove vuoi iniziare? — IL bivio di conversione -->
+  <section class="section h-paths">
+    <div class="container">
+      <div class="h-paths-head">
+        <div class="head-block">
+          <span class="eyebrow kicker-rule">Da dove vuoi iniziare?</span>
+          <h2 class="display-lg" data-split="chars">Dimmi perché <span class="script">sei qui.</span></h2>
+        </div>
+        <p class="lead" data-reveal>
+          Due percorsi diversi, un'unica identità: il benessere degli animali. E un blog per
+          approfondire con calma.
+        </p>
+      </div>
+      <ol class="path-index">
+        {
+          paths.map((p) => (
+            <li data-reveal>
+              <a class={`path-row tone-${p.tone}`} href={p.href} data-path-row>
+                <span class="pr-num">{p.num}</span>
+                <span class="pr-main">
+                  <span class="pr-title">{p.title}</span>
+                  <span class="pr-body">{p.body}</span>
+                </span>
+                <span class="pr-side">
+                  <span class="pr-badge">{p.badge}</span>
+                  <span class="pr-cta">
+                    {p.cta} <ArrowIcon size={18} />
+                  </span>
+                </span>
+                <span class={`pr-thumb pr-thumb--${p.thumb.kind}`} data-path-thumb aria-hidden="true">
+                  {p.thumb.kind === 'sticker' ? (
+                    <Image src={p.thumb.src} alt="" widths={[260, 520]} sizes="260px" loading="lazy" />
+                  ) : (
+                    <img src={p.thumb.src} alt="" width="260" height="260" loading="lazy" decoding="async" />
+                  )}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- L'APPROCCIO — la frase si accende parola per parola con lo scroll -->
+  <section class="statement-band" aria-labelledby="st-title">
+    <Sticker src={stkSegugio} width={230} rotate={8} class="st-stk st-stk--a" data-speed="0.5" />
+    <Sticker src={stkBassotto} width={130} rotate={-10} class="st-stk st-stk--b" data-float />
+    <div class="container">
+      <span class="eyebrow kicker-rule">L'approccio</span>
+      <h2 class="statement" id="st-title" data-scrub>
+        Non parto dal prodotto. Parto dall'animale. Alimentazione, comportamento e stile di vita
+        fanno parte dello stesso equilibrio.
+      </h2>
+      <div class="statement-foot">
+        <figure class="polaroid" data-speed="-0.25">
+          <Image
+            src={chiSonoPhoto}
+            alt="Andrea Bellettati guancia a guancia con il suo segugio, in inverno"
+            widths={[320, 640]}
+            sizes="300px"
+            loading="lazy"
+          />
+          <figcaption>guancia a guancia</figcaption>
+        </figure>
+        <div class="statement-copy" data-reveal>
+          <p>
+            Il mio lavoro è osservare il soggetto nella sua globalità e costruire un percorso
+            sostenibile per lui e per la sua famiglia.
+          </p>
+          <p>
+            Dal 2021 collaboro con un team di professionisti uniti per portare consapevolezza su un
+            tema troppo spesso sottovalutato.
+          </p>
+          <div class="statement-links">
+            <a class="btn btn-cream" href="/chi-sono">Conosci la mia storia <ArrowIcon size={15} /></a>
+            <a class="btn btn-ghost-cream" href="/servizi">Scopri i servizi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG — su desktop la sezione resta ferma e gli articoli scorrono di
+       lato; su mobile è un carosello a swipe. -->
+  {
+    latestArticoli.length > 0 && (
+      <section class="h-blog" data-hscroll aria-labelledby="blog-title">
+        <div class="container h-blog-head">
+          <div class="head-block">
+            <span class="eyebrow kicker-rule">Dal blog</span>
+            <h2 class="display-lg" id="blog-title">
+              Senza slogan.
+              <br />
+              Con <span class="script">metodo.</span>
+            </h2>
+          </div>
+          <a class="btn btn-ghost" href="/articoli">
+            Tutti gli articoli <ArrowIcon size={15} />
+          </a>
+        </div>
+        <div class="hs-viewport">
+          <div class="hs-track" data-hscroll-track>
+            {latestArticoli.map((entry) => (
+              <div class="hs-item">
+                <ArticleCard entry={entry} />
+              </div>
+            ))}
+            <a class="hs-item hs-more" href="/articoli">
+              <span class="hs-more-n">{nArticoli}</span>
+              <span class="hs-more-t">articoli per nutrire bene cane e gatto</span>
+              <span class="hs-more-cta">
+                Vai al blog <ArrowIcon size={18} />
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="container">
+          <div class="hs-bar" data-hscroll-bar aria-hidden="true">
+            <span />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- EVENTI — un biglietto, con il timbro -->
+  {
+    ev && (
+      <section class="section h-event">
+        <div class="container">
+          <article class="ticket" data-reveal>
+            <div class="ticket-main">
+              <span class="eyebrow kicker-rule">Eventi &amp; webinar</span>
+              <h2 class="display-md">
+                Impariamo insieme, <span class="script">dal vivo.</span>
+              </h2>
+              <p>
+                Incontri gratuiti per imparare a leggere le etichette e nutrire meglio cane e gatto,
+                online e in presenza. Come “{ev.title}”: pratici, concreti, senza fronzoli.
+              </p>
+              <div class="ticket-row">
+                {ev.statusLabel && <span class="pill pill-peach">{ev.statusLabel}</span>}
+                <a class="btn" href="/eventi">
+                  Vedi il calendario <ArrowIcon size={15} />
+                </a>
+              </div>
+            </div>
+            <div class="ticket-stub">
+              {evCover ? (
+                <img src={evCover} alt={ev.coverAlt ?? ev.title} loading="lazy" decoding="async" />
+              ) : (
+                <Image src={chiSonoPhoto} alt="Andrea Bellettati con il suo cane" widths={[400, 800]} sizes="360px" loading="lazy" />
+              )}
+            </div>
+            {ev.free && (
+              <span class="ticket-stamp" data-stamp aria-hidden="true">
+                Gratis
+              </span>
+            )}
+          </article>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- NUMERI — un muro di sticker -->
+  <section class="section-tight h-proof" aria-label="In breve">
+    <div class="container">
+      <ul class="proof-wall stagger" data-reveal>
+        <li class="pw tone-peach">
+          <span class="pw-n" data-count="2021" data-count-from="2000">2021</span>
+          <span class="pw-l">Nel team dal</span>
+        </li>
+        <li class="pw tone-sage">
+          <span class="pw-n" data-count="45">45'</span>
+          <span class="pw-l">Consulenza gratuita</span>
+        </li>
+        <li class="pw tone-paper">
+          <span class="pw-n">
+            <svg viewBox="0 0 50 44" width="88" height="78" fill="currentColor" aria-hidden="true" data-pop>
+              <ellipse cx="12" cy="15" rx="4.3" ry="5.8"></ellipse>
+              <ellipse cx="21" cy="10" rx="4.3" ry="6"></ellipse>
+              <ellipse cx="30" cy="11" rx="4.3" ry="6"></ellipse>
+              <ellipse cx="38.5" cy="16" rx="4.3" ry="5.6"></ellipse>
+              <ellipse cx="25" cy="29" rx="9.5" ry="8"></ellipse>
+            </svg>
+          </span>
+          <span class="pw-l">Cane &amp; Gatto</span>
+        </li>
+        <li class="pw tone-ink">
+          <span class="pw-n">Team</span>
+          <span class="pw-l">Metodo condiviso</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA — foglio pesca, badge che gira, i cani che spuntano dal fondo -->
+  <section class="h-cta" aria-labelledby="cta-title">
+    <div class="container h-cta-inner">
+      <span class="eyebrow">Il primo passo è gratuito</span>
+      <h2 class="h-cta-title" id="cta-title" data-split="pop">
+        Parliamo del tuo animale, <span class="script">davvero.</span>
+      </h2>
+      <p class="lead">
+        45 minuti insieme per analizzare alimentazione e comportamento. Al termine ricevi un piano
+        di lavoro firmato. Senza impegno.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-lg btn-dark" href="/consulenza-gratuita">Compila il questionario</a>
+        <button type="button" class="btn btn-ghost btn-lg" data-open-call>
+          Richiedi la tua consulenza gratuita <CalendarIcon size={16} />
+        </button>
+      </div>
+      <a class="spin-badge" href="/consulenza-gratuita" data-magnetic aria-label="Consulenza gratuita: 45 minuti, senza impegno">
+        <svg class="spin-ring" viewBox="0 0 200 200" aria-hidden="true" data-spin>
+          <defs><path id="spin-path" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"></path></defs>
+          <text><textPath href="#spin-path" textLength="486" lengthAdjust="spacing">consulenza gratuita · 45 minuti · senza impegno ·</textPath></text>
+        </svg>
+        <span class="spin-core" aria-hidden="true"><ArrowIcon size={30} /></span>
+      </a>
+    </div>
+    <div class="h-cta-peek" data-peek data-pet aria-hidden="true">
+      <Image src={stkCani} alt="" widths={[420, 840]} sizes="(min-width: 900px) 420px, 60vw" loading="lazy" />
+    </div>
+  </section>
+</Base>
