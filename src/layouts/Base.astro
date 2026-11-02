@@ -9,7 +9,7 @@ import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import CallModal from '../components/CallModal.astro';
-import { SITE, SITE_NAME } from '../config';
+import { SITE, SITE_NAME, TYPE_STYLE } from '../config';
 import {
   siteGraph,
   breadcrumbLd,
@@ -125,6 +125,7 @@ const speculationRules = JSON.stringify({
     <Font cssVariable="--font-bricolage" preload />
     <Font cssVariable="--font-anton" />
     <Font cssVariable="--font-caveat" />
+    {TYPE_STYLE === 'serif' && <Font cssVariable="--font-fraunces" preload />}
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
     <script type="speculationrules" is:inline set:html={speculationRules} />
@@ -134,7 +135,7 @@ const speculationRules = JSON.stringify({
     <ClientRouter />
     <slot name="head" />
   </head>
-  <body class="brand paper-bg">
+  <body class:list={['brand paper-bg', `type-${TYPE_STYLE}`]}>
     <a class="skip-link" href="#contenuto">Salta al contenuto</a>
     <SiteHeader active={active} />
     <main id="contenuto">

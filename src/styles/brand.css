@@ -231,3 +231,46 @@
   background: var(--bg-paper);
   box-shadow: 3px 3px 0 var(--peach);
 }
+
+/* ── TITOLI SERIF (TYPE_STYLE = 'serif' in src/config.ts) ─────────────
+   Fraunces per i titoli: pesi più leggeri e spaziatura meno stretta del
+   grotesk (a 800 e -0.05em un serif si impasta), le parole evidenziate dei
+   titoli in corsivo, come una rivista. Testo, numeri (Anton) e note a mano
+   (Caveat) non cambiano. */
+.type-serif {
+  --display: var(--font-fraunces, 'Fraunces', Georgia, serif);
+}
+.type-serif :is(h1, h2, h3, .display, .hm-title, .statement, .c-title, .l-title, .a-title, .cs-title,
+  .h-cta-title, .a-cta-title, .cs-cta-title, .l-strike-title, .step-q, .pr-title, .hs-more-t, .rail-step b,
+  .venn-label b, .pet-tag-name, .stack-card h3, .flex-card h3, .door h3, .sv-body h3, .sv-facts dd,
+  .faq-item summary, .cs-role, .pullquote q, .plan-list b) {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-optical-sizing: auto;
+}
+.type-serif :is(.hm-title, .c-title, .l-title, .a-title, .cs-title, .h-cta-title, .a-cta-title, .cs-cta-title,
+  .l-strike-title, .statement, .display-xl, .display-lg) {
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+.type-serif :is(h3, .faq-item summary, .cs-role, .sv-facts dd, .step-q) { font-weight: 600; letter-spacing: -0.015em; }
+/* Le parole chiave dei titoli in corsivo. */
+.type-serif :is(.hm-title-hl, .a-title-hl, .c-title-hl, .l-title-hl, .cs-title .line:last-child > span) {
+  font-style: italic;
+  font-weight: 500;
+}
+/* Logo e wordmark del footer: il nome in serif, un filo più leggero. */
+.type-serif :is(.lockup-name, .footer-lockup .n) { font-family: var(--display); font-weight: 650; letter-spacing: -0.02em; }
+.type-serif .foot-wordmark { font-family: var(--display); font-weight: 600; letter-spacing: -0.04em; }
+/* Le parole "a mano" dentro i titoli diventano corsivo serif: con Fraunces
+   il pennarello accanto al serif sarebbe troppo. Caveat resta per le note,
+   le didascalie e le firme. */
+.type-serif :is(h1, h2) .script {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+/* Sotto il corsivo serif la sottolineatura a mano è più sottile e più bassa. */
+.type-serif h2 .script::after { bottom: -0.16em; height: 0.12em; }
