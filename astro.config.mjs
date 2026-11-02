@@ -43,6 +43,32 @@ export default defineConfig({
       },
     },
     {
+      // Serif editoriale per i titoli (TYPE_STYLE = 'serif' in src/config.ts).
+      provider: fontProviders.local(),
+      name: 'Fraunces',
+      cssVariable: '--font-fraunces',
+      fallbacks: ['Georgia', 'serif'],
+      options: {
+        variants: [
+          { src: ['./src/assets/fonts/fraunces-latin-opsz.woff2'], weight: '100 900', style: 'normal' },
+          { src: ['./src/assets/fonts/fraunces-latin-opsz-italic.woff2'], weight: '100 900', style: 'italic' },
+        ],
+      },
+    },
+    {
+      // Serif marcato ad alto contrasto (TYPE_STYLE = 'serif-bold').
+      provider: fontProviders.local(),
+      name: 'Playfair Display',
+      cssVariable: '--font-playfair',
+      fallbacks: ['Georgia', 'serif'],
+      options: {
+        variants: [
+          { src: ['./src/assets/fonts/playfair-display-latin.woff2'], weight: '400 900', style: 'normal' },
+          { src: ['./src/assets/fonts/playfair-display-latin-italic.woff2'], weight: '400 900', style: 'italic' },
+        ],
+      },
+    },
+    {
       provider: fontProviders.local(),
       name: 'Caveat',
       cssVariable: '--font-caveat',

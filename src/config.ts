@@ -21,6 +21,16 @@ export const IG_HANDLE = '@comunicazionecinofila';
 export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
 
 /**
+ * Carattere dei titoli (il testo resta sempre in Bricolage). Cambia questa
+ * riga e rifai il build:
+ *  · 'serif-bold' — Playfair Display pieno: serif marcato, alto contrasto
+ *  · 'impact'     — Anton maiuscolo: condensato e pesante, da manifesto
+ *  · 'serif'      — Fraunces: serif editoriale più leggero
+ *  · 'grotesk'    — Bricolage Grotesque: il carattere di prima
+ */
+export const TYPE_STYLE: 'serif-bold' | 'impact' | 'serif' | 'grotesk' = 'serif-bold';
+
+/**
  * Numeri di fiducia mostrati in home ("Chi sono") e nella pagina Chi sono.
  * Aggiornali qui: valgono ovunque. Contenuti e follower vengono dal profilo
  * Instagram — da ritoccare ogni tanto, un numero vecchio non fa danni ma
