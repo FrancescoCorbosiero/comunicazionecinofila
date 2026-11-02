@@ -234,7 +234,7 @@ const igHandle = IG_HANDLE.replace(/^@/, '');
         </div>
         <p class="ig-bio">{SITE_TAGLINE}</p>
         <a class="ig-grid" href={IG_URL} target="_blank" rel="noopener" aria-label={`Apri il profilo Instagram ${IG_HANDLE}`}>
-          <img src="/assets/articolo-antistaminico-naturale-per-cani.jpg" alt="" width="128" height="128" loading="lazy" decoding="async" />
+          <Image src={chiSonoPhoto} alt="" widths={[160, 320]} sizes="128px" loading="lazy" />
           <Image src={heroPhoto} alt="" widths={[160, 320]} sizes="128px" loading="lazy" />
           <Image src={consulenzaPhoto} alt="" widths={[160, 320]} sizes="128px" loading="lazy" />
         </a>
