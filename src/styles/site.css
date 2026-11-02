@@ -140,8 +140,8 @@ section[id] { scroll-margin-top: 84px; }
 
 /* ── Type scale ────────────────────────────────────────────────── */
 .brand h1, .brand h2, .brand h3 { margin: 0; }
-.brand .display-xl { font-size: clamp(46px, 9vw, 124px); line-height: 0.92; }
-.brand .display-lg { font-size: clamp(38px, 6.2vw, 84px); line-height: 0.94; }
+.brand .display-xl { font-size: clamp(46px, 7.4vw, 100px); line-height: 0.92; }
+.brand .display-lg { font-size: clamp(38px, 5.2vw, 70px); line-height: 0.94; }
 .brand .display-md { font-size: clamp(30px, 4.2vw, 52px); line-height: 0.98; }
 .eyebrow { display: inline-block; }
 
@@ -500,7 +500,7 @@ section[id] { scroll-margin-top: 84px; }
 .footer-col a:hover { color: var(--cream-ink); transform: translateX(4px); }
 .foot-wordmark { position: relative; margin: 0; padding: 0 22px; text-align: center; user-select: none; pointer-events: none;
   font-family: var(--display); font-weight: 800; letter-spacing: -0.055em; line-height: 0.8;
-  font-size: clamp(38px, 13.2vw, 230px); color: var(--peach); white-space: nowrap; }
+  font-size: clamp(38px, 10.5vw, 170px); color: var(--peach); white-space: nowrap; }
 .foot-row { position: relative; z-index: 1; display: block; overflow: hidden; padding: 0.04em 0 0.1em; margin-bottom: -0.1em; }
 .foot-char { display: inline-block; }
 .foot-row + .foot-row { color: var(--cream-ink); }
