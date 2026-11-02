@@ -11,9 +11,9 @@ commit e deploy.
 | File | Dove compare | Formato consigliato |
 |---|---|---|
 | `logo.jpg` | Logo tondo in header e footer, ritratto nell'hero, favicon | quadrata, ≥ 512px, soggetto centrato |
-| `hero.jpg` | Sfondo dell'hero in home, blocco "L'approccio" in home, pagina Approccio | ≥ 1440px, deve reggere testo chiaro sopra (viene scurita) |
-| `chi-sono.jpg` | Pagina Chi sono, blocco "Consulenza 1:1" in Servizi | verticale 4:5, ≥ 1200px |
-| `consulenza.jpg` | Pagina Consulenza gratuita, seconda foto di Chi sono | verticale 4:5, ≥ 1200px |
+| `hero.jpg` | Polaroid del blocco "L'approccio" in home, anteprima social della home e di Approccio, ventaglio di Chi sono | ≥ 1440px |
+| `chi-sono.jpg` | Foto ad arco del blocco "Chi sono" in home, hero di Chi sono (finché non carichi `ritratto.jpg`), blocco "Consulenza 1:1" in Servizi | verticale 4:5, ≥ 1200px |
+| `consulenza.jpg` | Pagina Consulenza gratuita, polaroid "a casa" in home, ventaglio di Chi sono | verticale 4:5, ≥ 1200px |
 | `alimentazione.jpg` | Blocco "Alimentazione Naturale" in Servizi | 4:3 o quadrata, ≥ 1200px |
 | `team-formazione.jpg` | Blocco "Opportunità Lavorative" in Servizi *(oggi placeholder: appare appena la carichi)* | 4:3 o quadrata, ≥ 1200px |
 | `og-lavora-con-noi.jpg` | Anteprima social di "Lavora con noi" (lo striscione TeamNutrizione su fondo 1200×630) | orizzontale **1200×630** |
@@ -27,6 +27,22 @@ commit e deploy.
 > `src/assets/`** con lo stesso nome: sostituiscile in **entrambe** le
 > cartelle (una è la versione ottimizzata dei layout, l'altra serve per le
 > anteprime social).
+
+## Foto nuove (solo in `src/assets/`, appaiono da sole)
+
+Queste vanno caricate **in `src/assets/`** (non qui): sono foto dei layout,
+ottimizzate al build. Finché mancano, al loro posto c'è un segnaposto o una
+foto di ripiego — niente si rompe.
+
+| File (`src/assets/`) | Dove compare | Formato consigliato |
+|---|---|---|
+| `ritratto.jpg` | Hero di **Chi sono**: la foto "professionale" ad arco (senza, si usa `chi-sono.jpg`) | verticale 4:5, ≥ 1200px, volto ben illuminato |
+| `storia-zoe-prima.jpg` | Home, "Cani veri, ciotole vere": Zoe all'inizio (prima/dopo da trascinare) | verticale 4:5 o quadrata, ≥ 1000px |
+| `storia-zoe-dopo.jpg` | Home, stessa card: Zoe dopo un mese — **stessa inquadratura** della "prima" | come sopra |
+| `storia-pelle.jpg` | Home, card "La pelle racconta" (pastore australiano, 6 mesi) | verticale 4:5 o quadrata, ≥ 1000px |
+
+> Le storie dei clienti mostrano animali veri: carica solo foto per cui hai
+> il consenso della famiglia.
 
 ## Sticker (foto scontornate)
 

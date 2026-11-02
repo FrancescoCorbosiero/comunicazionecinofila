@@ -22,6 +22,26 @@ export const IG_HANDLE = '@comunicazionecinofila';
 export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
 
 /**
+ * Numeri di fiducia mostrati in home ("Chi sono") e nella pagina Chi sono.
+ * Aggiornali qui: valgono ovunque. Contenuti e follower vengono dal profilo
+ * Instagram — da ritoccare ogni tanto, un numero vecchio non fa danni ma
+ * uno gonfiato sì.
+ */
+export const STATS = {
+  /** Anno di ingresso nel Team. */
+  teamSince: 2021,
+  /** Contenuti pubblicati (post Instagram). */
+  posts: 385,
+  /** Persone che seguono il profilo. */
+  followers: 4760,
+};
+
+/** Numero all'italiana con il punto delle migliaia anche a 4 cifre (4.760). */
+export function formatNumber(n: number): string {
+  return new Intl.NumberFormat('it-IT', { useGrouping: 'always' }).format(n);
+}
+
+/**
  * cal.com — UNICA costante per l'integrazione del calendario.
  * Finché è vuota, i pulsanti "Richiedi la tua consulenza gratuita" aprono il modale-placeholder
  * (selezione slot → conferma via WhatsApp).

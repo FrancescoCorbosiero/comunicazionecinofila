@@ -47,21 +47,12 @@ a:focus-visible, button:focus-visible, .cal-slot:focus-visible {
   border-radius: 4px;
 }
 
-/* ── CTA WhatsApp in header: niente overflow su mobile ── */
-.header-inner {
-  min-width: 0;
-}
-.brand-lockup {
-  min-width: 0;
-}
+/* ── Header su telefoni stretti: il nome cede prima delle icone ── */
 .header-cta {
   flex-shrink: 0;
 }
-@media (max-width: 430px) {
-  .header-cta .cta-label {
-    display: none;
-  }
+@media (max-width: 360px) {
   .lockup-name {
-    font-size: 17px;
+    font-size: 16px;
   }
 }

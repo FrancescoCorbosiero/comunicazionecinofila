@@ -47,6 +47,11 @@
                             al passo con lo scroll e accendono le tappe
      data-fan               foto impilate ([data-fan-item]) che si aprono a
                             ventaglio mentre la sezione entra
+     data-chat              chat finta: i fumetti (.sv-bub, ritardo con --i)
+                            arrivano uno alla volta quando è davvero a schermo
+                            (anche dentro un carosello orizzontale)
+     data-accordion         <details> che si apre e si chiude morbido
+                            (il contenuto in [data-accordion-body])
      data-marquee           nastro che segue velocità e verso dello scroll
      data-peek              sticker che spunta dal fondo della sezione
      data-spin              badge che gira con lo scroll
@@ -717,9 +722,12 @@ function storiesScroll(media: gsap.MatchMedia): void {
         if (i > 0 && pieces.length) {
           tl.from(pieces, { y: 40, opacity: 0, stagger: 0.05, duration: 0.25, ease: 'power2.out' }, i - 1 + 0.82);
         }
+        // Tutto resta dentro lo schermo del telefono (clip-path in CSS): la
+        // slide che esce arretra a sinistra, si rimpicciolisce e si spegne
+        // mentre la nuova la copre da destra, come quando sfogli le stories.
         const next = slides[i + 1];
         if (next) {
-          tl.to(slide, { xPercent: -24, scale: 0.88, rotation: -4, opacity: 0.35, duration: 0.3, ease: 'power2.inOut' }, i + 0.75).to(
+          tl.to(slide, { xPercent: -32, scale: 0.9, opacity: 0.2, duration: 0.3, ease: 'power2.inOut' }, i + 0.75).to(
             next,
             { xPercent: 0, duration: 0.3, ease: 'power2.inOut' },
             i + 0.75
@@ -938,6 +946,86 @@ function fans(): void {
         },
         { x: 0, y: 0, rotation: rest, ease: 'power2.out' },
         0
+      );
+    });
+  });
+}
+
+/* ── Chat che si scrive da sola ──────────────────────────────────────
+   I fumetti arrivano uno dopo l'altro (le transizioni CSS hanno il
+   ritardo in --i) quando la chat è visibile per più di metà: un
+   IntersectionObserver vede anche il ritaglio dei caroselli orizzontali,
+   quindi la terza card non si "consuma" prima che ci arrivi lo swipe. */
+function chats(): void {
+  const els = gsap.utils.toArray<HTMLElement>('[data-chat]');
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('is-in'));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      });
+    },
+    { threshold: 0.55 }
+  );
+  els.forEach((el) => io.observe(el));
+  cleanups.push(() => {
+    io.disconnect();
+    els.forEach((el) => el.classList.remove('is-in'));
+  });
+}
+
+/* ── Accordion morbido (FAQ) ─────────────────────────────────────────
+   Il <details> nativo funziona già senza script; qui l'apertura e la
+   chiusura diventano un'animazione d'altezza. Durante la chiusura
+   [data-closing] riporta subito l'icona a "+" (il CSS la guarda). */
+function accordions(): void {
+  gsap.utils.toArray<HTMLDetailsElement>('details[data-accordion]').forEach((d) => {
+    const summary = d.querySelector<HTMLElement>('summary');
+    const body = d.querySelector<HTMLElement>('[data-accordion-body]');
+    if (!summary || !body) return;
+    on(summary, 'click', (e) => {
+      e.preventDefault();
+      if (d.open && !d.hasAttribute('data-closing')) {
+        d.setAttribute('data-closing', '');
+        gsap.fromTo(
+          body,
+          { height: body.offsetHeight, opacity: 1 },
+          {
+            height: 0,
+            opacity: 0,
+            duration: 0.42,
+            ease: 'power2.inOut',
+            overwrite: true,
+            onComplete: () => {
+              d.open = false;
+              d.removeAttribute('data-closing');
+              gsap.set(body, { clearProps: 'height,opacity' });
+            },
+          }
+        );
+        return;
+      }
+      // Riaperto mentre si chiudeva: riparte dall'altezza a cui era arrivato.
+      const fromH = d.hasAttribute('data-closing') ? body.offsetHeight : 0;
+      d.removeAttribute('data-closing');
+      d.open = true;
+      gsap.fromTo(
+        body,
+        { height: fromH, opacity: fromH ? 1 : 0 },
+        {
+          height: () => body.scrollHeight,
+          opacity: 1,
+          duration: 0.55,
+          ease: 'power3.out',
+          overwrite: true,
+          onComplete: () => void gsap.set(body, { clearProps: 'height,opacity' }),
+        }
       );
     });
   });
@@ -1437,6 +1525,8 @@ function initPage(): void {
     stamps();
     trails();
     fans();
+    chats();
+    accordions();
     counters();
     pops();
     drawPaths();

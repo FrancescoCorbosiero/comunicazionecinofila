@@ -494,6 +494,73 @@ function initBlogFilter(): void {
   if (cat !== '*' || query) apply(false);
 }
 
+/* ── Storie vere (home): carosello nativo + prima/dopo ──────────
+   Lo scorrimento è quello nativo (swipe, trackpad, scroll-snap): qui solo
+   frecce, contatore "1 / 3", pallini e i cursori prima/dopo. */
+function initStoryCarousel(): void {
+  const root = document.querySelector<HTMLElement>('[data-sv]');
+  const track = root?.querySelector<HTMLElement>('[data-sv-track]');
+  if (!root || !track) return;
+  const cards = Array.from(track.children) as HTMLElement[];
+  const count = root.querySelector<HTMLElement>('[data-sv-count]');
+  const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-sv-dots] i'));
+  const prev = root.querySelector<HTMLButtonElement>('[data-sv-prev]');
+  const next = root.querySelector<HTMLButtonElement>('[data-sv-next]');
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let index = 0;
+  // La card "attuale" è quella più vicina al bordo d'aggancio (lo
+  // scroll-padding coincide con il padding sinistro della fascia).
+  const padStart = (): number => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  const update = (): void => {
+    const x = track.scrollLeft + padStart();
+    let best = 0;
+    cards.forEach((c, i) => {
+      if (Math.abs(c.offsetLeft - x) < Math.abs(cards[best].offsetLeft - x)) best = i;
+    });
+    index = best;
+    if (count) count.textContent = `${index + 1} / ${cards.length}`;
+    dots.forEach((d, i) => d.classList.toggle('on', i === index));
+    if (prev) prev.disabled = track.scrollLeft <= 2;
+    if (next) next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+  };
+  const go = (i: number): void => {
+    const card = cards[Math.max(0, Math.min(cards.length - 1, i))];
+    track.scrollTo({ left: card.offsetLeft - padStart(), behavior: smooth ? 'smooth' : 'auto' });
+  };
+  prev?.addEventListener('click', () => go(index - 1));
+  next?.addEventListener('click', () => go(index + 1));
+  let raf = 0;
+  track.addEventListener(
+    'scroll',
+    () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    },
+    { passive: true }
+  );
+  track.addEventListener('keydown', (e) => {
+    // Le frecce sul cursore prima/dopo muovono il cursore, non il carosello.
+    if (e.target instanceof Element && e.target.closest('input, select, textarea')) return;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      go(index + 1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      go(index - 1);
+    }
+  });
+  update();
+
+  // Prima/dopo: il range (invisibile, a tutta superficie) muove la linea.
+  root.querySelectorAll<HTMLElement>('[data-compare]').forEach((cmp) => {
+    const input = cmp.querySelector<HTMLInputElement>('input[type="range"]');
+    if (!input) return;
+    const set = (): void => cmp.style.setProperty('--x', `${input.value}%`);
+    input.addEventListener('input', set);
+    set();
+  });
+}
+
 /* ── Selettore di percorso (contatti) ────────────────────────── */
 function initPathSelector(): void {
   const cards = document.querySelectorAll<HTMLElement>('[data-path]');
@@ -700,6 +767,7 @@ function onPageLoad(): void {
   initStepForm();
   initWorkForm();
   initBlogFilter();
+  initStoryCarousel();
   initPathSelector();
   initBookings();
   initCatalog();
