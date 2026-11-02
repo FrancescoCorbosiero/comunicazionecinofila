@@ -1,0 +1,39 @@
+# =====================================================================
+# Deploy con Caddy (caddy-docker-proxy: lucaslorentz/caddy-docker-proxy).
+# Caddy gira in un suo container sulla rete esterna "caddy", legge queste
+# label, prende i certificati HTTPS e fa da reverse proxy.
+#
+#   docker network create caddy        # una volta sola, se non esiste
+#   cp .env.example .env               # e compila dominio + credenziali SES
+#   docker compose up -d --build
+#
+# Le label usano SITE_DOMAIN e SITE_DOMAIN_ALT dal file .env.
+# =====================================================================
+services:
+  web:
+    build:
+      context: .
+      args:
+        PUBLIC_FORM_ENDPOINT: /api/form
+    image: comunicazione-cinofila:latest
+    container_name: comunicazione-cinofila
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "3000"
+    networks:
+      - caddy
+    labels:
+      # Dominio principale → il server del sito.
+      caddy: ${SITE_DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.encode: zstd gzip
+      caddy.header.Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+      caddy.header.-Server: ""
+      # Dominio alternativo (es. senza www) → redirect permanente al principale.
+      caddy_1: ${SITE_DOMAIN_ALT}
+      caddy_1.redir: "https://${SITE_DOMAIN}{uri} permanent"
+
+networks:
+  caddy:
+    external: true

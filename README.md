@@ -32,12 +32,12 @@ python scripts/make-stickers.py   # rigenera gli sticker fustellati (vedi sotto)
 
 ```
 src/
-  config.ts              # ⭐ contatti reali, numeri (STATS) + CAL_LINK (sorgente unica)
+  config.ts              # ⭐ contatti reali, numeri (STATS), CAL_LINK, endpoint dei form
   lib/seo.ts             # default SEO + JSON-LD (Person/LocalBusiness/breadcrumb)
   lib/dates.ts           # formattazione date (fuso Europe/Rome)
   layouts/Base.astro     # <head>: meta/OG/Twitter, JSON-LD, ClientRouter, speculation rules
   components/            # Header, Footer, CallModal, CoverImage, Sticker, Ticker, card/row, icone
-  scripts/site.ts        # nav, step-form→WhatsApp, form→Netlify, ricerca blog, modale
+  scripts/site.ts        # nav, step-form→WhatsApp, form→/api/form (SES), ricerca blog, modale
   scripts/motion.ts      # ⭐ animazioni GSAP + Lenis (API ad attributi: vedi l'intestazione del file)
   scripts/catalog.ts     # filtro/ordinamento/ricerca del catalogo (archiviato)
   pages/                 # index, approccio, chi-sono, consulenza-gratuita, lavora-con-noi,
@@ -54,6 +54,9 @@ src/
   assets/stickers/       # foto scontornate col bordo bianco (scripts/make-stickers.py)
   assets/                # foto ottimizzate da astro:assets (webp responsive)
 public/assets/           # favicon + immagini per OG e cover delle collection
+server/                  # server Docker: sito statico + /api/form → AWS SES
+netlify/functions/       # la stessa logica SES come Netlify Function
+Dockerfile, docker-compose.yml, .env.example   # deploy con Caddy (label)
 ```
 
 ## Aggiungere un articolo
@@ -129,36 +132,69 @@ Nessun prezzo: ogni card invita a **richiedere un preventivo** via WhatsApp.
 > riporta `src/_archive/catalogo.astro` in `src/pages/` e ripristina le voci di
 > navigazione in header/footer. Dati, script e stili sono rimasti intatti.
 
-## Form: invio configurabile (Netlify Forms oggi, AWS SES quando vuoi)
+## Form: WhatsApp + email via AWS SES
 
 Entrambi i questionari passano da **un solo punto di uscita**
-(`submitForm()` in `src/scripts/site.ts`), con endpoint configurabile via
-`FORM_ENDPOINT` in `src/config.ts`:
+(`submitForm()` in `src/scripts/site.ts`); la destinazione si decide **al
+build** con la variabile `PUBLIC_FORM_ENDPOINT` (vedi `src/config.ts`):
 
-- **`/lavora-con-noi`** (`candidatura-team`): invio reale via fetch, stato
-  "Invio in corso…", conferma inline. Se la rete fallisce compare un fallback
-  con **email precompilata** — la candidatura non si perde mai.
-- **`/consulenza-gratuita`** (`consulenza-gratuita`): il flusso resta
-  **WhatsApp-first** (il pulsante apre WhatsApp col messaggio pronto, come
-  sempre), ma ogni questionario completato viene **anche salvato in
-  background**. Se la persona chiude WhatsApp senza premere invio, il
-  contatto non va perso.
+| `PUBLIC_FORM_ENDPOINT` | Dove finiscono i dati |
+|---|---|
+| `/api/form` (default nell'immagine Docker) | server Node del container → **email via AWS SES** |
+| `/.netlify/functions/invia-form` | Netlify Function → **email via AWS SES** |
+| vuota | Netlify Forms (dashboard Netlify) |
 
-**Oggi (default, `FORM_ENDPOINT = ''`)** → [Netlify Forms](https://docs.netlify.com/manage/forms/setup/):
-zero backend, al primo deploy Netlify registra i form da solo (attributo
-`data-netlify` nell'HTML statico) e in **Site → Forms** si attivano le
-notifiche email. Anti-spam: honeypot `bot-field` già configurato.
+**WhatsApp resta com'è.** Il questionario della consulenza apre WhatsApp con
+il messaggio già pronto *e* in background manda la copia via email: se la
+persona chiude WhatsApp senza inviare, il contatto arriva comunque. La
+candidatura "Lavora con noi" arriva via email (Reply-To = l'email del
+candidato); se l'invio fallisce compare l'email precompilata come piano B.
+Ogni email ad Andrea contiene il bottone **"Rispondi su WhatsApp"** con il
+numero di chi ha scritto.
 
-**Domani (AWS SES)** → scrivi una function che riceve il POST
-`application/x-www-form-urlencoded` e inoltra via SES (`SendEmail`), poi
-metti il suo URL in `FORM_ENDPOINT` (es. `/.netlify/functions/invia-form` o
-un endpoint API Gateway). Il payload include `form-name`
-(`candidatura-team` / `consulenza-gratuita`) per distinguere i due form e
-il campo honeypot `bot-field` da scartare se valorizzato. Il client non
-cambia; a quel punto puoi rimuovere gli attributi `data-netlify` dai form.
+La logica sta tutta in `server/form-handler.mjs` (validazione, honeypot
+`bot-field`, email testo + HTML, invio con `@aws-sdk/client-sesv2`), usata sia
+da `server/index.mjs` (Docker) sia da `netlify/functions/invia-form.mjs`.
 
-In `astro dev`/`preview` l'endpoint non esiste: il form di candidatura
-mostra il fallback, ed è il comportamento atteso.
+### Configurare AWS SES (una volta)
+
+1. **SES → Identities → Create identity → Domain**: verifica
+   `andreabellettati.it` aggiungendo i record DKIM al DNS. Aggiungi anche
+   SPF (`v=spf1 include:amazonses.com ~all`) e un record DMARC.
+2. **Esci dalla sandbox** (SES → Account dashboard → Request production
+   access): in sandbox puoi scrivere solo a indirizzi verificati.
+3. **IAM → utente dedicato** con questa sola policy, e crea le sue chiavi:
+   ```json
+   { "Version": "2012-10-17", "Statement": [{ "Effect": "Allow",
+     "Action": "ses:SendEmail", "Resource": "*" }] }
+   ```
+4. Copia `.env.example` in `.env` e compila `AWS_REGION`, le chiavi,
+   `SES_FROM` (un indirizzo del dominio verificato) e `SES_TO`.
+   Con `SES_DRY_RUN=true` le email vengono solo stampate nei log.
+
+Le chiavi stanno **solo** nel `.env` del server (o nelle variabili di
+Netlify): mai nel repo. Senza configurazione l'endpoint risponde 503 e i
+form mostrano i loro fallback (WhatsApp / email precompilata).
+
+## Deploy con Docker + Caddy
+
+L'immagine (`Dockerfile`) builda il sito con `PUBLIC_FORM_ENDPOINT=/api/form`
+e lo serve con un server Node minimale (`server/index.mjs`: file statici con
+le stesse regole di cache e sicurezza di Netlify, `POST /api/form`,
+`GET /healthz` per l'healthcheck). HTTPS, compressione e dominio li gestisce
+**Caddy** tramite label ([caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy)).
+
+```bash
+docker network create caddy          # una volta, se Caddy non l'ha già
+cp .env.example .env                 # dominio + credenziali SES
+docker compose up -d --build
+```
+
+`docker-compose.yml` collega il container alla rete esterna `caddy` e
+dichiara le label: `SITE_DOMAIN` → reverse proxy sulla porta 3000 (zstd/gzip,
+HSTS), `SITE_DOMAIN_ALT` → redirect permanente al dominio principale.
+Per provarlo senza Docker: `npm run build` con
+`PUBLIC_FORM_ENDPOINT=/api/form`, poi `npm run serve` (legge `.env`).
 
 ## Performance & SEO (già attive)
 
@@ -249,8 +285,10 @@ andrebellettati@gmail.com, Instagram @comunicazionecinofila.
 
 ## Deploy
 
-Build statica: funziona su **Netlify / Vercel / Cloudflare Pages** senza
-configurazione (build `npm run build`, output `dist/`).
+Consigliato: **Docker + Caddy** (sezione sopra), con i form via AWS SES.
+In alternativa la build statica gira anche su **Netlify / Vercel /
+Cloudflare Pages** (build `npm run build`, output `dist/`); su Netlify i
+form possono usare la function SES o Netlify Forms.
 
 **Prima del deploy:** imposta il dominio reale in
 [`astro.config.mjs`](./astro.config.mjs) (`site`), in `src/config.ts` (`SITE`) e
@@ -263,9 +301,8 @@ in [`public/robots.txt`](./public/robots.txt) — serve a sitemap, canonical e O
   [`public/assets/README.md`](./public/assets/README.md) (cover articoli/eventi,
   foto team/formazione, `og-home.jpg` 1200×630). Basta caricare il file.
 - **Testi articoli/blog** on-site (12 stub `coming-soon` + bozze marcate nel Markdown).
-- **Form**: dopo il primo deploy, attivare le notifiche email in Site → Forms
-  (i form si registrano da soli). Quando arriva **AWS SES**: function che
-  inoltra via email + URL in `FORM_ENDPOINT` (`src/config.ts`).
+- **AWS SES**: verificare il dominio, uscire dalla sandbox, creare l'utente
+  IAM e compilare `.env` (vedi "Form: WhatsApp + email via AWS SES").
 - **Sezioni future in `/servizi`** (solo TODO nel codice): dieta casalinga/BARF con referral alla biologa Stefania Bartoloni; servizi in affiliazione.
 - **Link cal.com** (`CAL_LINK` in `src/config.ts`) + immagine OG dedicata 1200×630.
 - **Catalogo archiviato**: se tornerà, aggiornare i dati in `src/data/catalogo.json` alla gamma reale.

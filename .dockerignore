@@ -1,0 +1,12 @@
+node_modules
+server/node_modules
+dist
+.astro
+.git
+.github
+.env
+.env.*
+!.env.example
+design_handoff_sito_andrea
+*.log
+.DS_Store

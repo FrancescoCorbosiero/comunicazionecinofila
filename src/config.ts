@@ -51,17 +51,17 @@ export function formatNumber(n: number): string {
 export const CAL_LINK = '';
 
 /**
- * Endpoint di invio dei form (candidatura "Lavora con noi" + backup del
+ * Endpoint di invio dei form (candidatura "Lavora con noi" + copia del
  * questionario consulenza — il questionario resta comunque WhatsApp-first).
  *
- * Vuoto = Netlify Forms: POST alla pagina stessa, zero backend, funziona da subito.
- * Con AWS SES (o altro backend): metti qui l'URL della function che inoltra
- * via email — es. '/.netlify/functions/invia-form' o un endpoint API Gateway.
- * Il client non cambia: submitForm() in scripts/site.ts POSTa lo stesso
- * payload application/x-www-form-urlencoded (campo `form-name` incluso,
- * utile per distinguere i due form anche lato SES).
+ * Si decide AL BUILD con la variabile d'ambiente PUBLIC_FORM_ENDPOINT:
+ *  · vuota (default)                      → Netlify Forms (POST alla pagina)
+ *  · '/api/form'                          → server Docker + AWS SES (Dockerfile la imposta già)
+ *  · '/.netlify/functions/invia-form'     → Netlify Function + AWS SES
+ * Il payload è sempre lo stesso: application/x-www-form-urlencoded con
+ * `form-name`. La logica SES è in server/form-handler.mjs.
  */
-export const FORM_ENDPOINT = '';
+export const FORM_ENDPOINT: string = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 
 /** Helper: costruisce un deep-link WhatsApp con testo precompilato. */
 export function waLink(text: string): string {
