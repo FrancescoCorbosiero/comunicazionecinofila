@@ -28,7 +28,7 @@ export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
  *  · 'serif'      — Fraunces: serif editoriale più leggero
  *  · 'grotesk'    — Bricolage Grotesque: il carattere di prima
  */
-export const TYPE_STYLE: 'serif-bold' | 'impact' | 'serif' | 'grotesk' = 'serif-bold';
+export const TYPE_STYLE: 'serif-bold' | 'impact' | 'serif' | 'grotesk' = 'impact';
 
 /**
  * Numeri di fiducia mostrati in home ("Chi sono") e nella pagina Chi sono.
