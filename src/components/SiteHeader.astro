@@ -9,18 +9,18 @@ interface Props {
 }
 const { active } = Astro.props;
 
-// Su desktop la barra tiene solo quattro voci corte: "Home" è il logo e la
-// consulenza è il bottone a destra (l'azione principale del sito, sempre
-// in vista). Nel menu mobile compaiono tutte (mobile: true = solo lì).
-// "Lavora con noi" è una pillola con il bordo: si nota, ma non compete con
-// la CTA della consulenza.
+// Su desktop la barra tiene quattro voci corte; i due flussi del sito
+// ("Lavora con noi" e "Consulenza gratuita") stanno a destra come bottoni,
+// sempre in vista. Nel menu mobile compaiono tutte le voci (mobile: true =
+// solo lì) e in fondo le due azioni.
 const nav = [
   { href: '/', label: 'Home', key: 'home', mobile: true },
   { href: '/approccio', label: 'Approccio', key: 'approccio' },
-  { href: '/consulenza-gratuita', label: 'Consulenza gratuita', key: 'consulenza', mobile: true },
   { href: '/chi-sono', label: 'Chi sono', key: 'chi-sono' },
-  { href: '/articoli', label: 'Blog', key: 'articoli' },
+  { href: '/consulenza-gratuita', label: 'Consulenza gratuita', key: 'consulenza', mobile: true },
   { href: '/lavora-con-noi', label: 'Lavora con noi', key: 'lavora', work: true },
+  { href: '/articoli', label: 'Blog', key: 'articoli' },
+  { href: '/eventi', label: 'Eventi', key: 'eventi' },
 ];
 ---
 <header class="site-header">
@@ -52,12 +52,13 @@ const nav = [
           </a>
         ))
       }
-      <!-- Solo nel menu mobile: le azioni in fondo al foglio. -->
+      <!-- Solo nel menu mobile: le due azioni e i contatti in fondo al foglio. -->
       <div class="nav-foot">
-        <a class="btn btn-dark" href="/consulenza-gratuita#questionario">
+        <a class="btn btn-cream" href="/consulenza-gratuita#questionario">
           Prenota la consulenza gratuita <ArrowIcon size={15} />
         </a>
-        <a class="btn btn-ghost" href={WA_LINK} target="_blank" rel="noopener">
+        <a class="btn btn-accent" href="/lavora-con-noi#candidatura">Lavora con noi</a>
+        <a class="btn btn-ghost-cream" href={WA_LINK} target="_blank" rel="noopener">
           <WhatsAppIcon size={16} /> WhatsApp
         </a>
         <a class="nav-ig" href={IG_URL} target="_blank" rel="noopener">
@@ -73,6 +74,7 @@ const nav = [
       <a class="header-icon header-wa" href={WA_LINK} target="_blank" rel="noopener" aria-label="Scrivi ad Andrea su WhatsApp">
         <WhatsAppIcon size={18} />
       </a>
+      <a class="btn btn-sm btn-ghost-accent header-work" href="/lavora-con-noi">Lavora con noi</a>
       <a class="btn btn-sm header-cta" href="/consulenza-gratuita#questionario">
         Consulenza gratuita <ArrowIcon size={14} />
       </a>

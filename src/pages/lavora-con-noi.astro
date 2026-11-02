@@ -2,11 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-import Sticker from '../components/Sticker.astro';
-import Ticker from '../components/Ticker.astro';
 import coverPhoto from '../assets/lavora-con-noi.jpg';
-import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
-import stkBassotto from '../assets/stickers/bassotto.webp';
 
 // La lente sul branco (data-lens) qui è stata tolta: era un bel gioco, ma
 // distraeva dal messaggio. L'effetto resta in motion.ts, pronto da riusare
@@ -14,7 +10,7 @@ import stkBassotto from '../assets/stickers/bassotto.webp';
 const coverAlt =
   'TeamNutrizione — Al tuo fianco per il benessere del tuo pet: cani e gatti di tante razze in fila';
 
-// "A chi è rivolto": ogni profilo è uno sticker cliccabile che preseleziona
+// "A chi è rivolto": ogni profilo è un'etichetta cliccabile che preseleziona
 // l'ambito nel modulo di candidatura (site.ts, initProfileWall).
 const profili = [
   { label: 'Educatori e istruttori cinofili', ambito: 'Educazione cinofila' },
@@ -26,8 +22,6 @@ const profili = [
   { label: 'Appassionati di alimentazione e benessere naturale', ambito: 'Altro' },
   { label: 'Chi vuole costruire una nuova attività nel mondo animale', ambito: 'Altro' },
 ];
-const wallTones = ['peach', 'paper', 'sage', 'ink'];
-const wallTilt = [-4, 3, -2, 5, -3, 2, -5, 3];
 
 const ambiti = [
   'Educazione cinofila',
@@ -42,16 +36,6 @@ const ambiti = [
 const tempi = ['Qualche ora a settimana', 'Part-time', 'Attività principale', 'Non lo so ancora'];
 
 // Nastro sotto l'hero: le stesse persone di "A chi è rivolto", in breve.
-const nastro = [
-  'Educatori cinofili',
-  'Naturopati',
-  'Toelettatori',
-  'Allevatori',
-  'Pet sitter',
-  'Dog sitter',
-  'Professionisti del pet',
-  'Appassionati di benessere naturale',
-];
 
 // I tre principi: card che si impilano con lo scroll.
 const principi = [
@@ -112,7 +96,7 @@ const icons: Record<string, string> = {
   </section>
 
   <!-- HERO -->
-  <section class="l-hero" data-paw-trail data-sticky-from>
+  <section class="l-hero" data-sticky-from>
     <div class="container l-hero-inner">
       <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.3s;">Lavora con noi · TeamNutrizione</span>
       <h1 class="l-title intro-lines" style="--intro-base:0.45s;">
@@ -126,13 +110,10 @@ const icons: Record<string, string> = {
           professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere
           animale.
         </p>
-        <a class="btn btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
+        <a class="btn btn-accent btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
       </div>
     </div>
-    <Sticker src={stkAndreaSegugio} width={250} rotate={-5} eager class="l-hero-andrea" data-float />
   </section>
-
-  <Ticker items={nastro} tone="peach" tilt={-1.6} />
 
   <!-- COME LAVORIAMO: la parola sbagliata viene barrata a mano -->
   <section class="l-strike" data-strike aria-labelledby="strike-title">
@@ -186,7 +167,7 @@ const icons: Record<string, string> = {
     </div>
   </section>
 
-  <!-- A CHI È RIVOLTO: muro di sticker -->
+  <!-- A CHI È RIVOLTO: le etichette dei profili -->
   <section class="section l-who">
     <div class="container">
       <div class="l-who-head">
@@ -196,19 +177,14 @@ const icons: Record<string, string> = {
         </div>
         <p class="lead">
           Non serve sapere già tutto: servono ascolto, serietà, sensibilità e una reale volontà di
-          formarsi. <strong>Ti riconosci? Tocca il tuo sticker.</strong>
+          formarsi. <strong>Ti riconosci? Tocca il tuo profilo.</strong>
         </p>
       </div>
-      <ul class="sticker-wall" data-sticker-wall data-profile-wall>
+      <ul class="sticker-wall stagger" data-reveal data-profile-wall>
         {
-          profili.map((p, i) => (
-            <li data-wall-item style={`--tilt:${wallTilt[i]}deg`}>
-              <button
-                type="button"
-                class={`pstk tone-${wallTones[i % wallTones.length]}`}
-                data-ambito={p.ambito}
-                aria-pressed="false"
-              >
+          profili.map((p) => (
+            <li data-wall-item>
+              <button type="button" class="pstk" data-ambito={p.ambito} aria-pressed="false">
                 {p.label}
               </button>
             </li>
@@ -219,14 +195,13 @@ const icons: Record<string, string> = {
         <span data-wall-text></span>
         <a class="btn btn-sm" href="#candidatura">Vai alla candidatura <ArrowIcon size={14} /></a>
       </p>
-      <Sticker src={stkBassotto} width={120} rotate={8} class="l-who-dog" data-float />
     </div>
   </section>
 
   <!-- FLESSIBILITÀ + FORMAZIONE -->
   <section class="section l-flex">
     <div class="container l-flex-grid">
-      <article class="flex-card tone-paper" data-tilt data-reveal>
+      <article class="flex-card tone-paper" data-reveal>
         <span class="flex-icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="12" width="34" height="24" rx="3"></rect><path d="M4 40h42"></path><path d="M44 26l10-8 8 7v21H44z"></path><path d="M50 46v-8h6v8"></path></svg>
         </span>
@@ -236,7 +211,7 @@ const icons: Record<string, string> = {
           già oppure crescere fino a diventare la tua attività principale, di persona o a distanza.
         </p>
       </article>
-      <article class="flex-card tone-sage" data-tilt data-reveal>
+      <article class="flex-card tone-sage" data-reveal>
         <span class="flex-icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24l28-12 28 12-28 12z"></path><path d="M16 30v14c8 6 24 6 32 0V30"></path><path d="M60 24v16"></path></svg>
         </span>
@@ -249,7 +224,7 @@ const icons: Record<string, string> = {
     </div>
   </section>
 
-  <!-- IL MODELLO, CON TRASPARENZA: un foglio d'appunti con l'evidenziatore -->
+  <!-- IL MODELLO, CON TRASPARENZA: la nota di Andrea, con l'evidenziatore -->
   <section class="section l-note-sec">
     <div class="container container-narrow">
       <article class="l-note" data-reveal>

@@ -23,12 +23,10 @@ export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
 /**
  * Carattere dei titoli (il testo resta sempre in Bricolage). Cambia questa
  * riga e rifai il build:
- *  · 'serif-bold' — Playfair Display pieno: serif marcato, alto contrasto
- *  · 'impact'     — Anton maiuscolo: condensato e pesante, da manifesto
- *  · 'serif'      — Fraunces: serif editoriale più leggero
- *  · 'grotesk'    — Bricolage Grotesque: il carattere di prima
+ *  · 'serif'    — Fraunces: serif editoriale, le parole chiave in corsivo (default)
+ *  · 'grotesk'  — Bricolage Grotesque: nero e stretto, il carattere della v3
  */
-export const TYPE_STYLE: 'serif-bold' | 'impact' | 'serif' | 'grotesk' = 'serif-bold';
+export const TYPE_STYLE: 'serif' | 'grotesk' = 'serif';
 
 /**
  * Numeri di fiducia mostrati in home ("Chi sono") e nella pagina Chi sono.

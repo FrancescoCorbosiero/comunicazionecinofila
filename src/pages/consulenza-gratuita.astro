@@ -4,18 +4,11 @@ import Base from '../layouts/Base.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
 import WhatsAppIcon from '../components/WhatsAppIcon.astro';
 import InstagramIcon from '../components/InstagramIcon.astro';
-import Sticker from '../components/Sticker.astro';
-import Ticker from '../components/Ticker.astro';
 import consulenzaPhoto from '../assets/consulenza.jpg';
-import stkSegugio from '../assets/stickers/segugio.webp';
-import stkBassotto from '../assets/stickers/bassotto.webp';
-import stkAndreaSegugio from '../assets/stickers/andrea-segugio.webp';
 import { WA_LINK, EMAIL, PHONE, PHONE_DISPLAY, IG_HANDLE, IG_URL } from '../config';
 
 // Il percorso dopo la call: le tappe del monitoraggio (dal testo di Andrea).
 const monitoraggio = ['Adattamento', 'Appetito', 'Feci', 'Digestione', 'Abitudini'];
-
-const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano di lavoro firmato'];
 ---
 <Base
   active="consulenza"
@@ -29,7 +22,7 @@ const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano
   ogImageHeight={1440}
 >
   <!-- HERO: pitch + questionario in un solo schermo -->
-  <section class="c-hero" data-paw-trail data-sticky-from>
+  <section class="c-hero" data-sticky-from>
     <div class="container c-hero-grid">
       <div class="c-intro">
         <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.02s;">Consulenza gratuita · 45'</span>
@@ -46,12 +39,9 @@ const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano
           <li><b>2</b><span>Ti richiamo io<small>Al numero che lasci, quando preferisci.</small></span></li>
           <li><b>3</b><span>Piano di lavoro firmato<small>Concreto e su misura, al termine della call.</small></span></li>
         </ol>
-        <Sticker src={stkSegugio} width={230} rotate={-4} eager class="c-hero-dog" data-float />
       </div>
 
       <div class="c-form-wrap" id="questionario" data-intro="card" style="--intro-d:0.35s;">
-        <Sticker src={stkBassotto} width={112} rotate={6} eager class="c-form-dog" />
-        <span class="c-form-note" aria-hidden="true">due minuti, tre domande ↓</span>
         <div class="form-card">
           <!-- Netlify Forms come rete di sicurezza: oltre ad aprire WhatsApp,
                ogni questionario completato viene salvato nella dashboard Netlify.
@@ -169,8 +159,6 @@ const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano
     </div>
   </section>
 
-  <Ticker items={ticker} tone="ink" tilt={1.2} direction="right" />
-
   <!-- MIRROR: scrivi il nome del tuo animale, la scheda si personalizza -->
   <section class="section c-mirror" data-mirror>
     <div class="container c-mirror-grid">
@@ -188,7 +176,7 @@ const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano
             placeholder="Birba"
             data-mirror-input
           />
-          <span class="c-name-hint" aria-hidden="true">scrivilo qui ↑</span>
+          <span class="c-name-hint" aria-hidden="true">Scrivilo qui: la scheda si aggiorna da sola.</span>
         </label>
       </div>
 
@@ -355,10 +343,9 @@ const ticker = ['45 minuti', 'Gratuita', 'Senza impegno', 'Cane & gatto', 'Piano
           sizes="(min-width: 900px) 380px, 80vw"
           loading="lazy"
         />
-        <figcaption>il segugio &amp; la bassotta</figcaption>
+        <figcaption>Il segugio e la bassotta di Andrea.</figcaption>
       </figure>
     </div>
-    <Sticker src={stkAndreaSegugio} width={260} class="c-channels-peek" data-peek />
   </section>
 
   <!-- CTA fissa: compare dopo l'hero, sparisce quando torni al questionario -->
