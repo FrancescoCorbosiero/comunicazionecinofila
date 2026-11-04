@@ -31,6 +31,17 @@ export const IG_URL = 'https://www.instagram.com/comunicazionecinofila';
 export const TYPE_STYLE: 'serif-bold' | 'impact' | 'serif' | 'grotesk' = 'impact';
 
 /**
+ * Materiale delle superfici (bottoni, etichette, card, cornici). Stessi
+ * colori, misure e forme; cambia come sono "fatte". Cambia questa riga e
+ * rifai il build:
+ *  · 'vetro'  — vetro smerigliato: filo di luce sui bordi, riflessi, ombre
+ *               morbide tinte del colore dell'elemento (src/styles/surface-vetro.css)
+ *  · 'timbro' — bordo d'inchiostro da 2px e ombra piena "a timbro": il
+ *               Brand System "Branco" di sempre
+ */
+export const SURFACE_STYLE: 'vetro' | 'timbro' = 'vetro';
+
+/**
  * Numeri di fiducia mostrati in home ("Chi sono") e nella pagina Chi sono.
  * Aggiornali qui: valgono ovunque. Contenuti e follower vengono dal profilo
  * Instagram — da ritoccare ogni tanto, un numero vecchio non fa danni ma

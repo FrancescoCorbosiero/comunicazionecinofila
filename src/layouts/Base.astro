@@ -4,12 +4,13 @@ import '../styles/site.css';
 import '../styles/effects.css';
 import '../styles/motion.css';
 import '../styles/sections.css';
+import '../styles/surface-vetro.css';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import CallModal from '../components/CallModal.astro';
-import { SITE, SITE_NAME, TYPE_STYLE } from '../config';
+import { SITE, SITE_NAME, SURFACE_STYLE, TYPE_STYLE } from '../config';
 import {
   siteGraph,
   breadcrumbLd,
@@ -136,7 +137,7 @@ const speculationRules = JSON.stringify({
     <ClientRouter />
     <slot name="head" />
   </head>
-  <body class:list={['brand paper-bg', `type-${TYPE_STYLE}`]}>
+  <body class:list={['brand paper-bg', `type-${TYPE_STYLE}`, `surface-${SURFACE_STYLE}`]}>
     <a class="skip-link" href="#contenuto">Salta al contenuto</a>
     <SiteHeader active={active} />
     <main id="contenuto">

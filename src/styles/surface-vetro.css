@@ -1,0 +1,477 @@
+/* =====================================================================
+   SUPERFICI "VETRO" — attive con SURFACE_STYLE = 'vetro' (src/config.ts)
+
+   Stessi volumi del Brand System "Branco" (pillole, card grandi, cornici
+   spesse, numeri da poster), un materiale diverso. Al posto del bordo
+   d'inchiostro da 2px e dell'ombra piena "a timbro":
+   · un filo di luce sul bordo e un riflesso sul lato alto, come una
+     lastra spessa che prende la luce;
+   · un'ombra morbida e lunga quanto quella di prima, tinta del colore
+     dell'elemento (sotto un bottone pesca c'è un alone pesca);
+   · trasparenza e sfocatura vere solo dove dietro c'è qualcosa da
+     sfocare: hero, foto, header, barre fisse, finestre;
+   · al passaggio, la superficie si solleva e un lampo di luce la
+     attraversa (il "ghiaccio").
+   Colori, misure, raggi e animazioni restano quelli di sempre: tutto è
+   scoperto sotto .surface-vetro, e con SURFACE_STYLE = 'timbro' il sito
+   torna esattamente com'era.
+   ===================================================================== */
+
+:root .brand.surface-vetro {
+  /* ── Token ─────────────────────────────────────────────────────── */
+  /* La riga d'inchiostro dei divisori diventa un filetto. */
+  --hair: rgba(21, 25, 15, 0.12);
+  --line: 1px solid var(--hair);
+
+  /* Il bordo di luce: filo alto acceso, contorno interno appena visibile,
+     un'ombra sottile sul filo basso (lo spessore della lastra). */
+  --edge: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(21, 25, 15, 0.07);
+  --edge-dim: inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+
+  /* Riflessi: il bagliore diagonale delle lastre grandi, la lucentezza
+     delle pillole e il lampo che passa sui bottoni. */
+  --glare: radial-gradient(120% 85% at 0% 0%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 58%);
+  --glare-dim: radial-gradient(120% 85% at 0% 0%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 58%);
+  --gloss: linear-gradient(175deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 46%, rgba(255, 255, 255, 0) 64%);
+  --sheen: linear-gradient(105deg, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 58%);
+  --frost: blur(18px) saturate(1.6);
+
+  /* Elevazione: ombre verde notte, lunghe quanto le vecchie ombre piene. */
+  --lift-s: 0 1px 2px rgba(31, 40, 24, 0.1), 0 8px 18px -8px rgba(31, 40, 24, 0.34);
+  --lift-m: 0 2px 4px rgba(31, 40, 24, 0.08), 0 16px 32px -14px rgba(31, 40, 24, 0.42);
+  --lift-l: 0 3px 8px rgba(31, 40, 24, 0.08), 0 30px 56px -24px rgba(31, 40, 24, 0.5);
+  --lift-xl: 0 4px 12px rgba(31, 40, 24, 0.1), 0 44px 80px -30px rgba(31, 40, 24, 0.58);
+  --shadow-s: var(--edge), var(--lift-s);
+  --shadow-m: var(--edge), var(--lift-m);
+  --shadow-l: var(--edge), var(--lift-l);
+
+  /* Vetro "di contesto" (bottoni ghost, icone): chiaro sul chiaro,
+     fumé sullo scuro. I fondi scuri qui sotto li ridefiniscono. */
+  --ctx-glass: rgba(255, 255, 255, 0.58);
+  --ctx-glass-hi: rgba(255, 255, 255, 0.9);
+  --ctx-ink: var(--ink);
+  --ctx-rim: rgba(255, 255, 255, 0.95);
+  --ctx-top: #fff;
+  --ctx-depth: rgba(21, 25, 15, 0.1);
+  --ctx-glow: rgba(31, 40, 24, 0.32);
+
+  /* ── Fondi scuri: filetti chiari, ombre più nere, vetro fumé ────── */
+  & :is(.hm-hero--green, .bg-deep, .bg-bark, .bg-sage, .statement-band, .door--care, .l-hero, .a-hero, .cs-hero,
+    .a-cta, .l-who, .site-footer, .tone-ink, .booking-card) {
+    --hair: rgba(241, 242, 234, 0.18);
+    --line: 1px solid var(--hair);
+    --lift-s: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 18px -8px rgba(0, 0, 0, 0.55);
+    --lift-m: 0 2px 4px rgba(0, 0, 0, 0.16), 0 16px 32px -14px rgba(0, 0, 0, 0.6);
+    --lift-l: 0 3px 8px rgba(0, 0, 0, 0.16), 0 30px 56px -24px rgba(0, 0, 0, 0.66);
+    --lift-xl: 0 4px 12px rgba(0, 0, 0, 0.2), 0 44px 80px -30px rgba(0, 0, 0, 0.72);
+    --shadow-s: var(--edge), var(--lift-s);
+    --shadow-m: var(--edge), var(--lift-m);
+    --shadow-l: var(--edge), var(--lift-l);
+    --ctx-glass: rgba(255, 255, 255, 0.1);
+    --ctx-glass-hi: rgba(255, 255, 255, 0.2);
+    --ctx-ink: var(--cream-ink);
+    --ctx-rim: rgba(255, 255, 255, 0.4);
+    --ctx-top: rgba(255, 255, 255, 0.42);
+    --ctx-depth: rgba(0, 0, 0, 0.25);
+    --ctx-glow: rgba(0, 0, 0, 0.5);
+  }
+
+  /* =================================================================
+     LUCE D'AMBIENTE — il vetro ha bisogno di qualcosa dietro: sui fondi
+     pieni più importanti una luce morbida, mai una texture.
+     ================================================================= */
+  & .hm-hero--green {
+    background:
+      radial-gradient(48% 62% at 76% 42%, rgba(244, 169, 138, 0.3), rgba(244, 169, 138, 0) 72%),
+      radial-gradient(38% 52% at 6% 100%, rgba(201, 169, 106, 0.2), rgba(201, 169, 106, 0) 70%),
+      radial-gradient(30% 40% at 100% 0%, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 70%),
+      var(--forest);
+  }
+  & .statement-band {
+    background:
+      radial-gradient(50% 70% at 92% 8%, rgba(111, 139, 96, 0.3), rgba(111, 139, 96, 0) 70%),
+      radial-gradient(40% 60% at 0% 100%, rgba(244, 169, 138, 0.1), rgba(244, 169, 138, 0) 70%),
+      var(--bg-deep);
+  }
+  & .hm-how.bg-bark {
+    background:
+      radial-gradient(60% 70% at 50% 0%, rgba(244, 169, 138, 0.16), rgba(244, 169, 138, 0) 70%),
+      var(--bark);
+  }
+  & :is(.h-cta, .cs-cta, .a-proverb) {
+    background:
+      radial-gradient(55% 80% at 0% 0%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 65%),
+      radial-gradient(50% 70% at 100% 100%, rgba(208, 103, 63, 0.28), rgba(208, 103, 63, 0) 70%),
+      var(--peach);
+  }
+  & :is(.l-hero, .a-hero) {
+    background:
+      radial-gradient(50% 64% at 80% 36%, rgba(111, 139, 96, 0.34), rgba(111, 139, 96, 0) 72%),
+      radial-gradient(40% 50% at 0% 100%, rgba(111, 139, 96, 0.18), rgba(111, 139, 96, 0) 70%),
+      var(--bg-deep);
+  }
+  & .cs-hero {
+    background:
+      radial-gradient(50% 60% at 78% 40%, rgba(244, 169, 138, 0.2), rgba(244, 169, 138, 0) 72%),
+      var(--olive-deep);
+  }
+  /* Le due porte galleggiano su due luci: salvia dietro la consulenza,
+     pesca dietro il colloquio. */
+  & .hm-doors {
+    background:
+      radial-gradient(34% 46% at 22% 62%, rgba(111, 139, 96, 0.22), rgba(111, 139, 96, 0) 72%),
+      radial-gradient(34% 46% at 80% 52%, rgba(244, 169, 138, 0.3), rgba(244, 169, 138, 0) 72%),
+      var(--bg-cream);
+  }
+
+  /* =================================================================
+     BOTTONI — lastre lucide: riflesso alto, fondo più denso (lo spessore),
+     alone del proprio colore. Al passaggio si sollevano e un lampo di
+     luce le attraversa; alla pressione si abbassano.
+     ================================================================= */
+  & .btn {
+    --g-rim: rgba(255, 255, 255, 0.62);
+    --g-top: rgba(255, 255, 255, 0.82);
+    --g-depth: rgba(208, 103, 63, 0.5);
+    --g-glow: rgba(208, 103, 63, 0.62);
+    --g-base: rgba(31, 40, 24, 0.14);
+    border: 1px solid var(--g-rim);
+    background-image: var(--sheen), var(--gloss);
+    background-size: 260% 100%, 100% 100%;
+    background-position: 106% 0, 0 0;
+    background-repeat: no-repeat;
+    box-shadow: inset 0 1px 0 var(--g-top), inset 0 -1px 0 rgba(255, 255, 255, 0.28), inset 0 -6px 14px -8px var(--g-depth),
+      0 10px 22px -10px var(--g-glow), 0 2px 5px var(--g-base);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      background-position 1.1s cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  & .btn:hover {
+    transform: translateY(-2px);
+    background-position: -6% 0, 0 0;
+    box-shadow: inset 0 1px 0 var(--g-top), inset 0 -1px 0 rgba(255, 255, 255, 0.28), inset 0 -6px 14px -8px var(--g-depth),
+      0 16px 30px -12px var(--g-glow), 0 3px 8px var(--g-base);
+  }
+  & .btn:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 1px 0 var(--g-top), inset 0 -1px 0 rgba(255, 255, 255, 0.2), inset 0 -3px 8px -6px var(--g-depth),
+      0 4px 10px -6px var(--g-glow), 0 1px 2px var(--g-base);
+  }
+  & .btn-dark {
+    --g-rim: rgba(255, 255, 255, 0.2);
+    --g-top: rgba(255, 255, 255, 0.3);
+    --g-depth: rgba(0, 0, 0, 0.5);
+    --g-glow: rgba(21, 27, 15, 0.62);
+  }
+  & .btn-cream {
+    --g-rim: rgba(255, 255, 255, 0.95);
+    --g-top: #fff;
+    --g-depth: rgba(21, 25, 15, 0.12);
+    --g-glow: rgba(0, 0, 0, 0.42);
+  }
+  /* Ghost: vetro vero, chiaro sul chiaro e fumé sullo scuro. */
+  & :is(.btn-ghost, .btn-ghost-cream),
+  & .hm-hero--green .btn-ghost {
+    --g-rim: var(--ctx-rim);
+    --g-top: var(--ctx-top);
+    --g-depth: var(--ctx-depth);
+    --g-glow: var(--ctx-glow);
+    background-color: var(--ctx-glass);
+    color: var(--ctx-ink);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+  }
+  & :is(.btn-ghost, .btn-ghost-cream):hover,
+  & .hm-hero--green .btn-ghost:hover {
+    background-color: var(--ctx-glass-hi);
+    color: var(--ctx-ink);
+  }
+
+  /* Bottoni tondi e icone: la stessa lastra, in piccolo. */
+  & :is(.header-icon, .nav-toggle, .sv-arrow, .call-x, .faq-ico) {
+    border: 1px solid var(--ctx-rim);
+    background-color: var(--ctx-glass);
+    background-image: var(--gloss);
+    box-shadow: var(--edge), var(--lift-s);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+  }
+  & .header-icon:hover { background-color: var(--peach); }
+  & .sv-arrow:hover:not(:disabled) {
+    background-color: var(--peach);
+    transform: translateY(-2px);
+    box-shadow: var(--edge), var(--lift-m);
+  }
+  & .sv-arrow:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--edge), var(--lift-s); }
+  & .faq-item[open]:not([data-closing]) .faq-ico { background-color: var(--peach); }
+
+  /* Torna su: il disco pesca con l'anello di avanzamento. */
+  & .to-top {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-image: var(--gloss);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -6px 14px -8px rgba(208, 103, 63, 0.55),
+      0 12px 26px -10px rgba(208, 103, 63, 0.6), 0 2px 6px rgba(31, 40, 24, 0.14);
+  }
+
+  /* =================================================================
+     ETICHETTE, PILLOLE, CHIP, BADGE
+     ================================================================= */
+  & :is(.eyebrow, .pill, .chip, .sv-badge, .wall-hint) {
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    background-image: var(--gloss);
+    box-shadow: var(--edge), var(--lift-s);
+  }
+  & .site-nav > a.nav-work {
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.5);
+    background-image: var(--gloss);
+    box-shadow: var(--edge), var(--lift-s);
+  }
+  /* Sulle foto e sul fondo pieno della hero, l'etichetta bianca è vetro. */
+  & :is(.sv-badge, .sv-lab) {
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+  }
+  & .sv-badge { background-color: rgba(255, 255, 255, 0.72); }
+  & .sv-lab {
+    background-color: rgba(21, 25, 15, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  }
+  & .chip:hover { box-shadow: var(--edge), var(--lift-m); }
+  & .chip.is-active {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--edge-dim), 0 10px 22px -10px rgba(208, 103, 63, 0.7), 0 2px 5px rgba(31, 40, 24, 0.14);
+  }
+  & .st-values li {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+
+  /* =================================================================
+     LASTRE GRANDI — card, pannelli, liste. Il colore di ogni superficie
+     resta il suo; cambiano bordo, riflesso e ombra.
+     ================================================================= */
+  & :is(.door, .sv-card, .evt, .hs-more, .card, .svc-block, .event-feature, .event-list, .channel, .toc, .form-card,
+    .plan-card, .paths-list, .flex-card, .stack-card, .rule, .trail-card, .ig-card, .l-note, .cs-note, .call-dialog,
+    .story-phone, .split-media, .photo-tape, .pet-tag, .evt-date) {
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    background-image: var(--glare);
+    box-shadow: var(--edge), var(--lift-l);
+  }
+  /* Superfici scure: filo di luce più tenue, riflesso fumé. */
+  & :is(.door--care, .tone-ink, .evt-date, .story-phone) {
+    border-color: rgba(255, 255, 255, 0.16);
+    background-image: var(--glare-dim);
+    box-shadow: var(--edge-dim), 0 3px 8px rgba(31, 40, 24, 0.1), 0 30px 56px -24px rgba(31, 40, 24, 0.6);
+  }
+  /* Sollevamento al passaggio: in alto e dritto, l'ombra si allunga. */
+  & :is(.door, .hs-more):hover { transform: translateY(-5px); box-shadow: var(--edge), var(--lift-xl); }
+  & .door--care:hover { box-shadow: var(--edge-dim), 0 4px 12px rgba(31, 40, 24, 0.12), 0 44px 80px -30px rgba(31, 40, 24, 0.66); }
+  & :is(.door, .hs-more):active { transform: translateY(-1px); box-shadow: var(--edge), var(--lift-m); }
+  & .card:hover { box-shadow: var(--edge), var(--lift-xl); }
+  & .channel:hover { transform: translateY(-3px); box-shadow: var(--edge), var(--lift-l); }
+
+  /* L'ombra conserva il colore che aveva: pesca, salvia. */
+  & .door--work { box-shadow: var(--edge), 0 3px 8px rgba(31, 40, 24, 0.06), 0 34px 60px -26px rgba(208, 103, 63, 0.62); }
+  & .door--work:hover { box-shadow: var(--edge), 0 4px 12px rgba(31, 40, 24, 0.08), 0 48px 84px -30px rgba(208, 103, 63, 0.7); }
+  & .hs-more { box-shadow: var(--edge), 0 3px 8px rgba(31, 40, 24, 0.06), 0 30px 56px -24px rgba(208, 103, 63, 0.62); }
+  & :is(.form-card, .plan-card) {
+    box-shadow: var(--edge), 0 3px 8px rgba(31, 40, 24, 0.06), 0 40px 80px -34px rgba(52, 64, 42, 0.55),
+      0 24px 60px -30px rgba(111, 139, 96, 0.55);
+  }
+  & :is(.l-note, .l-apply-card, .call-dialog, .toc, .cs-portrait-frame) {
+    box-shadow: var(--edge), 0 3px 8px rgba(31, 40, 24, 0.06), 0 40px 80px -34px rgba(208, 103, 63, 0.6);
+  }
+  & .story-phone { box-shadow: var(--edge-dim), 0 40px 80px -30px rgba(208, 103, 63, 0.6), 0 8px 18px rgba(0, 0, 0, 0.18); }
+  & .evt-date { box-shadow: var(--edge-dim), 0 18px 36px -16px rgba(208, 103, 63, 0.7); }
+  & .ig-card { box-shadow: var(--edge), var(--lift-xl); }
+  & .pet-tag { border-width: 1px; }
+  & .rule { box-shadow: var(--edge), var(--lift-l); }
+  & .rule.tone-ink { box-shadow: var(--edge-dim), 0 3px 8px rgba(31, 40, 24, 0.1), 0 30px 56px -24px rgba(31, 40, 24, 0.6); }
+  & .trail-card { box-shadow: var(--edge), var(--lift-m); }
+  & .cs-note { box-shadow: var(--edge), 0 24px 50px -24px rgba(208, 103, 63, 0.55); }
+  & .wall-hint { box-shadow: var(--edge), var(--lift-m); }
+
+  /* Divisori interni: filetti, non più righe d'inchiostro. */
+  & :is(.sv-media, .card-media) { border-color: var(--hair); }
+  & .sv-facts div { border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: var(--edge); }
+  & .blog-empty { border: 1.5px dashed rgba(21, 25, 15, 0.28); }
+
+  /* Le lastre davanti a un fondo vivo sono smerigliate davvero. */
+  & .call-dialog {
+    background-color: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    backdrop-filter: blur(24px) saturate(1.6);
+  }
+
+  /* =================================================================
+     CORNICI DELLE FOTO — la cornice spessa resta, diventa una lastra
+     smerigliata con il filo di luce; la foto ci sta incassata.
+     ================================================================= */
+  & :is(.hm-disc, .a-hero-disc) {
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    /* Vetro chiaro: si vede il fondo, la luce entra dall'alto a sinistra e
+       si accende di pesca nell'angolo opposto. */
+    background-color: rgba(255, 246, 240, 0.13);
+    background-image: radial-gradient(120% 85% at 0% 0%, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 52%),
+      linear-gradient(315deg, rgba(244, 169, 138, 0.28), rgba(244, 169, 138, 0) 45%);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    backdrop-filter: blur(22px) saturate(1.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+      inset 0 -18px 40px -26px rgba(244, 169, 138, 0.6), 0 50px 90px -40px rgba(0, 0, 0, 0.7),
+      0 12px 28px -12px rgba(0, 0, 0, 0.4);
+  }
+  & :is(.hm-disc-photo, .a-hero-photo) {
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 22px 44px -20px rgba(0, 0, 0, 0.6);
+  }
+  & .hm-photo-2 {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.12), 0 0 0 8px rgba(255, 255, 255, 0.22),
+      0 36px 64px -24px rgba(0, 0, 0, 0.72), 0 8px 18px -8px rgba(0, 0, 0, 0.4);
+  }
+  & :is(.hm-arch, .cs-portrait-frame, .split-media) {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.28), 0 0 0 8px rgba(255, 255, 255, 0.5), var(--lift-xl);
+  }
+  & .cs-portrait-frame {
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.14), 0 0 0 8px rgba(255, 255, 255, 0.28),
+      0 44px 84px -34px rgba(244, 169, 138, 0.5), 0 12px 28px -12px rgba(0, 0, 0, 0.45);
+  }
+  /* Polaroid: cornice bianca di vetro latte. */
+  & :is(.polaroid, .cs-pol) {
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.86);
+    background-image: var(--glare);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow: var(--edge), var(--lift-l);
+  }
+  & .ig-tile { border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: var(--lift-s); }
+  & .ig-tile:hover { transform: translateY(-3px); box-shadow: var(--lift-m); }
+  & .ig-tile span {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.62);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow: var(--edge);
+  }
+
+  /* =================================================================
+     PUNTI, NUMERI, SIGILLI, SPUNTE
+     ================================================================= */
+  & :is(.how-dot, .trail-dot, .rail-dot, .success-check, .cs-seal, .lockup-mark, .path-ico, .channel-icon),
+  & .c-steps b,
+  & .door-go b,
+  & .footer-lockup .pp {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-image: var(--gloss);
+    box-shadow: var(--edge), var(--lift-s);
+  }
+  & .how-dot { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -6px 14px -8px rgba(208, 103, 63, 0.6), 0 14px 28px -12px rgba(0, 0, 0, 0.6); }
+  & .has-motion .how-step:not(.is-reached) .how-dot { border-color: rgba(241, 242, 234, 0.3); box-shadow: var(--edge-dim); }
+  & .sv-handle { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 18px rgba(0, 0, 0, 0.35); }
+  & .sv-handle b {
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background-color: rgba(244, 169, 138, 0.9);
+    background-image: var(--gloss);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 10px 24px -8px rgba(0, 0, 0, 0.55);
+  }
+  & :is(.sv-dots i, .step-dot) { border: 1px solid rgba(21, 25, 15, 0.24); box-shadow: inset 0 1px 0 #fff; }
+  & .sv-dots i.on { border-color: rgba(255, 255, 255, 0.8); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 10px -4px rgba(208, 103, 63, 0.7); }
+  & .hm-facts li::before { border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 3px 8px -3px rgba(0, 0, 0, 0.4); }
+  & .venn-c { border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 40px rgba(255, 255, 255, 0.2); }
+  & .venn-core { box-shadow: var(--edge), 0 14px 30px -12px rgba(208, 103, 63, 0.7); }
+  & .lockup-mark { border-color: rgba(21, 25, 15, 0.1); }
+
+  /* Chat: nuvolette di vetro latte. */
+  & .sv-bub {
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow: var(--edge), var(--lift-s);
+  }
+
+  /* Profili "Ti riconosci?": pillole di vetro, quella scelta si accende. */
+  & .pstk { border: 1px solid rgba(255, 255, 255, 0.75); background-image: var(--gloss); box-shadow: var(--edge), var(--lift-s); }
+  & .pstk:hover { transform: translateY(-3px); box-shadow: var(--edge), var(--lift-m); }
+  & .pstk:active { transform: translateY(1px); box-shadow: var(--edge), 0 2px 6px -2px rgba(31, 40, 24, 0.3); }
+  & .pstk[aria-pressed="true"] {
+    box-shadow: var(--edge), 0 0 0 3px rgba(244, 169, 138, 0.85), 0 16px 34px -12px rgba(208, 103, 63, 0.75);
+  }
+
+  /* Testi "stampati": l'ombra piena diventa un alone. */
+  & :is(.h-cta-title, .cs-cta-title) .script { text-shadow: 0 1px 0 rgba(208, 103, 63, 0.55), 0 4px 14px rgba(140, 60, 30, 0.3); }
+  & .cs-sign { text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45); }
+
+  /* =================================================================
+     HEADER, BARRE FISSE, CAMPI
+     ================================================================= */
+  /* Abbastanza pieno da non far leggere il testo che ci scorre sotto
+     (Chrome lascia nitido il filo basso della sfocatura). */
+  & .site-header {
+    background: rgba(241, 235, 223, 0.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.7);
+    backdrop-filter: blur(20px) saturate(1.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 0 rgba(21, 25, 15, 0.06);
+  }
+  & .sticky-bar {
+    background: rgba(241, 235, 223, 0.78);
+    -webkit-backdrop-filter: blur(20px) saturate(1.7);
+    backdrop-filter: blur(20px) saturate(1.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 -10px 30px -18px rgba(31, 40, 24, 0.4);
+  }
+  & .sticky-cta {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background-image: var(--gloss);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 16px 34px -12px rgba(21, 27, 15, 0.6),
+      0 10px 30px -14px rgba(208, 103, 63, 0.55);
+  }
+  & :is(input:not([type="radio"], [type="checkbox"], [type="range"], [type="hidden"]), textarea, select) {
+    border: 1px solid rgba(21, 25, 15, 0.14);
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 2px rgba(21, 25, 15, 0.06);
+  }
+  & :is(input:not([type="radio"], [type="checkbox"], [type="range"], [type="hidden"]), textarea, select):focus {
+    border-color: var(--peach-deep);
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(21, 25, 15, 0.04), 0 0 0 4px rgba(244, 169, 138, 0.38);
+  }
+  /* Il nome nel questionario resta una riga da compilare, non un campo. */
+  & .c-name-field input,
+  & .c-name-field input:focus {
+    border: 0;
+    border-bottom: 2px solid rgba(21, 25, 15, 0.28);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  & .c-name-field input:focus { border-bottom-color: var(--peach-deep); }
+  & .tl-item::before { border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: var(--edge), var(--lift-s); }
+}
+
+/* Chi chiede meno trasparenze, o un browser senza backdrop-filter: lastre
+   piene, stessi bordi di luce e ombre. */
+@media (prefers-reduced-transparency: reduce) {
+  :root .brand.surface-vetro :is(.btn-ghost, .btn-ghost-cream, .header-icon, .nav-toggle, .sv-arrow, .call-x, .faq-ico,
+    .sv-badge, .sv-bub, .polaroid, .cs-pol, .ig-tile span, .call-dialog) { background-color: var(--bg-paper); }
+  :root .brand.surface-vetro :is(.site-header, .sticky-bar) { background: var(--bg-cream); }
+  :root .brand.surface-vetro *, :root .brand.surface-vetro *::before {
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .brand.surface-vetro .btn { transition: background-color 0.25s ease, color 0.25s ease; }
+  :root .brand.surface-vetro :is(.btn, .door, .hs-more, .sv-arrow, .pstk, .channel, .ig-tile):is(:hover, :active) { transform: none; }
+}

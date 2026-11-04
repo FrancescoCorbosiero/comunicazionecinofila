@@ -495,7 +495,7 @@ function initBlogFilter(): void {
   if (cat !== '*' || query) apply(false);
 }
 
-/* ── Storie vere (home): carosello nativo + prima/dopo ──────────
+/* ── Le vostre storie (home): carosello nativo + prima/dopo ──────────
    Lo scorrimento è quello nativo (swipe, trackpad, scroll-snap): qui solo
    frecce, contatore "1 / 3", pallini e i cursori prima/dopo. */
 function initStoryCarousel(): void {

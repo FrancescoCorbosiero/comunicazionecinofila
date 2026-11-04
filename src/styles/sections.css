@@ -91,7 +91,7 @@ h1.hm-title { margin: 0; font-family: var(--display); font-weight: 800; letter-s
   .hm-underline path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw-on 0.9s cubic-bezier(0.6, 0, 0.3, 1) 1s forwards; }
 }
 
-/* ── Le due porte: scegli il tuo primo passo ─────────────────────── */
+/* ── Le due porte: dimmi perché sei qui ──────────────────────────── */
 .hm-doors .head-block { margin-bottom: clamp(28px, 4vw, 44px); }
 .doors { display: grid; gap: 22px; }
 .door { position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
@@ -246,7 +246,7 @@ h1.hm-title { margin: 0; font-family: var(--display); font-weight: 800; letter-s
 }
 @media (prefers-reduced-motion: reduce) { .how-step, .how-dot { transition: none; } }
 
-/* ── Storie vere: cani veri, ciotole vere ────────────────────────── */
+/* ── Le vostre storie: prima e dopo, con tempi e punto di partenza ─ */
 .hm-stories { position: relative; overflow: hidden; background: var(--sand); border-block: var(--line);
   padding: clamp(70px, 9vw, 120px) 0 clamp(56px, 7vw, 90px); }
 .hm-stories-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px 40px;

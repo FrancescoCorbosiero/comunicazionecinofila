@@ -41,7 +41,7 @@ foto di ripiego — niente si rompe.
 | `home-ciotola.jpg` | Home, polaroid "l'ora della pappa" accanto alla foto ad arco | verticale 4:5, ≥ 600px |
 | `home-approccio.jpg` | Home, polaroid "si parte!" nel blocco "L'approccio" | verticale 4:5, ≥ 600px |
 | `ritratto.jpg` | Hero di **Chi sono**: la foto "professionale" ad arco (senza, si usa `chi-sono.jpg`) | verticale 4:5, ≥ 1200px, volto ben illuminato |
-| `storia-zoe-prima.jpg` | Home, "Cani veri, ciotole vere": Zoe all'inizio (prima/dopo da trascinare) | verticale 4:5 o quadrata, ≥ 1000px |
+| `storia-zoe-prima.jpg` | Home, "Le vostre storie": Zoe all'inizio (prima/dopo da trascinare) | verticale 4:5 o quadrata, ≥ 1000px |
 | `storia-zoe-dopo.jpg` | Home, stessa card: Zoe dopo un mese — **stessa inquadratura** della "prima" | come sopra |
 | `storia-pelle.jpg` | Home, card "La pelle racconta" (pastore australiano, 6 mesi) | verticale 4:5 o quadrata, ≥ 1000px |
 

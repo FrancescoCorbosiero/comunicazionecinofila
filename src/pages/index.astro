@@ -84,7 +84,7 @@ const passi = [
   },
 ];
 
-// Storie vere: le foto arrivano per nome (src/assets/storia-*.jpg, vedi
+// Le vostre storie: le foto arrivano per nome (src/assets/storia-*.jpg, vedi
 // public/assets/README.md). Finché mancano, al loro posto c'è un segnaposto.
 const zoePrima = assetImage('storia-zoe-prima');
 const zoeDopo = assetImage('storia-zoe-dopo');
@@ -109,7 +109,7 @@ const igTiles = [
 const percorsi = [
   { href: '/approccio', icon: ICON.compass, title: 'Il mio approccio', text: 'Non parto dal prodotto, parto dall’animale.' },
   { href: '/chi-sono', icon: ICON.person, title: 'Chi sono', text: 'La mia storia, dal primo cane a un metodo condiviso.' },
-  { href: '#storie', icon: ICON.stories, title: 'Storie vere', text: 'Prima e dopo, con tempi e punto di partenza.' },
+  { href: '#storie', icon: ICON.stories, title: 'Le vostre storie', text: 'Prima e dopo, con tempi e punto di partenza.' },
   { href: '/articoli', icon: ICON.book, title: 'Blog', text: `${nArticoli} articoli su alimentazione e comportamento.` },
   { href: '/eventi', icon: ICON.calendar, title: 'Eventi e webinar', text: 'Gli incontri dal vivo e online.' },
   { href: '/servizi', icon: ICON.bowl, title: 'I servizi', text: 'Consulenze, percorsi e monitoraggio.' },
@@ -170,9 +170,9 @@ const PAW_D = [
 >
   <!-- HERO — testo a sinistra, il disco con la foto vera di Andrea e la
        ciotola in una seconda cornice a destra; intro tutta in CSS. -->
-  <!-- Sfondo: hm-hero--green (verde bosco). Per la versione marrone aggiungi
-       anche hm-hero--bark; senza nessuna delle due torna sul chiaro. -->
-  <section class="hm-hero hm-hero--green" data-sticky-from aria-labelledby="hm-title">
+  <!-- Sfondo: hm-hero--green + hm-hero--bark = marrone pieno (attuale);
+       togli hm-hero--bark per il verde bosco, togli entrambe per il chiaro. -->
+  <section class="hm-hero hm-hero--green hm-hero--bark" data-sticky-from aria-labelledby="hm-title">
     <div class="container hm-hero-grid">
       <div class="hm-hero-copy">
         <span class="eyebrow kicker-rule" data-intro style="--intro-d:0.05s;">Nutrizione e comportamento · cane e gatto</span>
@@ -239,8 +239,8 @@ const PAW_D = [
   <section class="section hm-doors" aria-labelledby="doors-title">
     <div class="container">
       <div class="head-block">
-        <span class="eyebrow kicker-rule">Da dove vuoi partire?</span>
-        <h2 class="display-lg" id="doors-title">Scegli il tuo <span class="script">primo passo.</span></h2>
+        <span class="eyebrow kicker-rule">Da dove vuoi iniziare?</span>
+        <h2 class="display-lg" id="doors-title">Dimmi perché <span class="script">sei qui.</span></h2>
       </div>
       <div class="doors stagger" data-reveal>
         <a class="door door--care" href="/consulenza-gratuita#questionario">
@@ -383,8 +383,8 @@ const PAW_D = [
             sostenibile per lui e per la sua famiglia.
           </p>
           <p>
-            <strong>Lavoro al fianco del tuo veterinario, mai al suo posto.</strong> L'alimentazione è
-            il primo passo, non l'unico.
+            <strong>Lavoro al fianco del tuo veterinario, mai al suo posto.</strong> E una dieta perfetta
+            sulla carta non serve a nulla, se non entra nella vita di tutti i giorni.
           </p>
           <ul class="st-values" aria-label="I miei valori">
             <li>Concretezza</li>
@@ -440,17 +440,17 @@ const PAW_D = [
     </div>
   </section>
 
-  <!-- STORIE VERE — carosello nativo (swipe, frecce): prima/dopo da
+  <!-- LE VOSTRE STORIE — carosello nativo (swipe, frecce): prima/dopo da
        trascinare, foto con il badge della durata, la chat di Brownie che
        si scrive da sola quando arriva a schermo. -->
   <section class="hm-stories" id="storie" data-sv aria-labelledby="stories-title">
     <div class="container hm-stories-head">
       <div class="head-block">
-        <span class="eyebrow kicker-rule">Storie vere</span>
-        <h2 class="display-lg" id="stories-title">Cani veri, <span class="script">ciotole vere.</span></h2>
+        <span class="eyebrow kicker-rule">Le vostre storie</span>
+        <h2 class="display-lg" id="stories-title">Chi ha già <span class="script">iniziato.</span></h2>
         <p class="lead">
-          Ogni storia dice quanto è durata e da dove si partiva. Sono esperienze individuali, non
-          promesse.
+          Per ogni storia ti dico quanto è durato il percorso e da dove si partiva: sono esperienze
+          individuali, non promesse.
         </p>
       </div>
       <div class="sv-nav">
@@ -464,7 +464,7 @@ const PAW_D = [
       </div>
     </div>
 
-    <div class="sv-track" data-sv-track tabindex="0" aria-label="Storie vere: scorri per vederle tutte">
+    <div class="sv-track" data-sv-track tabindex="0" aria-label="Le vostre storie: scorri per vederle tutte">
       <article class="sv-card" aria-labelledby="sv-zoe">
         <div class="sv-media">
           <div class="sv-compare" data-compare>
@@ -496,8 +496,8 @@ const PAW_D = [
           <span class="pill pill-peach">Prima e dopo</span>
           <h3 id="sv-zoe">Zoe, un mese dopo</h3>
           <p>
-            Cucciola dal pelo riccio, appena cambiata l'alimentazione. Dopo trenta giorni il mantello
-            racconta già un'altra storia.
+            Cucciola dal pelo riccio, con l'alimentazione appena cambiata. Dopo trenta giorni il mantello
+            è già diverso.
           </p>
           <dl class="sv-facts">
             <div><dt>Durata</dt><dd>1 mese</dd></div>
@@ -522,10 +522,10 @@ const PAW_D = [
         </div>
         <div class="sv-body">
           <span class="pill pill-peach">Prima e dopo</span>
-          <h3 id="sv-pelle">La pelle racconta</h3>
+          <h3 id="sv-pelle">Sei mesi dopo</h3>
           <p>
-            Sei mesi di tempo e costanza. Quello che succede dentro, prima o poi, si vede fuori: nel
-            pelo, nella pelle, nell'energia.
+            Sei mesi di percorso, seguiti con costanza dalla sua famiglia. Il cambiamento si vede nel
+            pelo, nella pelle e nell'energia.
           </p>
           <dl class="sv-facts">
             <div><dt>Durata</dt><dd>6 mesi</dd></div>
@@ -709,7 +709,7 @@ const PAW_D = [
       <div class="hm-faq-head">
         <div class="head-block">
           <span class="eyebrow kicker-rule">Domande frequenti</span>
-          <h2 class="display-lg" id="faq-title">Prima di <span class="script">compilare.</span></h2>
+          <h2 class="display-lg" id="faq-title">Quello che mi chiedete <span class="script">più spesso.</span></h2>
         </div>
         <p>Non trovi la tua domanda? Scrivimi: ti rispondo io, di persona.</p>
         <a
