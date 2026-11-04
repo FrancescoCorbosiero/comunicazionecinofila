@@ -177,7 +177,7 @@ export function scrollToTarget(target: HTMLElement | number): void {
   }
 }
 
-/* Le ancore della stessa pagina (#candidatura…) scivolano invece di
+/* Le ancore della stessa pagina (#unisciti…) scivolano invece di
    saltare. In capture, così il router di Astro vede defaultPrevented. */
 document.addEventListener(
   'click',

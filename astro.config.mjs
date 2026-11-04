@@ -89,4 +89,11 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
+  // Il CSS annidato (src/styles/surface-vetro.css) viene appiattito in build:
+  // così funziona anche su Safari/iOS precedenti alla 16.5.
+  vite: {
+    build: {
+      cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari15'],
+    },
+  },
 });

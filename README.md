@@ -13,6 +13,13 @@ nutrizione per cani e gatti. Due pubblici, un'unica identità: i proprietari
 > il tono è più autorevole: niente sticker scontornati, nastri, badge che
 > girano, scotch o elementi storti; titoli in Anton (`TYPE_STYLE = 'impact'`)
 > e i due flussi del sito (consulenza, Team) sempre in vista.
+>
+> **Superfici** (`SURFACE_STYLE` in `src/config.ts`): con `'vetro'` (attuale)
+> bottoni, etichette, card e cornici sono lastre di vetro smerigliato — filo
+> di luce sui bordi, riflessi, ombre morbide tinte del colore dell'elemento
+> (`src/styles/surface-vetro.css`); con `'timbro'` tornano il bordo
+> d'inchiostro e l'ombra piena di "Branco". Colori, misure e forme sono gli
+> stessi nei due casi.
 
 ## Comandi
 
@@ -49,7 +56,8 @@ src/
   content.config.ts      # schema delle Content Collections
   styles/                # brand.css (design system v3), site.css (base), content/catalog/effects.css,
                          # motion.css (intro above-the-fold + stati degli effetti),
-                         # sections.css (le sezioni delle landing: hero, stories, stack…)
+                         # sections.css (le sezioni delle landing: hero, stories, stack…),
+                         # surface-vetro.css (superfici di vetro, SURFACE_STYLE = 'vetro')
   assets/                # foto ottimizzate da astro:assets (webp responsive)
 public/assets/           # favicon + immagini per OG e cover delle collection
 server/                  # server Docker: sito statico + /api/form → AWS SES

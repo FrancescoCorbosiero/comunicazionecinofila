@@ -245,7 +245,7 @@ function initStepForm(): void {
   });
 }
 
-/* ── Candidatura "Lavora con noi" (a step) → submitForm() ────── */
+/* ── Modulo "Lavora con noi" (a step) → submitForm() ────── */
 function initWorkForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-workform]');
   if (!form) return;
@@ -261,7 +261,7 @@ function initWorkForm(): void {
     if (mail) {
       const d = new FormData(formEl);
       const body = [
-        'Ciao Andrea, ti mando la mia candidatura per TeamNutrizione.',
+        'Ciao Andrea, mi piacerebbe entrare in TeamNutrizione. Ecco chi sono.',
         '',
         'Nome: ' + (d.get('nome') || '—'),
         'Email: ' + (d.get('email') || '—'),
@@ -278,7 +278,7 @@ function initWorkForm(): void {
         'mailto:' +
         EMAIL +
         '?subject=' +
-        encodeURIComponent('Candidatura TeamNutrizione — ' + (d.get('nome') || '')) +
+        encodeURIComponent('Entrare in TeamNutrizione — ' + (d.get('nome') || '')) +
         '&body=' +
         encodeURIComponent(body);
     }
@@ -352,7 +352,7 @@ function initMirror(): void {
 
 /* ── "Ti riconosci?" (lavora con noi) ────────────────────────────
    Ogni profilo è uno sticker: toccarlo lo segna e preseleziona l'ambito
-   nel modulo di candidatura, con un invito a raggiungerlo. */
+   nel modulo "Entra nel Team", con un invito a raggiungerlo. */
 function initProfileWall(): void {
   const wall = document.querySelector<HTMLElement>('[data-profile-wall]');
   if (!wall) return;
@@ -495,7 +495,7 @@ function initBlogFilter(): void {
   if (cat !== '*' || query) apply(false);
 }
 
-/* ── Storie vere (home): carosello nativo + prima/dopo ──────────
+/* ── Le vostre storie (home): carosello nativo + prima/dopo ──────────
    Lo scorrimento è quello nativo (swipe, trackpad, scroll-snap): qui solo
    frecce, contatore "1 / 3", pallini e i cursori prima/dopo. */
 function initStoryCarousel(): void {
@@ -708,7 +708,9 @@ function updateToTop(): void {
   if (ring) {
     const max = doc.scrollHeight - doc.clientHeight;
     const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
-    ring.style.strokeDashoffset = (RING_LEN * (1 - p)).toFixed(2);
+    // Tratto lungo p·L e vuoto più lungo del cerchio: niente ripetizioni
+    // del dash né arrotondamenti che chiudono male l'anello.
+    ring.style.strokeDasharray = `${(RING_LEN * p).toFixed(2)} ${RING_LEN + 1}`;
   }
 }
 
