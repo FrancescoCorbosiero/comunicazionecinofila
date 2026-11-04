@@ -9,7 +9,7 @@
 
    WhatsApp resta il canale principale del questionario: questa email è la
    rete di sicurezza (il contatto arriva anche se la persona non preme
-   "invia" su WhatsApp) e il canale ufficiale per le candidature.
+   "invia" su WhatsApp) e il canale ufficiale per chi vuole entrare nel Team.
 
    Variabili d'ambiente (vedi .env.example):
      AWS_REGION              regione SES, es. eu-south-1 / eu-west-1
@@ -38,8 +38,8 @@ const FORMS = {
     replyTo: null,
   },
   'candidatura-team': {
-    subject: (d) => `Candidatura TeamNutrizione — ${d.nome || 'nuovo contatto'}`,
-    title: 'Nuova candidatura per il Team',
+    subject: (d) => `Entrare in TeamNutrizione — ${d.nome || 'nuovo contatto'}`,
+    title: 'Qualcuno vuole entrare nel Team',
     fields: {
       nome: 'Nome',
       email: 'Email',

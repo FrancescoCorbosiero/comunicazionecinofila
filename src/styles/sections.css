@@ -748,7 +748,7 @@ mark.hl { color: var(--ink); font-weight: 700; padding: 0 0.12em; margin: 0 -0.1
 .l-note-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; width: 100%; margin-top: 10px; }
 .l-note-sign { font-family: var(--script); font-size: 42px; font-weight: 600; line-height: 1; color: var(--peach-deep); }
 
-/* ── Candidatura ─────────────────────────────────────────────────── */
+/* ── Entra nel Team ───────────────────────────────────────────────── */
 .l-apply { background: var(--bg-cream); }
 .l-apply-grid { display: grid; gap: 44px; align-items: start; }
 .l-apply-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }

@@ -60,7 +60,7 @@ export function formatNumber(n: number): string {
 export const CAL_LINK = '';
 
 /**
- * Endpoint di invio dei form (candidatura "Lavora con noi" + copia del
+ * Endpoint di invio dei form (modulo "Lavora con noi" + copia del
  * questionario consulenza — il questionario resta comunque WhatsApp-first).
  *
  * Si decide AL BUILD con la variabile d'ambiente PUBLIC_FORM_ENDPOINT:

@@ -11,7 +11,7 @@ const coverAlt =
   'TeamNutrizione — Al tuo fianco per il benessere del tuo pet: cani e gatti di tante razze in fila';
 
 // "A chi è rivolto": ogni profilo è un'etichetta cliccabile che preseleziona
-// l'ambito nel modulo di candidatura (site.ts, initProfileWall).
+// l'ambito nel modulo "Entra nel Team" (site.ts, initProfileWall).
 const profili = [
   { label: 'Educatori e istruttori cinofili', ambito: 'Educazione cinofila' },
   { label: 'Naturopati e operatori del benessere animale', ambito: 'Naturopatia' },
@@ -111,7 +111,7 @@ const icons: Record<string, string> = {
           professionisti che vogliono sviluppare competenze nell'alimentazione e nel benessere
           animale.
         </p>
-        <a class="btn btn-lg" href="#candidatura">Raccontami chi sei <ArrowIcon size={16} /></a>
+        <a class="btn btn-lg" href="#unisciti">Raccontami chi sei <ArrowIcon size={16} /></a>
       </div>
     </div>
   </section>
@@ -199,7 +199,7 @@ const icons: Record<string, string> = {
       </ul>
       <p class="wall-hint" data-wall-hint hidden>
         <span data-wall-text></span>
-        <a class="btn btn-sm" href="#candidatura">Vai alla candidatura <ArrowIcon size={14} /></a>
+        <a class="btn btn-sm" href="#unisciti">Raccontami chi sei <ArrowIcon size={14} /></a>
       </p>
     </div>
   </section>
@@ -248,17 +248,17 @@ const icons: Record<string, string> = {
         </p>
         <div class="l-note-foot">
           <span class="l-note-sign">— Andrea</span>
-          <a class="btn" href="#candidatura">Raccontami chi sei <ArrowIcon size={15} /></a>
+          <a class="btn" href="#unisciti">Raccontami chi sei <ArrowIcon size={15} /></a>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- FORM CANDIDATURA -->
-  <section class="section l-apply" id="candidatura" data-sticky-until>
+  <!-- FORM "ENTRA NEL TEAM" -->
+  <section class="section l-apply" id="unisciti" data-sticky-until>
     <div class="container l-apply-grid">
       <div class="l-apply-copy">
-        <span class="eyebrow kicker-rule">Candidatura</span>
+        <span class="eyebrow kicker-rule">Entra nel Team</span>
         <h2 class="display-lg">Raccontami <span class="script">chi sei.</span></h2>
         <p class="lead">
           Tre passaggi, un paio di minuti. Ti ricontatto personalmente per un primo confronto senza
@@ -273,7 +273,7 @@ const icons: Record<string, string> = {
       <div class="form-card l-apply-card">
         <!-- Netlify Forms: il bot di deploy registra il form dall'HTML statico;
              l'invio reale avviene via fetch in site.ts (initWorkForm).
-             Le candidature arrivano nella dashboard Netlify (+ notifiche email). -->
+             Le richieste arrivano nella dashboard Netlify (+ notifiche email). -->
         <form
           data-workform
           novalidate
@@ -393,7 +393,7 @@ const icons: Record<string, string> = {
             </div>
             <div class="step-nav">
               <button type="button" class="btn btn-ghost" data-prev>Indietro</button>
-              <button type="submit" class="btn">Invia la candidatura <ArrowIcon size={15} /></button>
+              <button type="submit" class="btn">Invia il messaggio <ArrowIcon size={15} /></button>
             </div>
             <p class="field-hint">
               Nessuna newsletter, nessuno spam: uso questi dati solo per ricontattarti.
@@ -407,13 +407,13 @@ const icons: Record<string, string> = {
                 <path d="M5 12.5 10 17 19 7" stroke="var(--cream-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
             </span>
-            <h3 class="display-md">Candidatura inviata.</h3>
+            <h3 class="display-md">Messaggio arrivato.</h3>
             <p style="max-width:420px;">Grazie, ti ricontatto presto. — Andrea</p>
           </div>
 
-          <!-- ERRORE DI RETE: la candidatura non si perde, si sposta sull'email -->
+          <!-- ERRORE DI RETE: il messaggio non si perde, si sposta sull'email -->
           <p class="form-error" role="alert" data-form-error>
-            Non sono riuscito a inviare la candidatura (problema di rete?). Riprova tra poco
+            Non sono riuscito a inviare il messaggio (problema di rete?). Riprova tra poco
             oppure <a class="text-link" data-error-mail href="#">scrivimi via email</a>: il
             messaggio è già pronto con le tue risposte.
           </p>
@@ -422,10 +422,10 @@ const icons: Record<string, string> = {
     </div>
   </section>
 
-  <!-- CTA fissa: compare dopo l'hero, sparisce sulla candidatura -->
-  <a class="sticky-cta" href="#candidatura" data-sticky-cta data-no-roll>
+  <!-- CTA fissa: compare dopo l'hero, sparisce sul modulo -->
+  <a class="sticky-cta" href="#unisciti" data-sticky-cta data-no-roll>
     <span class="sticky-cta-dot" aria-hidden="true"></span>
-    Candidati: raccontami chi sei
+    Entra nel Team: raccontami chi sei
     <ArrowIcon size={16} />
   </a>
 </Base>
